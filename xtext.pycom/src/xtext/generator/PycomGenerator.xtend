@@ -7,6 +7,9 @@ import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.AbstractGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
+import xtext.pycom.Board
+import xtext.pycom.Server
+import xtext.pycom.Communication
 
 /**
  * Generates code from your model files on save.
@@ -16,10 +19,129 @@ import org.eclipse.xtext.generator.IGeneratorContext
 class PycomGenerator extends AbstractGenerator {
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
-//		fsa.generateFile('greetings.txt', 'People to greet: ' + 
-//			resource.allContents
-//				.filter(Greeting)
-//				.map[name]
-//				.join(', '))
+		
+		for (board : resource.allContents.toIterable.filter(typeof(Board))) {
+			fsa.generateFile(board.name + ".py", generatePycomFiles(board, resource))			
+		}
+				
+		for (server : resource.allContents.toIterable.filter(typeof(Server))) {
+			fsa.generateFile(server.name + ".js", generateServerFiles(server, resource))			
+		} 				
 	}
+	
+	//  «»
+	//EzCopy
+	// Single Line Generate Comment «/* Comment goes here */»
+	
+	def generatePycomFiles(Board b, Resource r) {
+		'''
+			import pycom
+			import machine
+			import time «/*Needed */»
+			«generatePycomImports(b, r)»
+			«generatePycomCode(b, r)»
+		
+			pycom.heartbeat(False)
+				
+			for cycles in range(10): # stop after 10 cycles    
+				pycom.rgbled(0x007f00) # green    
+		    		time.sleep(0.5)
+		    		pycom.rgbled(0x7f7f00) # yellow    
+		    		time.sleep(0.5)
+		    		pycom.rgbled(0x7f0000) # red    
+		    		time.sleep(0.5)
+		'''
+	}
+	
+	def generatePycomImports(Board b, Resource r) { 
+		generatePycomConnectionImport(b, r)
+	}
+	
+	def generatePycomConnectionImport(Board b, Resource r) {
+		//Change to use Filters :)
+		for(var i = 0; i < b.boardMembers.size; i++){
+		    if(b.boardMembers.get(i) instanceof Communication) {
+		    	var Communication a = b.boardMembers.get(i) as Communication
+		    	if (a.type.equals("WiFi")) {
+		    		generatePycomWifiImport(b, r)
+		    	}
+		    }
+		}
+	}
+
+	def generatePycomWifiImport(Board b, Resource r) {
+		'''
+			from network import WLAN
+			
+		'''
+	}
+	
+	def generatePycomCode(Board b, Resource r) { 
+		generatePycomConnectionCode(b, r)
+	}
+	
+	def generatePycomConnectionCode(Board b, Resource r) {
+		//Change to use Filters :)
+		for(var i = 0; i < b.boardMembers.size; i++){
+		    if(b.boardMembers.get(i) instanceof Communication) {
+		    	var Communication a = b.boardMembers.get(i) as Communication
+		    	if (a.type.equals("WiFi")) {
+		    		generatePycomWifiCode(b, r)
+		    	}
+		    }
+		}
+	}
+	
+	def generatePycomWifiCode(Board b, Resource r) {
+		'''
+			#***WIFI SETUP***
+			wlan = WLAN(mode=WLAN.STA)
+			nets = wlan.scan()
+			ssidname = #***YOUR SSID***
+			password = #***YOUR PASSWORD***
+			
+			if wlan.isconnected() == False:
+			    for net in nets:
+			        print(net.ssid)
+			        if net.ssid == ssidname:
+			            wlan.connect(net.ssid, auth=(net.sec, password), timeout=5000)
+			            break
+			
+			while not wlan.isconnected():
+			    machine.idle()
+			print ('wlan connection succeeded!')
+			print (wlan.ifconfig())
+			
+			#***WIFI SETUP END***
+			
+		'''
+	}
+	
+	def generateServerFiles(Server s, Resource r) '''
+		var express = require('express');
+		var app = express();
+		var bodyParser = require('body-parser');
+		app.use(bodyParser.json());
+		
+		// Host: «if (s.conn.host.ipAdr === null) s.conn.host.website else s.conn.host.ipAdr »
+		
+		app.listen(«s.conn.portnumber», () => {
+		    console.log('Started on port «s.conn.portnumber»');
+		});
+		
+		app.get("*", function(req, res){		     
+		    res.send("Default get route");
+		    console.log("Default get route");
+		});			
+		
+		«FOR b : r. allContents.toIterable.filter(typeof(Board))»
+			app.post('/«b.name»/:value', function(req, res)
+				{        
+				    var value = req.params.value;    
+				    res.send("Message received: " + value);
+				    console.log("Message received: " + value)    
+				});
+									
+		«ENDFOR»		
+'''		
 }
