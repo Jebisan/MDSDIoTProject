@@ -2169,7 +2169,7 @@ public class InternalPycomParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleActuatorType"
-    // InternalPycom.g:839:1: ruleActuatorType returns [EObject current=null] : ( ( (lv_type_0_0= ruleActuatorName ) ) otherlv_1= ':' ( (lv_name_2_0= RULE_ID ) ) (otherlv_3= '(' ( (lv_pins_4_0= rulePin ) ) otherlv_5= ')' )? ) ;
+    // InternalPycom.g:839:1: ruleActuatorType returns [EObject current=null] : ( ( (lv_typeName_0_0= ruleActuatorName ) ) otherlv_1= ':' ( (lv_name_2_0= RULE_ID ) ) (otherlv_3= '(' ( (lv_pins_4_0= rulePin ) ) otherlv_5= ')' )? ) ;
     public final EObject ruleActuatorType() throws RecognitionException {
         EObject current = null;
 
@@ -2177,7 +2177,7 @@ public class InternalPycomParser extends AbstractInternalAntlrParser {
         Token lv_name_2_0=null;
         Token otherlv_3=null;
         Token otherlv_5=null;
-        AntlrDatatypeRuleToken lv_type_0_0 = null;
+        AntlrDatatypeRuleToken lv_typeName_0_0 = null;
 
         EObject lv_pins_4_0 = null;
 
@@ -2186,23 +2186,23 @@ public class InternalPycomParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalPycom.g:845:2: ( ( ( (lv_type_0_0= ruleActuatorName ) ) otherlv_1= ':' ( (lv_name_2_0= RULE_ID ) ) (otherlv_3= '(' ( (lv_pins_4_0= rulePin ) ) otherlv_5= ')' )? ) )
-            // InternalPycom.g:846:2: ( ( (lv_type_0_0= ruleActuatorName ) ) otherlv_1= ':' ( (lv_name_2_0= RULE_ID ) ) (otherlv_3= '(' ( (lv_pins_4_0= rulePin ) ) otherlv_5= ')' )? )
+            // InternalPycom.g:845:2: ( ( ( (lv_typeName_0_0= ruleActuatorName ) ) otherlv_1= ':' ( (lv_name_2_0= RULE_ID ) ) (otherlv_3= '(' ( (lv_pins_4_0= rulePin ) ) otherlv_5= ')' )? ) )
+            // InternalPycom.g:846:2: ( ( (lv_typeName_0_0= ruleActuatorName ) ) otherlv_1= ':' ( (lv_name_2_0= RULE_ID ) ) (otherlv_3= '(' ( (lv_pins_4_0= rulePin ) ) otherlv_5= ')' )? )
             {
-            // InternalPycom.g:846:2: ( ( (lv_type_0_0= ruleActuatorName ) ) otherlv_1= ':' ( (lv_name_2_0= RULE_ID ) ) (otherlv_3= '(' ( (lv_pins_4_0= rulePin ) ) otherlv_5= ')' )? )
-            // InternalPycom.g:847:3: ( (lv_type_0_0= ruleActuatorName ) ) otherlv_1= ':' ( (lv_name_2_0= RULE_ID ) ) (otherlv_3= '(' ( (lv_pins_4_0= rulePin ) ) otherlv_5= ')' )?
+            // InternalPycom.g:846:2: ( ( (lv_typeName_0_0= ruleActuatorName ) ) otherlv_1= ':' ( (lv_name_2_0= RULE_ID ) ) (otherlv_3= '(' ( (lv_pins_4_0= rulePin ) ) otherlv_5= ')' )? )
+            // InternalPycom.g:847:3: ( (lv_typeName_0_0= ruleActuatorName ) ) otherlv_1= ':' ( (lv_name_2_0= RULE_ID ) ) (otherlv_3= '(' ( (lv_pins_4_0= rulePin ) ) otherlv_5= ')' )?
             {
-            // InternalPycom.g:847:3: ( (lv_type_0_0= ruleActuatorName ) )
-            // InternalPycom.g:848:4: (lv_type_0_0= ruleActuatorName )
+            // InternalPycom.g:847:3: ( (lv_typeName_0_0= ruleActuatorName ) )
+            // InternalPycom.g:848:4: (lv_typeName_0_0= ruleActuatorName )
             {
-            // InternalPycom.g:848:4: (lv_type_0_0= ruleActuatorName )
-            // InternalPycom.g:849:5: lv_type_0_0= ruleActuatorName
+            // InternalPycom.g:848:4: (lv_typeName_0_0= ruleActuatorName )
+            // InternalPycom.g:849:5: lv_typeName_0_0= ruleActuatorName
             {
 
-            					newCompositeNode(grammarAccess.getActuatorTypeAccess().getTypeActuatorNameParserRuleCall_0_0());
+            					newCompositeNode(grammarAccess.getActuatorTypeAccess().getTypeNameActuatorNameParserRuleCall_0_0());
             				
             pushFollow(FOLLOW_20);
-            lv_type_0_0=ruleActuatorName();
+            lv_typeName_0_0=ruleActuatorName();
 
             state._fsp--;
 
@@ -2212,8 +2212,8 @@ public class InternalPycomParser extends AbstractInternalAntlrParser {
             					}
             					set(
             						current,
-            						"type",
-            						lv_type_0_0,
+            						"typeName",
+            						lv_typeName_0_0,
             						"xtext.Pycom.ActuatorName");
             					afterParserOrEnumRuleCall();
             				
@@ -2368,7 +2368,7 @@ public class InternalPycomParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleSensorType"
-    // InternalPycom.g:928:1: ruleSensorType returns [EObject current=null] : ( ( (lv_type_0_0= ruleSensorName ) ) otherlv_1= ':' ( (lv_name_2_0= RULE_ID ) ) (otherlv_3= '(' ( (lv_pins_4_0= rulePin ) ) otherlv_5= ')' )? ) ;
+    // InternalPycom.g:928:1: ruleSensorType returns [EObject current=null] : ( ( (lv_typeName_0_0= ruleSensorName ) ) otherlv_1= ':' ( (lv_name_2_0= RULE_ID ) ) (otherlv_3= '(' ( (lv_pins_4_0= rulePin ) ) otherlv_5= ')' )? ) ;
     public final EObject ruleSensorType() throws RecognitionException {
         EObject current = null;
 
@@ -2376,7 +2376,7 @@ public class InternalPycomParser extends AbstractInternalAntlrParser {
         Token lv_name_2_0=null;
         Token otherlv_3=null;
         Token otherlv_5=null;
-        AntlrDatatypeRuleToken lv_type_0_0 = null;
+        AntlrDatatypeRuleToken lv_typeName_0_0 = null;
 
         EObject lv_pins_4_0 = null;
 
@@ -2385,23 +2385,23 @@ public class InternalPycomParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalPycom.g:934:2: ( ( ( (lv_type_0_0= ruleSensorName ) ) otherlv_1= ':' ( (lv_name_2_0= RULE_ID ) ) (otherlv_3= '(' ( (lv_pins_4_0= rulePin ) ) otherlv_5= ')' )? ) )
-            // InternalPycom.g:935:2: ( ( (lv_type_0_0= ruleSensorName ) ) otherlv_1= ':' ( (lv_name_2_0= RULE_ID ) ) (otherlv_3= '(' ( (lv_pins_4_0= rulePin ) ) otherlv_5= ')' )? )
+            // InternalPycom.g:934:2: ( ( ( (lv_typeName_0_0= ruleSensorName ) ) otherlv_1= ':' ( (lv_name_2_0= RULE_ID ) ) (otherlv_3= '(' ( (lv_pins_4_0= rulePin ) ) otherlv_5= ')' )? ) )
+            // InternalPycom.g:935:2: ( ( (lv_typeName_0_0= ruleSensorName ) ) otherlv_1= ':' ( (lv_name_2_0= RULE_ID ) ) (otherlv_3= '(' ( (lv_pins_4_0= rulePin ) ) otherlv_5= ')' )? )
             {
-            // InternalPycom.g:935:2: ( ( (lv_type_0_0= ruleSensorName ) ) otherlv_1= ':' ( (lv_name_2_0= RULE_ID ) ) (otherlv_3= '(' ( (lv_pins_4_0= rulePin ) ) otherlv_5= ')' )? )
-            // InternalPycom.g:936:3: ( (lv_type_0_0= ruleSensorName ) ) otherlv_1= ':' ( (lv_name_2_0= RULE_ID ) ) (otherlv_3= '(' ( (lv_pins_4_0= rulePin ) ) otherlv_5= ')' )?
+            // InternalPycom.g:935:2: ( ( (lv_typeName_0_0= ruleSensorName ) ) otherlv_1= ':' ( (lv_name_2_0= RULE_ID ) ) (otherlv_3= '(' ( (lv_pins_4_0= rulePin ) ) otherlv_5= ')' )? )
+            // InternalPycom.g:936:3: ( (lv_typeName_0_0= ruleSensorName ) ) otherlv_1= ':' ( (lv_name_2_0= RULE_ID ) ) (otherlv_3= '(' ( (lv_pins_4_0= rulePin ) ) otherlv_5= ')' )?
             {
-            // InternalPycom.g:936:3: ( (lv_type_0_0= ruleSensorName ) )
-            // InternalPycom.g:937:4: (lv_type_0_0= ruleSensorName )
+            // InternalPycom.g:936:3: ( (lv_typeName_0_0= ruleSensorName ) )
+            // InternalPycom.g:937:4: (lv_typeName_0_0= ruleSensorName )
             {
-            // InternalPycom.g:937:4: (lv_type_0_0= ruleSensorName )
-            // InternalPycom.g:938:5: lv_type_0_0= ruleSensorName
+            // InternalPycom.g:937:4: (lv_typeName_0_0= ruleSensorName )
+            // InternalPycom.g:938:5: lv_typeName_0_0= ruleSensorName
             {
 
-            					newCompositeNode(grammarAccess.getSensorTypeAccess().getTypeSensorNameParserRuleCall_0_0());
+            					newCompositeNode(grammarAccess.getSensorTypeAccess().getTypeNameSensorNameParserRuleCall_0_0());
             				
             pushFollow(FOLLOW_20);
-            lv_type_0_0=ruleSensorName();
+            lv_typeName_0_0=ruleSensorName();
 
             state._fsp--;
 
@@ -2411,8 +2411,8 @@ public class InternalPycomParser extends AbstractInternalAntlrParser {
             					}
             					set(
             						current,
-            						"type",
-            						lv_type_0_0,
+            						"typeName",
+            						lv_typeName_0_0,
             						"xtext.Pycom.SensorName");
             					afterParserOrEnumRuleCall();
             				

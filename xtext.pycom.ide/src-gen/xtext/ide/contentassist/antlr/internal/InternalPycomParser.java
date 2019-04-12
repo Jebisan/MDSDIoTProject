@@ -8058,31 +8058,31 @@ public class InternalPycomParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ActuatorType__Group__0__Impl"
-    // InternalPycom.g:2574:1: rule__ActuatorType__Group__0__Impl : ( ( rule__ActuatorType__TypeAssignment_0 ) ) ;
+    // InternalPycom.g:2574:1: rule__ActuatorType__Group__0__Impl : ( ( rule__ActuatorType__TypeNameAssignment_0 ) ) ;
     public final void rule__ActuatorType__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalPycom.g:2578:1: ( ( ( rule__ActuatorType__TypeAssignment_0 ) ) )
-            // InternalPycom.g:2579:1: ( ( rule__ActuatorType__TypeAssignment_0 ) )
+            // InternalPycom.g:2578:1: ( ( ( rule__ActuatorType__TypeNameAssignment_0 ) ) )
+            // InternalPycom.g:2579:1: ( ( rule__ActuatorType__TypeNameAssignment_0 ) )
             {
-            // InternalPycom.g:2579:1: ( ( rule__ActuatorType__TypeAssignment_0 ) )
-            // InternalPycom.g:2580:2: ( rule__ActuatorType__TypeAssignment_0 )
+            // InternalPycom.g:2579:1: ( ( rule__ActuatorType__TypeNameAssignment_0 ) )
+            // InternalPycom.g:2580:2: ( rule__ActuatorType__TypeNameAssignment_0 )
             {
-             before(grammarAccess.getActuatorTypeAccess().getTypeAssignment_0()); 
-            // InternalPycom.g:2581:2: ( rule__ActuatorType__TypeAssignment_0 )
-            // InternalPycom.g:2581:3: rule__ActuatorType__TypeAssignment_0
+             before(grammarAccess.getActuatorTypeAccess().getTypeNameAssignment_0()); 
+            // InternalPycom.g:2581:2: ( rule__ActuatorType__TypeNameAssignment_0 )
+            // InternalPycom.g:2581:3: rule__ActuatorType__TypeNameAssignment_0
             {
             pushFollow(FOLLOW_2);
-            rule__ActuatorType__TypeAssignment_0();
+            rule__ActuatorType__TypeNameAssignment_0();
 
             state._fsp--;
 
 
             }
 
-             after(grammarAccess.getActuatorTypeAccess().getTypeAssignment_0()); 
+             after(grammarAccess.getActuatorTypeAccess().getTypeNameAssignment_0()); 
 
             }
 
@@ -8624,31 +8624,31 @@ public class InternalPycomParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__SensorType__Group__0__Impl"
-    // InternalPycom.g:2763:1: rule__SensorType__Group__0__Impl : ( ( rule__SensorType__TypeAssignment_0 ) ) ;
+    // InternalPycom.g:2763:1: rule__SensorType__Group__0__Impl : ( ( rule__SensorType__TypeNameAssignment_0 ) ) ;
     public final void rule__SensorType__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalPycom.g:2767:1: ( ( ( rule__SensorType__TypeAssignment_0 ) ) )
-            // InternalPycom.g:2768:1: ( ( rule__SensorType__TypeAssignment_0 ) )
+            // InternalPycom.g:2767:1: ( ( ( rule__SensorType__TypeNameAssignment_0 ) ) )
+            // InternalPycom.g:2768:1: ( ( rule__SensorType__TypeNameAssignment_0 ) )
             {
-            // InternalPycom.g:2768:1: ( ( rule__SensorType__TypeAssignment_0 ) )
-            // InternalPycom.g:2769:2: ( rule__SensorType__TypeAssignment_0 )
+            // InternalPycom.g:2768:1: ( ( rule__SensorType__TypeNameAssignment_0 ) )
+            // InternalPycom.g:2769:2: ( rule__SensorType__TypeNameAssignment_0 )
             {
-             before(grammarAccess.getSensorTypeAccess().getTypeAssignment_0()); 
-            // InternalPycom.g:2770:2: ( rule__SensorType__TypeAssignment_0 )
-            // InternalPycom.g:2770:3: rule__SensorType__TypeAssignment_0
+             before(grammarAccess.getSensorTypeAccess().getTypeNameAssignment_0()); 
+            // InternalPycom.g:2770:2: ( rule__SensorType__TypeNameAssignment_0 )
+            // InternalPycom.g:2770:3: rule__SensorType__TypeNameAssignment_0
             {
             pushFollow(FOLLOW_2);
-            rule__SensorType__TypeAssignment_0();
+            rule__SensorType__TypeNameAssignment_0();
 
             state._fsp--;
 
 
             }
 
-             after(grammarAccess.getSensorTypeAccess().getTypeAssignment_0()); 
+             after(grammarAccess.getSensorTypeAccess().getTypeNameAssignment_0()); 
 
             }
 
@@ -12243,9 +12243,9 @@ public class InternalPycomParser extends AbstractInternalContentAssistParser {
     // $ANTLR end "rule__Actuator__ActuatorTypesAssignment_2_1"
 
 
-    // $ANTLR start "rule__ActuatorType__TypeAssignment_0"
-    // InternalPycom.g:4017:1: rule__ActuatorType__TypeAssignment_0 : ( ruleActuatorName ) ;
-    public final void rule__ActuatorType__TypeAssignment_0() throws RecognitionException {
+    // $ANTLR start "rule__ActuatorType__TypeNameAssignment_0"
+    // InternalPycom.g:4017:1: rule__ActuatorType__TypeNameAssignment_0 : ( ruleActuatorName ) ;
+    public final void rule__ActuatorType__TypeNameAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
@@ -12256,13 +12256,13 @@ public class InternalPycomParser extends AbstractInternalContentAssistParser {
             // InternalPycom.g:4022:2: ( ruleActuatorName )
             // InternalPycom.g:4023:3: ruleActuatorName
             {
-             before(grammarAccess.getActuatorTypeAccess().getTypeActuatorNameParserRuleCall_0_0()); 
+             before(grammarAccess.getActuatorTypeAccess().getTypeNameActuatorNameParserRuleCall_0_0()); 
             pushFollow(FOLLOW_2);
             ruleActuatorName();
 
             state._fsp--;
 
-             after(grammarAccess.getActuatorTypeAccess().getTypeActuatorNameParserRuleCall_0_0()); 
+             after(grammarAccess.getActuatorTypeAccess().getTypeNameActuatorNameParserRuleCall_0_0()); 
 
             }
 
@@ -12281,7 +12281,7 @@ public class InternalPycomParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__ActuatorType__TypeAssignment_0"
+    // $ANTLR end "rule__ActuatorType__TypeNameAssignment_0"
 
 
     // $ANTLR start "rule__ActuatorType__NameAssignment_2"
@@ -12362,9 +12362,9 @@ public class InternalPycomParser extends AbstractInternalContentAssistParser {
     // $ANTLR end "rule__ActuatorType__PinsAssignment_3_1"
 
 
-    // $ANTLR start "rule__SensorType__TypeAssignment_0"
-    // InternalPycom.g:4062:1: rule__SensorType__TypeAssignment_0 : ( ruleSensorName ) ;
-    public final void rule__SensorType__TypeAssignment_0() throws RecognitionException {
+    // $ANTLR start "rule__SensorType__TypeNameAssignment_0"
+    // InternalPycom.g:4062:1: rule__SensorType__TypeNameAssignment_0 : ( ruleSensorName ) ;
+    public final void rule__SensorType__TypeNameAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
@@ -12375,13 +12375,13 @@ public class InternalPycomParser extends AbstractInternalContentAssistParser {
             // InternalPycom.g:4067:2: ( ruleSensorName )
             // InternalPycom.g:4068:3: ruleSensorName
             {
-             before(grammarAccess.getSensorTypeAccess().getTypeSensorNameParserRuleCall_0_0()); 
+             before(grammarAccess.getSensorTypeAccess().getTypeNameSensorNameParserRuleCall_0_0()); 
             pushFollow(FOLLOW_2);
             ruleSensorName();
 
             state._fsp--;
 
-             after(grammarAccess.getSensorTypeAccess().getTypeSensorNameParserRuleCall_0_0()); 
+             after(grammarAccess.getSensorTypeAccess().getTypeNameSensorNameParserRuleCall_0_0()); 
 
             }
 
@@ -12400,7 +12400,7 @@ public class InternalPycomParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__SensorType__TypeAssignment_0"
+    // $ANTLR end "rule__SensorType__TypeNameAssignment_0"
 
 
     // $ANTLR start "rule__SensorType__NameAssignment_2"
