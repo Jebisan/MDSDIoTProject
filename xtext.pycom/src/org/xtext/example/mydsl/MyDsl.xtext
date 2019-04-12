@@ -9,7 +9,11 @@ Server:
 ;
 
 Connection:
-	(ipAdr= Ipaddress | website=STRING) ',' portnumber=Port 
+	host=Host ',' portnumber=Port 
+;
+
+Host:
+	ipAdr= Ipaddress | website=STRING
 ;
 
 Ipaddress:
@@ -39,7 +43,7 @@ Actuator:
 	'Actuator' actuatorTypes+=ActuatorType (',' actuatorTypes+=ActuatorType)*;
 
 Communication:
-	'Communication' ':' ('WiFi' | 'Bluetooth' | 'SigFox');
+	'Communication' ':' type=('WiFi' | 'Bluetooth' | 'SigFox');
 
 ActuatorType:
 	typeName=ActuatorName ':' name=ID ('(' pins+=Pin ')')?;
@@ -63,19 +67,21 @@ LogicExp:
 	Boolean | ComparisonExp;
 	
 Boolean:
-	value='true' | value='false';
+	value='true' | 'false';
 	
 ComparisonExp: 
 	left=Expression op=Operator rigth=Expression 	
-;
-
-Operator:
-	'<' | '<=' | '==' | '>=' | '>' | '!='
 ;
 	
 Expression:
 	INT | Function
 ;
+
+Operator:
+	'<' | '<=' | '==' | '>=' | '>' | '!=';
+	
+Number: 
+	INT;
 	
 Function:
 	ActuatorFunction | SensorFunction | board=[Board] '.' BoardFunctionName;
