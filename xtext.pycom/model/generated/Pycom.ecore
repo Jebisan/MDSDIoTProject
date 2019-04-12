@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="pycom" nsURI="http://www.Pycom.xtext" nsPrefix="pycom">
+  <eClassifiers xsi:type="ecore:EClass" name="System">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="boards" upperBound="-1"
+        eType="#//Board" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="servers" upperBound="-1"
+        eType="#//Server" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Server">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="conn" eType="#//Connection"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exps" upperBound="-1" eType="#//ConditionalAction"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Connection">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ipAdr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="website" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="portnumber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Board">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="boardMembers" upperBound="-1"
+        eType="#//BoardMember" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BoardMember"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ConditionalAction" eSuperTypes="#//ExpMember"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ExpMember"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Sensor" eSuperTypes="#//BoardMember">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sensorTypes" upperBound="-1"
+        eType="#//SensorType" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Actuator" eSuperTypes="#//BoardMember">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actuatorTypes" upperBound="-1"
+        eType="#//ActuatorType" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ActuatorType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pins" upperBound="-1" eType="#//Pin"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SensorType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pins" upperBound="-1" eType="#//Pin"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Pin">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="power" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="input" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Condition" eSuperTypes="#//ConditionalAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ExpMembers" upperBound="-1"
+        eType="#//ExpMember" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LogicExp" eSuperTypes="#//Condition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//Condition"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Boolean" eSuperTypes="#//LogicExp">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComparisonExp" eSuperTypes="#//LogicExp">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rigth" eType="#//Expression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Expression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Function" eSuperTypes="#//ExpMember #//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="board" eType="#//Board"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ActuatorFunction" eSuperTypes="#//Function">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actuatorType" eType="#//ActuatorType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SensorFunction" eSuperTypes="#//Function">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sensorType" eType="#//SensorType"/>
+  </eClassifiers>
+</ecore:EPackage>

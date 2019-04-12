@@ -1,0 +1,96 @@
+grammar xtext.Pycom with org.eclipse.xtext.common.Terminals
+generate pycom "http://www.Pycom.xtext"
+	
+System:
+	boards+=Board* servers+=Server*;
+	
+Server:
+	'Server' name=ID '('conn=Connection')' '{' exps+=ConditionalAction* '}' 
+;
+
+Connection:
+	(ipAdr= Ipaddress | website=STRING) ',' portnumber=Port 
+;
+
+Ipaddress:
+	INT'.'INT'.'INT'.'INT
+;
+
+Port:
+	INT
+;
+
+Board:
+	'Board' name=ID '{' boardMembers+=BoardMember* '}';
+
+BoardMember:
+	Sensor | Actuator | Communication;
+
+ConditionalAction:
+	'if' '(' Condition ')' '{' ExpMembers+=ExpMember* '}' | 'while' '(' Condition ')' '{' ExpMembers+=ExpMember* '}';
+
+ExpMember:
+	Function | ConditionalAction;
+
+Sensor:
+	'Sensor' sensorTypes+=SensorType (',' sensorTypes+=SensorType)*;
+
+Actuator:
+	'Actuator' actuatorTypes+=ActuatorType (',' actuatorTypes+=ActuatorType)*;
+
+Communication:
+	'Communication' ':' ('WiFi' | 'Bluetooth' | 'SigFox');
+
+ActuatorType:
+	typeName=ActuatorName ':' name=ID ('(' pins+=Pin ')')?;
+
+SensorType:
+	typeName=SensorName ':' name=ID ('(' pins+=Pin ')')?;
+
+SensorName:
+	'Light' | 'Temperature' | 'Barometer' | 'Humidity' | 'Accelerometer';
+
+Pin:
+	power=INT ',' input=INT;
+
+ActuatorName:
+	'LED' | 'Engine';
+
+Condition:
+	LogicExp | LogicExp '&&' condition=Condition | LogicExp '||' condition=Condition;
+
+LogicExp:
+	Boolean | ComparisonExp;
+	
+Boolean:
+	value='true' | value='false';
+	
+ComparisonExp: 
+	left=Expression op=Operator rigth=Expression 	
+;
+
+Operator:
+	'<' | '<=' | '==' | '>=' | '>' | '!='
+;
+	
+Expression:
+	INT | Function
+;
+	
+Function:
+	ActuatorFunction | SensorFunction | board=[Board] '.' BoardFunctionName;
+
+ActuatorFunction: 
+	board=[Board] '.' actuatorType=[ActuatorType] '.' ActuatorFunctionName | actuatorType=[ActuatorType] '.' ActuatorFunctionName;
+	
+SensorFunction: 
+	board=[Board] '.' sensorType=[SensorType] '.' SensorFunctionName | sensorType=[SensorType] '.' SensorFunctionName;
+	
+SensorFunctionName:
+	'SensorFunctionName';
+
+ActuatorFunctionName:
+	'ActuatorFunctionName';
+	
+BoardFunctionName:
+	'BoardFunctionName';
