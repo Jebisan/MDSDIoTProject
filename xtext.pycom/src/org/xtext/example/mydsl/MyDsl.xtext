@@ -55,7 +55,11 @@ SensorName:
 	'Light' | 'Temperature' | 'Barometer' | 'Humidity' | 'Accelerometer';
 
 Pin:
-	power=INT ',' input=INT;
+	power=PinName ',' input=PinName;
+	
+PinName:
+	name=ID
+;
 
 ActuatorName:
 	'LED' | 'Engine';
