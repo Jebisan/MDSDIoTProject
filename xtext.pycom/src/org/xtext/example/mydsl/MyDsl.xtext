@@ -74,7 +74,7 @@ Boolean:
 	value='true' | value='false';
 	
 ComparisonExp: 
-	left=Expression op=Operator rigth=Expression 	
+	left=Expression op=Operator right=Expression 	
 ;
 
 Expression:
