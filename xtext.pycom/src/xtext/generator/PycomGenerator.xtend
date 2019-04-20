@@ -11,6 +11,12 @@ import xtext.pycom.Board
 import xtext.pycom.Server
 import xtext.pycom.Communication
 import xtext.pycom.ConditionalAction
+import javax.swing.JOptionPane
+import xtext.pycom.Actuator
+import xtext.pycom.Communication
+import xtext.pycom.Actuator
+
+//github.com/Jebisan/MDSDIoTProject.git
 
 /**
  * Generates code from your model files on save.
@@ -38,7 +44,7 @@ class PycomGenerator extends AbstractGenerator {
 		'''
 			import pycom
 			import machine
-			import time «/*Needed */»
+			import time 
 			«generatePycomImports(b, r)»
 			«generatePycomCode(b, r)»
 		
@@ -55,22 +61,38 @@ class PycomGenerator extends AbstractGenerator {
 	}
 	
 	def generatePycomImports(Board b, Resource r) { 
-		generatePycomConnectionImport(b, r)
+		var sb = new StringBuilder();
+		sb.append(generatePycomConnectionImport(b, r))
+		return sb.toString
+	}
+	
+	def generatePycomActuatorImport(Board b, Resource r) {
+		var sb = new StringBuilder();
+		for (actuator : b.boardMembers.filter(typeof(Actuator))) {
+			sb.append(generateActuatorImports(b, r))
+		}
+		return sb.toString
+	}
+	
+	def generateActuatorImports(Board b, Resource r) {	
+		'''
+			#
+		'''
 	}
 	
 	def generatePycomConnectionImport(Board b, Resource r) {
-		//Change to use Filters :)
-		for(var i = 0; i < b.boardMembers.size; i++){
-		    if(b.boardMembers.get(i) instanceof Communication) {
-		    	var Communication a = b.boardMembers.get(i) as Communication
-		    	if (a.type.equals("WiFi")) {
-		    		generatePycomWifiImport(b, r)
-		    	}
+		var sb = new StringBuilder();
+		for (a : b.boardMembers.filter(Communication)) {
+			if (a.type.equals("WiFi")) {
+		    	sb.append(generatePycomWifiImport(b, r))
+		    } else {
+		    	sb.append("") //Default case for unsupported BlueThooth|SigFox
 		    }
 		}
+		return sb.toString
 	}
 
-	def generatePycomWifiImport(Board b, Resource r) {
+	def generatePycomWifiImport(Board b, Resource r) {	
 		'''
 			from network import WLAN
 			
@@ -82,13 +104,13 @@ class PycomGenerator extends AbstractGenerator {
 	}
 	
 	def generatePycomConnectionCode(Board b, Resource r) {
+		var sb = new StringBuilder();
 		//Change to use Filters :)
-		for(var i = 0; i < b.boardMembers.size; i++){
-		    if(b.boardMembers.get(i) instanceof Communication) {
-		    	var Communication a = b.boardMembers.get(i) as Communication
-		    	if (a.type.equals("WiFi")) {
-		    		generatePycomWifiCode(b, r)
-		    	}
+		for (a : b.boardMembers.filter(Communication)) {
+			if (a.type.equals("WiFi")) {
+		    	sb.append(generatePycomWifiCode(b, r))
+		    } else {
+		    	sb.append("") //Default case for unsupported BlueThooth|SigFox
 		    }
 		}
 	}
