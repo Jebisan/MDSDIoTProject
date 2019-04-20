@@ -31,7 +31,7 @@ BoardMember:
 	Sensor | Actuator | Communication;
 
 ConditionalAction:
-	'if' '(' Condition ')' '{' ExpMembers+=ExpMember* '}' | 'while' '(' Condition ')' '{' ExpMembers+=ExpMember* '}';
+	type='if' '(' condition=Condition ')' '{' ExpMembers+=ExpMember* '}' | type='while' '(' condition=Condition ')' '{' ExpMembers+=ExpMember* '}';
 
 ExpMember:
 	Function | ConditionalAction;
@@ -61,20 +61,20 @@ ActuatorName:
 	'LED' | 'Engine';
 
 Condition:
-	LogicExp | LogicExp '&&' condition=Condition | LogicExp '||' condition=Condition;
+	logicEx=LogicExp | logicEx=LogicExp '&&' nestedCondition=Condition | logicEx=LogicExp '||' nestedCondition=Condition;
 
 LogicExp:
-	Boolean | ComparisonExp;
+	boolVal=Boolean | compExp=ComparisonExp;
 	
 Boolean:
-	value='true' | 'false';
+	value='true' | value='false';
 	
 ComparisonExp: 
 	left=Expression op=Operator rigth=Expression 	
 ;
-	
+
 Expression:
-	INT | Function
+	outputValue=INT | outputfunction=Function
 ;
 
 Operator:
