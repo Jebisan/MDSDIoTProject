@@ -10,6 +10,7 @@ import org.eclipse.xtext.generator.IGeneratorContext
 import xtext.pycom.Board
 import xtext.pycom.Server
 import xtext.pycom.Communication
+import xtext.pycom.ConditionalAction
 
 /**
  * Generates code from your model files on save.
@@ -20,9 +21,9 @@ class PycomGenerator extends AbstractGenerator {
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
 		
-		for (board : resource.allContents.toIterable.filter(typeof(Board))) {
+		/*for (board : resource.allContents.toIterable.filter(typeof(Board))) {
 			fsa.generateFile(board.name + ".py", generatePycomFiles(board, resource))			
-		}
+		}*/
 				
 		for (server : resource.allContents.toIterable.filter(typeof(Server))) {
 			fsa.generateFile(server.name + ".js", generateServerFiles(server, resource))			
@@ -133,6 +134,8 @@ class PycomGenerator extends AbstractGenerator {
 		    res.send("Default get route");
 		    console.log("Default get route");
 		});			
+				
+		Server test «s.exps.get(0).type» «s.exps.get(0).condition.logicEx.compExp.left.outputValue» «s.exps.get(0).condition.logicEx.compExp.op» «s.exps.get(0).condition.logicEx.compExp.rigth.outputValue» Server test						
 		
 		«FOR b : r. allContents.toIterable.filter(typeof(Board))»
 			app.post('/«b.name»/:value', function(req, res)
