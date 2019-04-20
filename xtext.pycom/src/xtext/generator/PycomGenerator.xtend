@@ -140,7 +140,32 @@ class PycomGenerator extends AbstractGenerator {
 		'''
 	}
 	
-	def generateServerFiles(Server s, Resource r) '''
+	def generateServerFiles(Server s, Resource r) 
+	{
+		var type = s.exps.get(0).type;
+		var left = "";	
+		var operator = s.exps.get(0).condition.logicEx.compExp.op;
+		var right = "";	
+		
+		if(s.exps.get(0).condition.logicEx.compExp.left.outputfunction != null)
+		{
+			left = "value";
+		}	
+		else
+		{
+			left = String.valueOf(s.exps.get(0).condition.logicEx.compExp.left.outputValue);
+		}
+		
+		if(s.exps.get(0).condition.logicEx.compExp.right.outputfunction != null)
+		{		
+			right = "value";
+		}	
+		else
+		{
+			right = String.valueOf(s.exps.get(0).condition.logicEx.compExp.right.outputValue);
+		}				
+		
+		'''	
 		var express = require('express');
 		var app = express();
 		var bodyParser = require('body-parser');
@@ -155,18 +180,20 @@ class PycomGenerator extends AbstractGenerator {
 		app.get("*", function(req, res){		     
 		    res.send("Default get route");
 		    console.log("Default get route");
-		});			
-				
-		Server test «s.exps.get(0).type» «s.exps.get(0).condition.logicEx.compExp.left.outputValue» «s.exps.get(0).condition.logicEx.compExp.op» «s.exps.get(0).condition.logicEx.compExp.rigth.outputValue» Server test						
+		});				
 		
 		«FOR b : r. allContents.toIterable.filter(typeof(Board))»
 			app.post('/«b.name»/:value', function(req, res)
-				{        
-				    var value = req.params.value;    
-				    res.send("Message received: " + value);
-				    console.log("Message received: " + value)    
-				});
-									
-		«ENDFOR»		
-'''		
+				{    					    
+				    var value = req.params.value; 
+				    
+				    «type»(«left» «operator» «right»)
+				    {  
+				    	res.send("Message received: " + value);
+				    	console.log("Message received: " + value)    
+				    }
+				});									
+		«ENDFOR»	
+		'''		
+	}
 }
