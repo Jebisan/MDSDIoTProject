@@ -10,13 +10,20 @@ import org.eclipse.xtext.generator.IGeneratorContext
 import xtext.pycom.Board
 import xtext.pycom.Server
 import xtext.pycom.Communication
+import xtext.pycom.Actuator
+import java.util.HashMap
+import xtext.pycom.ActuatorType
+import java.io.BufferedInputStream
+import java.net.URL
+import java.nio.file.Paths
+import java.io.IOException
+import xtext.pycom.Sensor
+import xtext.pycom.SensorType
 import xtext.pycom.ConditionalAction
+import xtext.pycom.Condition
+import xtext.pycom.Function
+import xtext.pycom.Expression
 import javax.swing.JOptionPane
-import xtext.pycom.Actuator
-import xtext.pycom.Communication
-import xtext.pycom.Actuator
-
-//github.com/Jebisan/MDSDIoTProject.git
 
 /**
  * Generates code from your model files on save.
@@ -24,72 +31,313 @@ import xtext.pycom.Actuator
  * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#code-generation
  */
 class PycomGenerator extends AbstractGenerator {
-
+	
+	var externalFilesMap = new HashMap<String, URL>();
+	var moduleMap = new HashMap<String, String>();
+	
+	var HashMap<String, String> importcode
+	var HashMap<String, String> codeMap
+	
+	var HashMap<String, String> logicmap
+	var HashMap<String, String> functionmap
+	
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
 		
-		/*for (board : resource.allContents.toIterable.filter(typeof(Board))) {
-			fsa.generateFile(board.name + ".py", generatePycomFiles(board, resource))			
-		}*/
+		populateHashmap()
+		
+		for (board : resource.allContents.toIterable.filter(typeof(Board))) {
+			fsa.generateFile(board.name + ".py", generatePycomFiles(board, resource, fsa))			
+		}
 				
 		for (server : resource.allContents.toIterable.filter(typeof(Server))) {
 			fsa.generateFile(server.name + ".js", generateServerFiles(server, resource))			
-		} 				
+		} 			
+	}
+	
+	def populateHashmap() {
+		externalFilesMap.put("Temperature", new URL("https://raw.githubusercontent.com/pycom/pycom-libraries/master/pysense/lib/SI7006A20.py"))
+		moduleMap.put("Temperature", "SI7006A20")
 	}
 	
 	//  «»
-	//EzCopy
+	// EzCopy
 	// Single Line Generate Comment «/* Comment goes here */»
+	// Debug Code
+	// JOptionPane.showMessageDialog( null , "Message", "Title" , JOptionPane.INFORMATION_MESSAGE)
 	
-	def generatePycomFiles(Board b, Resource r) {
+	def generatePycomFiles(Board b, Resource r, IFileSystemAccess2 fsa) {
+		generatePycom(b, r)
+		
 		'''
 			import pycom
+			import urequests
 			import machine
 			import time 
-			«generatePycomImports(b, r)»
-			«generatePycomCode(b, r)»
+			«generatePycomImports(b, r, fsa)»
 		
+			isRunning = True
 			pycom.heartbeat(False)
-				
-			for cycles in range(10): # stop after 10 cycles    
-				pycom.rgbled(0x007f00) # green    
-		    		time.sleep(0.5)
-		    		pycom.rgbled(0x7f7f00) # yellow    
-		    		time.sleep(0.5)
-		    		pycom.rgbled(0x7f0000) # red    
-		    		time.sleep(0.5)
+			
+			«generatePycomCode(b, r)»
+			
+			«genFunctions(b, r)»
+			while(isRunning):
+				«generateLogic(b, r)»
+			#CODE GENERATION END
 		'''
 	}
 	
-	def generatePycomImports(Board b, Resource r) { 
-		var sb = new StringBuilder();
-		sb.append(generatePycomConnectionImport(b, r))
+	def generatePycomImports(Board b, Resource r, IFileSystemAccess2 fsa) { 
+		val sb = new StringBuilder();
+		importcode.forEach[k, v| {
+			if(externalFilesMap.containsKey(k)) {
+				try {
+					var url = externalFilesMap.get(k)
+					var filename = Paths.get(url.toURI.getPath()).getFileName().toString()
+					fsa.generateFile(filename, new BufferedInputStream(url.openStream()))
+				} catch (IOException e) {
+					//Handle Download Exception Errors :)
+					e.printStackTrace()
+				}
+			}
+			sb.append(v + "\n")
+		}]
 		return sb.toString
 	}
 	
-	def generatePycomActuatorImport(Board b, Resource r) {
-		var sb = new StringBuilder();
+	def generatePycomCode(Board b, Resource r) { 
+		val sb = new StringBuilder();
+		sb.append("\n")
+		codeMap.forEach[k, v| {
+			sb.append(v + "\n")
+		}]
+		return sb.toString
+	}
+	
+	def generateLogic(Board board, Resource resource) {
+		val sb = new StringBuilder();
+		sb.append("\n")
+		logicmap.forEach[k, v| {
+			sb.append(v + "\n")
+		}]
+		return sb.toString
+	}
+	
+	def genFunctions(Board board, Resource resource) {
+		val sb = new StringBuilder();
+		sb.append("\n")
+		functionmap.forEach[k, v| {
+			sb.append(v + "\n")
+		}]
+		return sb.toString
+	}
+	
+	def generatePycom(Board b, Resource r) {
+		importcode = new HashMap<String, String>();
+		codeMap = new HashMap<String, String>();
+		logicmap = new HashMap<String, String>();
+		functionmap = new HashMap<String, String>();
+		generatePycomConnection(b, r)
+		generatePycomActuator(b, r)
+		generatePycomSensor(b, r)
+		generateFunctions(b, r)
+	}
+	
+	def generateFunctions(Board board, Resource resource) {
+		for (server : resource.allContents.toIterable.filter(typeof(Server))) {
+			for (condaction : server.exps) {
+				genConditionalAction(board, resource, condaction)
+			} 				
+		} 		
+	}
+	
+	def void genConditionalAction(Board board, Resource resource, ConditionalAction conAction) {
+		genCondition(board, resource, conAction.condition)
+		for (exp : conAction.expMembers) {
+			if(exp instanceof ConditionalAction) {
+				genConditionalAction(board, resource, exp)
+			} else if(exp instanceof Function) {
+				genFunction(board, resource, exp)
+			}
+		}
+	}
+	
+	def void genCondition(Board board, Resource resource, Condition condition) {
+		if(condition.nestedCondition !== null) {
+			genCondition(board, resource, condition.nestedCondition)
+		}
+		if(condition.logicEx.compExp.left.outputfunction !== null) {
+			if (condition.logicEx.compExp.left.outputfunction.board.equals(board)) {
+				var func = condition.logicEx.compExp.left.outputfunction
+				var op = condition.logicEx.compExp.op
+				if(condition.logicEx.compExp.right.outputfunction === null) {
+					var thresholdvalue = condition.logicEx.compExp.right.outputValue
+					generateThresholdFunction(board, resource, func, thresholdvalue, op)
+				} else if (condition.logicEx.compExp.right.outputfunction.board.equals(board)) {
+					var thresholdfunc = condition.logicEx.compExp.right.outputfunction
+					generateDoubleFunction(board, resource, func, thresholdfunc, op)
+				}
+			}
+		}
+		if(condition.logicEx.compExp.right.outputfunction !== null) {
+			if (condition.logicEx.compExp.right.outputfunction.board.equals(board)) {
+				var func = condition.logicEx.compExp.right.outputfunction
+				var op = condition.logicEx.compExp.op
+				if(condition.logicEx.compExp.left.outputfunction === null) {
+					var thresholdvalue = condition.logicEx.compExp.left.outputValue
+					generateThresholdFunction(board, resource, func, thresholdvalue, op)
+				} else if (condition.logicEx.compExp.left.outputfunction.board.equals(board)) {
+					var thresholdfunc = condition.logicEx.compExp.left.outputfunction
+					generateDoubleFunction(board, resource, func, thresholdfunc, op)
+				}
+			}
+		}
+	}
+	
+	def generateThresholdFunction(Board board, Resource resource, Function function, int i, String op) {
+		JOptionPane.showMessageDialog( null , function.functionName, "Threshold: " + i , JOptionPane.INFORMATION_MESSAGE)
+		var threshold = '''
+		«function.functionName»Threshold = «i»
+		«function.functionName»Value = «function.functionName»()
+		if («function.functionName»Value «op» «function.functionName»Threshold):
+			sendurl = "http://www.kikuku.tk:3000/send/{}".format(«function.functionName»Value)
+			res = urequests.post(sendurl)   
+			print("Res code: ", res.status_code)
+			print("Res: ", res.reason)'''
+		var funk = '''
+		def «function.functionName»():
+			#Write your code here		
+		'''
+		logicmap.put(function.functionName, threshold)
+		functionmap.put(function.functionName, funk)
+	}
+	
+	
+	def generateDoubleFunction(Board board, Resource resource, Function function, Function function2, String op) {
+		var transmitcode = '''
+		«function.functionName»Value = «function.functionName»()
+		«function2.functionName»Value = «function2.functionName»()
+		if («function.functionName»Value «op» «function2.functionName»Value):
+			sendurl = "http://www.kikuku.tk:3000/send/{}".format(true)
+			res = urequests.post(sendurl)   
+			print("Res code: ", res.status_code)
+			print("Res: ", res.reason)'''
+		var funk = '''
+		def «function.functionName»():
+			#Write your code here		
+		'''
+		
+		var funk2 = '''
+		def «function2.functionName»():
+			#Write your code here		
+		'''
+		logicmap.put(function.functionName, transmitcode)
+		functionmap.put(function.functionName, funk)
+		functionmap.put(function.functionName, funk2)
+	}
+	
+	def genFunction(Board board, Resource resource, Function function) {
+		if(function.board.equals(board)) {
+			var funk = '''
+			def «function.functionName»():
+				#Write your code here		
+			'''
+			functionmap.put(function.functionName, funk)
+		}
+	}
+	
+	def generatePycomSensor(Board b, Resource r) {
+		for (sensor : b.boardMembers.filter(typeof(Sensor))) {
+			for (sensortype : sensor.sensorTypes.filter(typeof(SensorType))) {
+				if (!importcode.containsKey(sensortype.typeName)) {
+					importcode.put(sensortype.typeName, generateSensorImport(b, r, sensortype).toString())
+					codeMap.put(sensortype.name, generateSensorCode(b, r, sensortype))
+					
+				}
+			}
+		}
+	}
+	
+	def generateSensorCode(Board board, Resource resource, SensorType type) {
+		if(type.pins !== null) {
+			var power = type.pins.power.name
+			var input = type.pins.input.name
+			if(power == null || input == null) {
+				if(moduleMap.containsKey(type.typeName)) {
+					return '''«type.name» = «moduleMap.get(type.typeName)»(Pin.IN = «input», Pin.OUT = «power»)'''
+				} else {
+					return '''«type.name» = #Unknown Sensor'''
+				}
+			}	
+		}
+		if(moduleMap.containsKey(type.typeName)) {
+			return '''«type.name» = «moduleMap.get(type.typeName)»()'''
+		} else {
+			return '''«type.name» = #Unknown Sensor'''
+		}
+	}
+	
+	def generateSensorImport(Board b, Resource r, SensorType sensorType) {			
+		if(moduleMap.containsKey(sensorType.typeName)) {
+			return '''from «moduleMap.get(sensorType.typeName)» import «moduleMap.get(sensorType.typeName)»'''
+		} else {
+			return '''import «sensorType.typeName»'''
+		}		
+	}
+	
+	def generatePycomActuator(Board b, Resource r) {
 		for (actuator : b.boardMembers.filter(typeof(Actuator))) {
-			sb.append(generateActuatorImports(b, r))
+			for (actuatortype : actuator.actuatorTypes.filter(typeof(ActuatorType))) {
+				if (!importcode.containsKey(actuatortype.typeName)) {
+					importcode.put(actuatortype.typeName, generateActuatorImports(b, r, actuatortype).toString())
+					codeMap.put(actuatortype.name, generateActuatorCode(b, r, actuatortype))
+				}
+			}
 		}
-		return sb.toString
 	}
 	
-	def generateActuatorImports(Board b, Resource r) {	
-		'''
-			#
-		'''
+	def generateActuatorCode(Board board, Resource resource, ActuatorType type) {
+		if(type.pins !== null) {
+			var power = type.pins.power.name
+			var input = type.pins.input.name
+			if(power == null || input == null) {
+				if(moduleMap.containsKey(type.typeName)) {
+					return '''«type.name» = «moduleMap.get(type.typeName)»(Pin.IN = «input», Pin.OUT = «power»)'''
+				} else {
+					return '''«type.name» = #Unknown Actuator'''
+				}
+			}	
+		}
+		if(moduleMap.containsKey(type.typeName)) {
+			return '''«type.name» = «moduleMap.get(type.typeName)»()'''
+		} else {
+			return '''«type.name» = #Unknown Actuator'''
+		}
 	}
 	
-	def generatePycomConnectionImport(Board b, Resource r) {
-		var sb = new StringBuilder();
+	def generateActuatorImports(Board b, Resource r, ActuatorType actuatorType) {	
+		'''import «actuatorType.typeName»'''
+	}
+	
+	def generatePycomConnection(Board b, Resource r) {
 		for (a : b.boardMembers.filter(Communication)) {
-			if (a.type.equals("WiFi")) {
-		    	sb.append(generatePycomWifiImport(b, r))
-		    } else {
-		    	sb.append("") //Default case for unsupported BlueThooth|SigFox
-		    }
+			if (!importcode.containsKey(a.type)) {
+				if (a.type.equals("WiFi")) {
+		    		importcode.put(a.type, generatePycomWifiImport(b, r).toString)
+		    		codeMap.put(a.type, generatePycomWifiCode(b, r).toString)
+			    } else {
+			    	importcode.put(a.type, "#Not Supported Communication-type: " + a.type) //Default case for unsupported BlueThooth|SigFox
+			    	var s = '''
+			    				#***«a.type» SETUP***
+			    		
+			    				#Unsupported Communication, write your own code
+			    		
+			    				#***«a.type» SETUP END***
+			    			'''
+			    	codeMap.put(a.type, s)
+			    }
+			}
 		}
-		return sb.toString
 	}
 
 	def generatePycomWifiImport(Board b, Resource r) {	
@@ -97,22 +345,6 @@ class PycomGenerator extends AbstractGenerator {
 			from network import WLAN
 			
 		'''
-	}
-	
-	def generatePycomCode(Board b, Resource r) { 
-		generatePycomConnectionCode(b, r)
-	}
-	
-	def generatePycomConnectionCode(Board b, Resource r) {
-		var sb = new StringBuilder();
-		//Change to use Filters :)
-		for (a : b.boardMembers.filter(Communication)) {
-			if (a.type.equals("WiFi")) {
-		    	sb.append(generatePycomWifiCode(b, r))
-		    } else {
-		    	sb.append("") //Default case for unsupported BlueThooth|SigFox
-		    }
-		}
 	}
 	
 	def generatePycomWifiCode(Board b, Resource r) {
