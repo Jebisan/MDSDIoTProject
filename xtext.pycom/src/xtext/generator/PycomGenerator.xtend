@@ -24,6 +24,8 @@ import xtext.pycom.Condition
 import xtext.pycom.Function
 import xtext.pycom.Expression
 import javax.swing.JOptionPane
+import java.util.List
+import xtext.pycom.ExpMember
 
 /**
  * Generates code from your model files on save.
@@ -400,15 +402,16 @@ class PycomGenerator extends AbstractGenerator {
 		var stringBuilder = new StringBuilder;
 		
 		stringBuilder.append(GenerateServerHeader(s))		
-		GeneratePostRoutes(stringBuilder, conditionalAction.condition, r, type)
+		GeneratePostRoutes(stringBuilder, conditionalAction, r, type)
 						
 		return stringBuilder.toString;
 	}		
 	
-	def GeneratePostRoutes(StringBuilder stringBuilder, Condition condition, Resource r, String type)
+	def GeneratePostRoutes(StringBuilder stringBuilder, ConditionalAction conditionalAction, Resource r, String type)
 	{		
 		var conditionalStringBuilder = new StringBuilder();
-		var content = GetConditionalStatementContent(conditionalStringBuilder, condition)
+		var content = GetConditionalStatementContent(conditionalStringBuilder, conditionalAction.condition);		
+		var scopeContent = GetConditionalScopeContent(conditionalAction.expMembers);
 		
 		stringBuilder.append(						
 		'''							
@@ -419,6 +422,7 @@ class PycomGenerator extends AbstractGenerator {
 				    
 				    «type»(«content»)
 				    {  
+				    	«scopeContent»
 				    	res.send("Message received: " + value);
 				    	console.log("Message received: " + value)    
 				    }
@@ -426,6 +430,27 @@ class PycomGenerator extends AbstractGenerator {
 		«ENDFOR»	
 		'''				
 		)				
+	}
+	
+	def GetConditionalScopeContent(List<ExpMember> content)
+	{
+		var scopeContentBuilder = new StringBuilder();		
+		
+		for (exp : content) 
+		{
+			if(exp instanceof ConditionalAction) 
+			{
+				var tempBuilder = new StringBuilder();
+				var text = GetConditionalStatementContent(tempBuilder, exp.condition)
+				scopeContentBuilder.append(exp.type + "(" + text + ")\n")				
+			} 
+			else if(exp instanceof Function) 
+			{
+				scopeContentBuilder.append("// Activate this actuator: " + exp.board.name + "." + exp.functionName + "\n")
+			}
+		}
+		
+		return scopeContentBuilder.toString;
 	}
 	
 	def GetConditionalStatementContent(StringBuilder stringBuilder, Condition condition)
@@ -465,5 +490,5 @@ class PycomGenerator extends AbstractGenerator {
 		}	
 		
 		return stringBuilder.toString;
-	}
+	}		
 }
