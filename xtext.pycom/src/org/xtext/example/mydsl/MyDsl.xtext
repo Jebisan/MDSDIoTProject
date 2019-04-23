@@ -45,11 +45,11 @@ Actuator:
 Communication:
 	'Communication' ':' type=('WiFi' | 'Bluetooth' | 'SigFox');
 
-ActuatorType:
-	typeName=ActuatorName ':' name=ID ('(' pins=Pin ')')?;
+ActuatorType returns ModuleType:
+	{ActuatorType} typeName=ActuatorName ':' name=ID ('(' pins=Pin ')')?;
 
-SensorType:
-	typeName=SensorName ':' name=ID ('(' pins=Pin ')')?;
+SensorType returns ModuleType:
+	{SensorType} typeName=SensorName ':' name=ID ('(' pins=Pin ')')?;
 
 SensorName:
 	'Light' | 'Temperature' | 'Barometer' | 'Humidity' | 'Accelerometer';
@@ -85,22 +85,17 @@ Operator:
 	'<' | '<=' | '==' | '>=' | '>' | '!=';
 	
 Number: 
-	INT;
+	INT
+;
 	
-Function:
-	ActuatorFunction | SensorFunction | board=[Board] '.' functionName=BoardFunctionName;
-
-ActuatorFunction: 
-	board=[Board] '.' actuatorType=[ActuatorType] '.' functionName=ActuatorFunctionName | actuatorType=[ActuatorType] '.' functionName=ActuatorFunctionName;
+Function: 
+	ModuleFunction | board=[Board] '.' functionName=FunctionName
+;
 	
-SensorFunction: 
-	board=[Board] '.' sensorType=[SensorType] '.' functionName=SensorFunctionName | sensorType=[SensorType] '.' functionName=SensorFunctionName;
+ModuleFunction: 
+	board=[Board] '.' moduleType=[ModuleType] '.' functionName=FunctionName
+;
 	
-SensorFunctionName:
-	'SensorFunctionName';
-
-ActuatorFunctionName:
-	'ActuatorFunctionName';
-	
-BoardFunctionName:
-	'BoardFunctionName';
+FunctionName:
+	name=ID
+;

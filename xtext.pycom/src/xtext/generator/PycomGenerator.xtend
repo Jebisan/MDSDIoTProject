@@ -26,8 +26,8 @@ import xtext.pycom.Expression
 import javax.swing.JOptionPane
 import java.util.List
 import xtext.pycom.ExpMember
-import xtext.pycom.ActuatorFunction
-import xtext.pycom.SensorFunction
+import xtext.pycom.Connection
+import xtext.pycom.ModuleFunction
 
 /**
  * Generates code from your model files on save.
@@ -56,6 +56,27 @@ class PycomGenerator extends AbstractGenerator {
 		for (server : resource.allContents.toIterable.filter(typeof(Server))) {
 			fsa.generateFile(server.name + ".js", generateServerFiles(server, resource))			
 		} 			
+	}
+	
+	def oppositeOP(String op) {
+		if(op.equals("<")) {
+			return ">"
+		}
+		if(op.equals(">")) {
+			return "<"
+		}
+		if(op.equals("<=")) {
+			return ">"
+		}
+		if(op.equals(">=")) {
+			return "<"
+		}
+		if(op.equals("==")) {
+			return "!="
+		}
+		if(op.equals("!=")) {
+			return "=="
+		}	
 	}
 	
 	def populateHashmap() {
@@ -150,25 +171,25 @@ class PycomGenerator extends AbstractGenerator {
 	def generateFunctions(Board board, Resource resource) {
 		for (server : resource.allContents.toIterable.filter(typeof(Server))) {
 			for (condaction : server.exps) {
-				genConditionalAction(board, resource, condaction)
+				genConditionalAction(board, resource, condaction, server)
 			} 				
 		} 		
 	}
 	
-	def void genConditionalAction(Board board, Resource resource, ConditionalAction conAction) {
-		genCondition(board, resource, conAction.condition)
+	def void genConditionalAction(Board board, Resource resource, ConditionalAction conAction, Server server) {
+		genCondition(board, resource, conAction.condition, server)
 		for (exp : conAction.expMembers) {
 			if(exp instanceof ConditionalAction) {
-				genConditionalAction(board, resource, exp)
+				genConditionalAction(board, resource, exp, server)
 			} else if(exp instanceof Function) {
-				genFunction(board, resource, exp)
+				genFunction(board, resource, exp, server)
 			}
 		}
 	}
 	
-	def void genCondition(Board board, Resource resource, Condition condition) {
+	def void genCondition(Board board, Resource resource, Condition condition, Server server) {
 		if(condition.nestedCondition !== null) {
-			genCondition(board, resource, condition.nestedCondition)
+			genCondition(board, resource, condition.nestedCondition, server)
 		}
 		if(condition.logicEx.compExp.left.outputfunction !== null) {
 			if (condition.logicEx.compExp.left.outputfunction.board.equals(board)) {
@@ -176,10 +197,10 @@ class PycomGenerator extends AbstractGenerator {
 				var op = condition.logicEx.compExp.op
 				if(condition.logicEx.compExp.right.outputfunction === null) {
 					var thresholdvalue = condition.logicEx.compExp.right.outputValue
-					generateThresholdFunction(board, resource, func, thresholdvalue, op)
+					generateThresholdFunction(board, resource, func, thresholdvalue, op, server)
 				} else if (condition.logicEx.compExp.right.outputfunction.board.equals(board)) {
 					var thresholdfunc = condition.logicEx.compExp.right.outputfunction
-					generateDoubleFunction(board, resource, func, thresholdfunc, op)
+					generateDoubleFunction(board, resource, func, thresholdfunc, op, server)
 				}
 			}
 		}
@@ -189,63 +210,88 @@ class PycomGenerator extends AbstractGenerator {
 				var op = condition.logicEx.compExp.op
 				if(condition.logicEx.compExp.left.outputfunction === null) {
 					var thresholdvalue = condition.logicEx.compExp.left.outputValue
-					generateThresholdFunction(board, resource, func, thresholdvalue, op)
+					generateThresholdFunction(board, resource, func, thresholdvalue, op, server)
 				} else if (condition.logicEx.compExp.left.outputfunction.board.equals(board)) {
 					var thresholdfunc = condition.logicEx.compExp.left.outputfunction
-					generateDoubleFunction(board, resource, func, thresholdfunc, op)
+					generateDoubleFunction(board, resource, func, thresholdfunc, op, server)
 				}
 			}
 		}
 	}
 	
-	def generateThresholdFunction(Board board, Resource resource, Function function, int i, String op) {
-		var threshold = '''
-		«function.functionName»Threshold = «i»
-		«function.functionName»Value = «function.functionName»()
-		if («function.functionName»Value «op» «function.functionName»Threshold):
-			sendurl = "http://www.kikuku.tk:3000/send/{}".format(«function.functionName»Value)
-			res = urequests.post(sendurl)   
-			print("Res code: ", res.status_code)
-			print("Res: ", res.reason)'''
-		var funk = '''
-		def «function.functionName»():
-			#Write your code here		
-		'''
-		logicmap.put(function.functionName, threshold)
-		functionmap.put(function.functionName, funk)
+	def getServerAddress(Connection conn) {
+		var String adress
+		if(!conn.host.ipAdr.isNullOrEmpty) {
+			adress = conn.host.ipAdr
+		} else if ((!conn.host.website.isNullOrEmpty)) {
+			adress = conn.host.website
+		} else {
+			adress = "#Undefined Address"
+		}
+		adress = adress + ":" + conn.portnumber
+		return adress
 	}
 	
-	
-	def generateDoubleFunction(Board board, Resource resource, Function function, Function function2, String op) {
-		var transmitcode = '''
-		«function.functionName»Value = «function.functionName»()
-		«function2.functionName»Value = «function2.functionName»()
-		if («function.functionName»Value «op» «function2.functionName»Value):
-			sendurl = "http://www.kikuku.tk:3000/send/{}".format(true)
+	def generateThresholdFunction(Board board, Resource resource, Function function, int i, String op, Server server) {	
+		var threshold = '''
+		«function.functionName.name»Threshold = «i»
+		«function.functionName.name»Value = «function.functionName.name»()
+		if («function.functionName.name»Value «op» «function.functionName.name»Threshold):
+			sendurl = «getServerAddress(server.conn)».format(«function.functionName.name»Value)
 			res = urequests.post(sendurl)   
 			print("Res code: ", res.status_code)
-			print("Res: ", res.reason)'''
+			print("Res: ", res.reason)
+		if («function.functionName.name»Value «oppositeOP(op)» «function.functionName.name»Threshold):
+					sendurl = «getServerAddress(server.conn)».format(«function.functionName.name»Value)
+					res = urequests.post(sendurl)   
+					print("Res code: ", res.status_code)
+					print("Res: ", res.reason)
+		'''				
 		var funk = '''
-		def «function.functionName»():
+		def «function.functionName.name»():
+			#Write your code here		
+		'''
+		logicmap.put(function.functionName.name, threshold)
+		functionmap.put(function.functionName.name, funk)
+	}
+	
+	def generateDoubleFunction(Board board, Resource resource, Function function, Function function2, String op, Server server) {
+		var transmitcode = '''
+		«function.functionName.name»Value = «function.functionName.name»()
+		«function2.functionName.name»Value = «function2.functionName.name»()
+		if («function.functionName.name»Value «op» «function2.functionName.name»Value):
+			sendurl = "«getServerAddress(server.conn)»/send/{}".format(true)
+			res = urequests.post(sendurl)   
+			print("Res code: ", res.status_code)
+			print("Res: ", res.reason)
+		if («function.functionName.name»Value «oppositeOP(op)» «function2.functionName»Value):
+			sendurl = "«getServerAddress(server.conn)»/send/{}".format(false)
+			res = urequests.post(sendurl)   
+			print("Res code: ", res.status_code)
+			print("Res: ", res.reason)
+		'''
+		var funk = '''
+		def «function.functionName.name»():
 			#Write your code here		
 		'''
 		
+		
 		var funk2 = '''
-		def «function2.functionName»():
+		def «function2.functionName.name»():
 			#Write your code here		
 		'''
-		logicmap.put(function.functionName, transmitcode)
-		functionmap.put(function.functionName, funk)
-		functionmap.put(function.functionName, funk2)
+		logicmap.put(function.functionName.name, transmitcode)
+		functionmap.put(function.functionName.name, funk)
+		functionmap.put(function.functionName.name, funk2)
 	}
 	
-	def genFunction(Board board, Resource resource, Function function) {
+	def genFunction(Board board, Resource resource, Function function, Server server) {
 		if(function.board.equals(board)) {
 			var funk = '''
-			def «function.functionName»():
-				#Write your code here		
+			def «function.functionName.name»():
+				#Write your code here LOL		
 			'''
-			functionmap.put(function.functionName, funk)
+			functionmap.put(function.functionName.name, funk)
 		}
 	}
 	
@@ -373,7 +419,7 @@ class PycomGenerator extends AbstractGenerator {
 			#***WIFI SETUP END***
 			
 		'''
-	}	
+	}
 	
 	def GenerateServerHeader(Server s)
 	{
@@ -531,14 +577,10 @@ class PycomGenerator extends AbstractGenerator {
 			} 
 			else if(exp instanceof Function) 
 			{
-				var sensorName = ""
-				if(exp instanceof ActuatorFunction) 
-				{
-					sensorName = exp.actuatorType.name + "."				
-				}
-				else if(exp instanceof SensorFunction)
-				{
-					sensorName = exp.sensorType.name + "."
+				var sensorName = ""			
+				
+				if(exp instanceof ModuleFunction) {
+					sensorName = exp.moduleType.name
 				}
 				scopeContentBuilder.append("// Activate this actuator: " + exp.board.name + "." + sensorName + exp.functionName + "\n")
 			}

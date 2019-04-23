@@ -5,13 +5,13 @@ package xtext.scoping
 
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EReference
-import xtext.pycom.ActuatorFunction
 import xtext.pycom.PycomPackage.Literals
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.scoping.Scopes
 import xtext.pycom.ActuatorType
-import xtext.pycom.SensorFunction
 import xtext.pycom.SensorType
+import xtext.pycom.ModuleFunction
+import xtext.pycom.ModuleType
 
 /**
  * This class contains custom scoping description.
@@ -22,19 +22,11 @@ import xtext.pycom.SensorType
 class PycomScopeProvider extends AbstractPycomScopeProvider {
 
 	override getScope(EObject context, EReference reference) {
-		if(context instanceof ActuatorFunction && reference == Literals.ACTUATOR_FUNCTION__ACTUATOR_TYPE){
-			val board = (context as ActuatorFunction).board
-			val candidates = EcoreUtil2.getAllContentsOfType(board, ActuatorType)			
+		if(context instanceof ModuleFunction && reference == Literals.MODULE_FUNCTION__MODULE_TYPE){
+			val board = (context as ModuleFunction).board
+			val candidates = EcoreUtil2.getAllContentsOfType(board, ModuleType)		
 			return Scopes.scopeFor(candidates);
 		}
-		
-		if(context instanceof SensorFunction && reference == Literals.SENSOR_FUNCTION__SENSOR_TYPE){
-			val board = (context as SensorFunction).board
-			val candidates = EcoreUtil2.getAllContentsOfType(board, SensorType)			
-			return Scopes.scopeFor(candidates);
-		}
-		
 		return super.getScope(context, reference)
 	}
-
 }
