@@ -26,6 +26,8 @@ import xtext.pycom.Expression
 import javax.swing.JOptionPane
 import java.util.List
 import xtext.pycom.ExpMember
+import xtext.pycom.ActuatorFunction
+import xtext.pycom.SensorFunction
 
 /**
  * Generates code from your model files on save.
@@ -392,6 +394,7 @@ class PycomGenerator extends AbstractGenerator {
 		    res.send("Default get route");
 		    console.log("Default get route");
 		});		
+						
 		'''
 	}
 	
@@ -426,7 +429,8 @@ class PycomGenerator extends AbstractGenerator {
 				    	res.send("Message received: " + value);
 				    	console.log("Message received: " + value)    
 				    }
-				});									
+				});	
+												
 		«ENDFOR»	
 		'''				
 		)				
@@ -446,12 +450,21 @@ class PycomGenerator extends AbstractGenerator {
 				
 				if(exp.expMembers.size > 0)
 				{
-					scopeContentBuilder.append("{\n" + GetConditionalScopeContent(exp.expMembers) + "}\n")
+					scopeContentBuilder.append("{\n" + GetConditionalScopeContent(exp.expMembers) + "}\n\n")
 				}
 			} 
 			else if(exp instanceof Function) 
 			{
-				scopeContentBuilder.append("// Activate this actuator: " + exp.board.name + "." + exp.functionName + "\n")
+				var sensorName = ""
+				if(exp instanceof ActuatorFunction) 
+				{
+					sensorName = exp.actuatorType.name + "."				
+				}
+				else if(exp instanceof SensorFunction)
+				{
+					sensorName = exp.sensorType.name + "."
+				}
+				scopeContentBuilder.append("// Activate this actuator: " + exp.board.name + "." + sensorName + exp.functionName + "\n")
 			}
 		}
 		
