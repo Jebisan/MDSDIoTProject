@@ -437,6 +437,7 @@ class PycomGenerator extends AbstractGenerator {
 		stringBuilder.append(GenerateServerHeader(s))	
 		stringBuilder.append(GenerateGlobalVariables(r))	
 		GeneratePostRoutes(stringBuilder, conditionalAction, r, type)
+		GenerateIfFunctions(stringBuilder, conditionalAction, r, type, s)
 						
 		return stringBuilder.toString;
 	}		
@@ -456,6 +457,7 @@ class PycomGenerator extends AbstractGenerator {
 						app.post('/«b.name»/«sensortype.typeName»/«sensortype.name»/:value', function(req, res)
 							{    					    
 							    «variableName» = req.params.value; 
+							    «b.name»();
 							    								    
 						    	res.send("Message received: " + «variableName»);
 						    	console.log("Message received: " + «variableName»)    								    
@@ -486,30 +488,30 @@ class PycomGenerator extends AbstractGenerator {
 			}
 			
 			stringBuilder.append("\n\n");
-		}
-		
+		}									
+	}
+	
+	def GenerateIfFunctions(StringBuilder stringBuilder, ConditionalAction conditionalAction, Resource r, String type, Server s)
+	{
 		var conditionalStringBuilder = new StringBuilder();
 		var content = GetConditionalStatementContent(conditionalStringBuilder, conditionalAction.condition);		
 		var scopeContent = GetConditionalScopeContent(conditionalAction.expMembers);		
 		
 		stringBuilder.append(						
-		'''							
-		«FOR b : r.allContents.toIterable.filter(typeof(Board))»
-			app.post('/«b.name»/:value', function(req, res)
-				{    					    
-				    var value = req.params.value; 
-				    
-				    «type»(«content»)
-				    {  
-				    	«scopeContent»
-				    	res.send("Message received: " + value);
-				    	console.log("Message received: " + value)    
-				    }
-				});	
-												
+		'''		
+		«var counter = 1»					
+		«FOR b : s.exps.filter(typeof(ConditionalAction))»			
+			function «s.name»«counter»()
+			{    					    			    			    
+			    «type»(«content»)
+			    {  
+			    	«scopeContent»				    	
+			    }
+			}
+		«counter += 1»										
 		«ENDFOR»	
 		'''				
-		)							
+		)		
 	}
 	
 	def GetConditionalScopeContent(List<ExpMember> content)
@@ -531,16 +533,16 @@ class PycomGenerator extends AbstractGenerator {
 			} 
 			else if(exp instanceof Function) 
 			{
-				var sensorName = ""
+				var output = ""
 				if(exp instanceof ActuatorFunction) 
 				{
-					sensorName = exp.actuatorType.name + "."				
+					output = exp.actuatorType.typeName + "_" + exp.actuatorType.name + "_" + "turnOn"
 				}
 				else if(exp instanceof SensorFunction)
 				{
-					sensorName = exp.sensorType.name + "."
+					output = exp.sensorType.typeName + "_" + exp.sensorType.name + "_" + "turnOn"					
 				}
-				scopeContentBuilder.append("// Activate this actuator: " + exp.board.name + "." + sensorName + exp.functionName + "\n")
+				scopeContentBuilder.append("\t" + output + " = true" + "\n")
 			}
 		}
 		
