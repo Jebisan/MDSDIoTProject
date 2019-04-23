@@ -443,6 +443,11 @@ class PycomGenerator extends AbstractGenerator {
 				var tempBuilder = new StringBuilder();
 				var text = GetConditionalStatementContent(tempBuilder, exp.condition)
 				scopeContentBuilder.append(exp.type + "(" + text + ")\n")				
+				
+				if(exp.expMembers.size > 0)
+				{
+					scopeContentBuilder.append("{\n" + GetConditionalScopeContent(exp.expMembers) + "}\n")
+				}
 			} 
 			else if(exp instanceof Function) 
 			{
