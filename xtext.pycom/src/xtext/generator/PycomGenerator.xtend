@@ -407,7 +407,7 @@ class PycomGenerator extends AbstractGenerator {
 			{
 				for (sensortype : sensor.sensorTypes.filter(typeof(SensorType))) 
 				{
-					globalVariablesStringBuilder.append("var " + sensortype.typeName + "_" + sensortype.name + "_value" + ";\n")														
+					globalVariablesStringBuilder.append("var " + sensortype.typeName + "_" + sensortype.name + "_value" + " = undefined;\n")														
 				}
 			}
 			
@@ -417,7 +417,7 @@ class PycomGenerator extends AbstractGenerator {
 			{
 				for (actuatortype : actuator.actuatorTypes.filter(typeof(ActuatorType))) 
 				{	
-					globalVariablesStringBuilder.append("var " + actuatortype.typeName + "_" + actuatortype.name + "_turnOn" + ";\n")																								
+					globalVariablesStringBuilder.append("var " + actuatortype.typeName + "_" + actuatortype.name + "_turnOn" + " = undefined;\n")																								
 				}
 			}
 			
@@ -442,10 +442,55 @@ class PycomGenerator extends AbstractGenerator {
 	}		
 	
 	def GeneratePostRoutes(StringBuilder stringBuilder, ConditionalAction conditionalAction, Resource r, String type)
-	{		
+	{						
+		for (b : r.allContents.toIterable.filter(typeof(Board)))
+		{
+			for (sensor : b.boardMembers.filter(typeof(Sensor))) 
+			{
+				for (sensortype : sensor.sensorTypes.filter(typeof(SensorType))) 
+				{
+					var variableName = sensortype.typeName + "_" + sensortype.name + "_" + "value";
+					
+					stringBuilder.append(						
+						'''							
+						app.post('/«b.name»/«sensortype.typeName»/«sensortype.name»/:value', function(req, res)
+							{    					    
+							    «variableName» = req.params.value; 
+							    								    
+						    	res.send("Message received: " + «variableName»);
+						    	console.log("Message received: " + «variableName»)    								    
+							});	
+																
+						'''				
+						)														
+				}
+			}			
+			
+			for (actuator : b.boardMembers.filter(typeof(Actuator))) 
+			{
+				for (actuatortype : actuator.actuatorTypes.filter(typeof(ActuatorType))) 
+				{	
+					var variableName = actuatortype.typeName + "_" + actuatortype.name + "_" + "turnOn";
+											
+					stringBuilder.append(						
+						'''							
+						app.get('/«b.name»/«actuatortype.typeName»/«actuatortype.name»', function(req, res)
+							{    					    
+							    res.send(«variableName»);
+						    	console.log("Return «variableName»: " + «variableName»)    								    
+							});	
+																
+						'''				
+						)																									
+				}
+			}
+			
+			stringBuilder.append("\n\n");
+		}
+		
 		var conditionalStringBuilder = new StringBuilder();
 		var content = GetConditionalStatementContent(conditionalStringBuilder, conditionalAction.condition);		
-		var scopeContent = GetConditionalScopeContent(conditionalAction.expMembers);
+		var scopeContent = GetConditionalScopeContent(conditionalAction.expMembers);		
 		
 		stringBuilder.append(						
 		'''							
@@ -464,7 +509,7 @@ class PycomGenerator extends AbstractGenerator {
 												
 		«ENDFOR»	
 		'''				
-		)				
+		)							
 	}
 	
 	def GetConditionalScopeContent(List<ExpMember> content)
