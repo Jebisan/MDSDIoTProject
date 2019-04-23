@@ -65,7 +65,7 @@ ActuatorName:
 	'LED' | 'Engine';
 
 Condition:
-	logicEx=LogicExp | logicEx=LogicExp '&&' nestedCondition=Condition | logicEx=LogicExp '||' nestedCondition=Condition;
+	logicEx=LogicExp | logicEx=LogicExp operator='&&' nestedCondition=Condition | logicEx=LogicExp operator='||' nestedCondition=Condition;
 
 LogicExp:
 	boolVal=Boolean | compExp=ComparisonExp;

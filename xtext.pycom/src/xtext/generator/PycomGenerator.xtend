@@ -370,34 +370,11 @@ class PycomGenerator extends AbstractGenerator {
 			#***WIFI SETUP END***
 			
 		'''
-	}
+	}	
 	
-	def generateServerFiles(Server s, Resource r) 
+	def GenerateServerHeader(Server s)
 	{
-		var type = s.exps.get(0).type;
-		var left = "";	
-		var operator = s.exps.get(0).condition.logicEx.compExp.op;
-		var right = "";	
-		
-		if(s.exps.get(0).condition.logicEx.compExp.left.outputfunction != null)
-		{
-			left = "value";
-		}	
-		else
-		{
-			left = String.valueOf(s.exps.get(0).condition.logicEx.compExp.left.outputValue);
-		}
-		
-		if(s.exps.get(0).condition.logicEx.compExp.right.outputfunction != null)
-		{		
-			right = "value";
-		}	
-		else
-		{
-			right = String.valueOf(s.exps.get(0).condition.logicEx.compExp.right.outputValue);
-		}				
-		
-		'''	
+		'''
 		var express = require('express');
 		var app = express();
 		var bodyParser = require('body-parser');
@@ -412,20 +389,81 @@ class PycomGenerator extends AbstractGenerator {
 		app.get("*", function(req, res){		     
 		    res.send("Default get route");
 		    console.log("Default get route");
-		});				
+		});		
+		'''
+	}
+	
+	def generateServerFiles(Server s, Resource r) 
+	{
+		var conditionalAction = s.exps.get(0);		
+		var type = conditionalAction.type;
+		var stringBuilder = new StringBuilder;
 		
-		«FOR b : r. allContents.toIterable.filter(typeof(Board))»
+		stringBuilder.append(GenerateServerHeader(s))		
+		GeneratePostRoutes(stringBuilder, conditionalAction.condition, r, type)
+						
+		return stringBuilder.toString;
+	}		
+	
+	def GeneratePostRoutes(StringBuilder stringBuilder, Condition condition, Resource r, String type)
+	{		
+		var conditionalStringBuilder = new StringBuilder();
+		var content = GetConditionalStatementContent(conditionalStringBuilder, condition)
+		
+		stringBuilder.append(						
+		'''							
+		«FOR b : r.allContents.toIterable.filter(typeof(Board))»
 			app.post('/«b.name»/:value', function(req, res)
 				{    					    
 				    var value = req.params.value; 
 				    
-				    «type»(«left» «operator» «right»)
+				    «type»(«content»)
 				    {  
 				    	res.send("Message received: " + value);
 				    	console.log("Message received: " + value)    
 				    }
 				});									
 		«ENDFOR»	
-		'''		
+		'''				
+		)				
+	}
+	
+	def GetConditionalStatementContent(StringBuilder stringBuilder, Condition condition)
+	{
+		var left = "";
+		var operator = condition.logicEx.compExp.op;
+		var right = "";											
+		
+		if(condition.logicEx.compExp.left.outputfunction != null)
+		{
+			left = "value";
+		}	
+		else
+		{
+			left = String.valueOf(condition.logicEx.compExp.left.outputValue);
+		}
+		
+		if(condition.logicEx.compExp.right.outputfunction != null)
+		{
+			right = "value";
+		}
+		else
+		{
+			right = String.valueOf(condition.logicEx.compExp.right.outputValue);
+		}
+		
+		stringBuilder.append(left + " " + operator + " " + right);
+		
+		if(condition.operator != null)
+		{
+			stringBuilder.append(" " + condition.operator + " ");
+		}	
+		
+		if(condition.nestedCondition != null)
+		{
+			GetConditionalStatementContent(stringBuilder, condition.nestedCondition)
+		}	
+		
+		return stringBuilder.toString;
 	}
 }
