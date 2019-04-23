@@ -232,12 +232,21 @@ class PycomGenerator extends AbstractGenerator {
 		return adress
 	}
 	
+	def getPostAddress(Board board, Function function) {
+		if(function instanceof ModuleFunction) {
+			return '''/«board.name»/«function.moduleType.typeName»/«function.moduleType.name»/«function.functionName.name»/{}'''
+		} else {
+			return '''/«board.name»/«function.functionName.name»/{}'''
+		}
+	}
+	
 	def generateThresholdFunction(Board board, Resource resource, Function function, int i, String op, Server server) {	
+		var postaddress = getPostAddress(board, function)
 		var threshold = '''
 		«function.functionName.name»Threshold = «i»
 		«function.functionName.name»Value = «function.functionName.name»()
 		if («function.functionName.name»Value «op» «function.functionName.name»Threshold):
-			sendurl = «getServerAddress(server.conn)».format(«function.functionName.name»Value)
+			sendurl = "«getServerAddress(server.conn)»«postaddress»".format(«function.functionName.name»Value)
 			res = urequests.post(sendurl)   
 			print("Res code: ", res.status_code)
 			print("Res: ", res.reason)
@@ -256,15 +265,16 @@ class PycomGenerator extends AbstractGenerator {
 	}
 	
 	def generateDoubleFunction(Board board, Resource resource, Function function, Function function2, String op, Server server) {
+		var postaddress = getPostAddress(board, function)
 		var transmitcode = '''
 		«function.functionName.name»Value = «function.functionName.name»()
 		«function2.functionName.name»Value = «function2.functionName.name»()
 		if («function.functionName.name»Value «op» «function2.functionName.name»Value):
-			sendurl = "«getServerAddress(server.conn)»/send/{}".format(true)
+			sendurl = "«getServerAddress(server.conn)»«»".format(true)
 			res = urequests.post(sendurl)   
 			print("Res code: ", res.status_code)
 			print("Res: ", res.reason)
-		if («function.functionName.name»Value «oppositeOP(op)» «function2.functionName»Value):
+		if («function.functionName.name»Value «oppositeOP(op)» «function2.functionName.name»Value):
 			sendurl = "«getServerAddress(server.conn)»/send/{}".format(false)
 			res = urequests.post(sendurl)   
 			print("Res code: ", res.status_code)
@@ -284,12 +294,31 @@ class PycomGenerator extends AbstractGenerator {
 		functionmap.put(function.functionName.name, funk)
 		functionmap.put(function.functionName.name, funk2)
 	}
+	//('/boardEt/Engine/myEngine1'
 	
 	def genFunction(Board board, Resource resource, Function function, Server server) {
 		if(function.board.equals(board)) {
+			var address = getServerAddress(server.conn)
+			var String sendUrl;
+			var String functionname
+			if(function instanceof ModuleFunction) {
+				sendUrl = '''sendurl = "«address»/«board.name»/«function.moduleType.typeName»/«function.moduleType.name»/«function.functionName.name»/{}'''
+			} else {
+				sendUrl = '''sendurl = "«address»/«board.name»/«function.functionName.name»/{}'''
+			}
+			var getCode='''
+			«sendUrl»
+			urequests.get(sendurl) 
+			    response = res.text
+			    print('sending')
+			    print("Res code: ", res.status_code)
+			    print("Response: " + response)
+			    «function.functionName.name»(response)
+			'''
+			logicmap.put(function.functionName.name, getCode)
 			var funk = '''
-			def «function.functionName.name»():
-				#Write your code here LOL		
+			def «function.functionName.name»(serverResponse):
+				#Write your code here	
 			'''
 			functionmap.put(function.functionName.name, funk)
 		}
