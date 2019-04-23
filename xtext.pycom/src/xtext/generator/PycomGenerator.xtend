@@ -199,7 +199,6 @@ class PycomGenerator extends AbstractGenerator {
 	}
 	
 	def generateThresholdFunction(Board board, Resource resource, Function function, int i, String op) {
-		JOptionPane.showMessageDialog( null , function.functionName, "Threshold: " + i , JOptionPane.INFORMATION_MESSAGE)
 		var threshold = '''
 		«function.functionName»Threshold = «i»
 		«function.functionName»Value = «function.functionName»()
@@ -398,13 +397,45 @@ class PycomGenerator extends AbstractGenerator {
 		'''
 	}
 	
+	def GenerateGlobalVariables(Resource r)
+	{
+		var globalVariablesStringBuilder = new StringBuilder()
+		
+		for(b : r.allContents.toIterable.filter(typeof(Board)))
+		{
+			for (sensor : b.boardMembers.filter(typeof(Sensor))) 
+			{
+				for (sensortype : sensor.sensorTypes.filter(typeof(SensorType))) 
+				{
+					globalVariablesStringBuilder.append("var " + sensortype.typeName + "_" + sensortype.name + "_value" + ";\n")														
+				}
+			}
+			
+			globalVariablesStringBuilder.append("\n");
+			
+			for (actuator : b.boardMembers.filter(typeof(Actuator))) 
+			{
+				for (actuatortype : actuator.actuatorTypes.filter(typeof(ActuatorType))) 
+				{	
+					globalVariablesStringBuilder.append("var " + actuatortype.typeName + "_" + actuatortype.name + "_turnOn" + ";\n")																								
+				}
+			}
+			
+			globalVariablesStringBuilder.append("\n");
+		}		
+		
+		globalVariablesStringBuilder.append("\n");
+		return globalVariablesStringBuilder.toString;				
+	}
+	
 	def generateServerFiles(Server s, Resource r) 
 	{
 		var conditionalAction = s.exps.get(0);		
 		var type = conditionalAction.type;
 		var stringBuilder = new StringBuilder;
 		
-		stringBuilder.append(GenerateServerHeader(s))		
+		stringBuilder.append(GenerateServerHeader(s))	
+		stringBuilder.append(GenerateGlobalVariables(r))	
 		GeneratePostRoutes(stringBuilder, conditionalAction, r, type)
 						
 		return stringBuilder.toString;
