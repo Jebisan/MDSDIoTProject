@@ -3,10 +3,43 @@
  */
 package xtext.generator;
 
+import com.google.common.base.Objects;
+import com.google.common.collect.Iterables;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.function.BiConsumer;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.generator.AbstractGenerator;
 import org.eclipse.xtext.generator.IFileSystemAccess2;
 import org.eclipse.xtext.generator.IGeneratorContext;
+import org.eclipse.xtext.xbase.lib.Exceptions;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.IteratorExtensions;
+import org.eclipse.xtext.xbase.lib.StringExtensions;
+import xtext.pycom.Actuator;
+import xtext.pycom.ActuatorType;
+import xtext.pycom.Board;
+import xtext.pycom.Communication;
+import xtext.pycom.Condition;
+import xtext.pycom.ConditionalAction;
+import xtext.pycom.Connection;
+import xtext.pycom.ExpMember;
+import xtext.pycom.Function;
+import xtext.pycom.ModuleFunction;
+import xtext.pycom.ModuleType;
+import xtext.pycom.Pin;
+import xtext.pycom.Sensor;
+import xtext.pycom.SensorType;
+import xtext.pycom.Server;
 
 /**
  * Generates code from your model files on save.
@@ -15,7 +48,1304 @@ import org.eclipse.xtext.generator.IGeneratorContext;
  */
 @SuppressWarnings("all")
 public class PycomGenerator extends AbstractGenerator {
+  private HashMap<String, URL> externalFilesMap = new HashMap<String, URL>();
+  
+  private HashMap<String, String> moduleMap = new HashMap<String, String>();
+  
+  private HashMap<String, String> importcode;
+  
+  private HashMap<String, String> codeMap;
+  
+  private HashMap<String, String> logicmap;
+  
+  private HashMap<String, String> functionmap;
+  
   @Override
   public void doGenerate(final Resource resource, final IFileSystemAccess2 fsa, final IGeneratorContext context) {
+    this.populateHashmap();
+    Iterable<Board> _filter = Iterables.<Board>filter(IteratorExtensions.<EObject>toIterable(resource.getAllContents()), Board.class);
+    for (final Board board : _filter) {
+      String _name = board.getName();
+      String _plus = (_name + ".py");
+      fsa.generateFile(_plus, this.generatePycomFiles(board, resource, fsa));
+    }
+    Iterable<Server> _filter_1 = Iterables.<Server>filter(IteratorExtensions.<EObject>toIterable(resource.getAllContents()), Server.class);
+    for (final Server server : _filter_1) {
+      String _name_1 = server.getName();
+      String _plus_1 = (_name_1 + ".js");
+      fsa.generateFile(_plus_1, this.generateServerFiles(server, resource));
+    }
+  }
+  
+  public String oppositeOP(final String op) {
+    boolean _equals = op.equals("<");
+    if (_equals) {
+      return ">";
+    }
+    boolean _equals_1 = op.equals(">");
+    if (_equals_1) {
+      return "<";
+    }
+    boolean _equals_2 = op.equals("<=");
+    if (_equals_2) {
+      return ">";
+    }
+    boolean _equals_3 = op.equals(">=");
+    if (_equals_3) {
+      return "<";
+    }
+    boolean _equals_4 = op.equals("==");
+    if (_equals_4) {
+      return "!=";
+    }
+    boolean _equals_5 = op.equals("!=");
+    if (_equals_5) {
+      return "==";
+    }
+    return null;
+  }
+  
+  public String populateHashmap() {
+    try {
+      String _xblockexpression = null;
+      {
+        URL _uRL = new URL("https://raw.githubusercontent.com/pycom/pycom-libraries/master/pysense/lib/SI7006A20.py");
+        this.externalFilesMap.put("Temperature", _uRL);
+        _xblockexpression = this.moduleMap.put("Temperature", "SI7006A20");
+      }
+      return _xblockexpression;
+    } catch (Throwable _e) {
+      throw Exceptions.sneakyThrow(_e);
+    }
+  }
+  
+  public CharSequence generatePycomFiles(final Board b, final Resource r, final IFileSystemAccess2 fsa) {
+    CharSequence _xblockexpression = null;
+    {
+      this.generatePycom(b, r);
+      StringConcatenation _builder = new StringConcatenation();
+      _builder.append("\t");
+      _builder.append("import pycom");
+      _builder.newLine();
+      _builder.append("\t");
+      _builder.append("import urequests");
+      _builder.newLine();
+      _builder.append("\t");
+      _builder.append("import machine");
+      _builder.newLine();
+      _builder.append("\t");
+      _builder.append("import time ");
+      _builder.newLine();
+      _builder.append("\t");
+      String _generatePycomImports = this.generatePycomImports(b, r, fsa);
+      _builder.append(_generatePycomImports, "\t");
+      _builder.newLineIfNotEmpty();
+      _builder.newLine();
+      _builder.append("\t");
+      _builder.append("isRunning = True");
+      _builder.newLine();
+      _builder.append("\t");
+      _builder.append("pycom.heartbeat(False)");
+      _builder.newLine();
+      _builder.append("\t");
+      _builder.newLine();
+      _builder.append("\t");
+      String _generatePycomCode = this.generatePycomCode(b, r);
+      _builder.append(_generatePycomCode, "\t");
+      _builder.newLineIfNotEmpty();
+      _builder.append("\t");
+      _builder.newLine();
+      _builder.append("\t");
+      String _genFunctions = this.genFunctions(b, r);
+      _builder.append(_genFunctions, "\t");
+      _builder.newLineIfNotEmpty();
+      _builder.append("\t");
+      _builder.append("while(isRunning):");
+      _builder.newLine();
+      _builder.append("\t\t");
+      String _generateLogic = this.generateLogic(b, r);
+      _builder.append(_generateLogic, "\t\t");
+      _builder.newLineIfNotEmpty();
+      _builder.append("\t");
+      _builder.append("#CODE GENERATION END");
+      _builder.newLine();
+      _xblockexpression = _builder;
+    }
+    return _xblockexpression;
+  }
+  
+  public String generatePycomImports(final Board b, final Resource r, final IFileSystemAccess2 fsa) {
+    final StringBuilder sb = new StringBuilder();
+    final BiConsumer<String, String> _function = (String k, String v) -> {
+      try {
+        boolean _containsKey = this.externalFilesMap.containsKey(k);
+        if (_containsKey) {
+          try {
+            URL url = this.externalFilesMap.get(k);
+            String filename = Paths.get(url.toURI().getPath()).getFileName().toString();
+            InputStream _openStream = url.openStream();
+            BufferedInputStream _bufferedInputStream = new BufferedInputStream(_openStream);
+            fsa.generateFile(filename, _bufferedInputStream);
+          } catch (final Throwable _t) {
+            if (_t instanceof IOException) {
+              final IOException e = (IOException)_t;
+              e.printStackTrace();
+            } else {
+              throw Exceptions.sneakyThrow(_t);
+            }
+          }
+        }
+        sb.append((v + "\n"));
+      } catch (Throwable _e) {
+        throw Exceptions.sneakyThrow(_e);
+      }
+    };
+    this.importcode.forEach(_function);
+    return sb.toString();
+  }
+  
+  public String generatePycomCode(final Board b, final Resource r) {
+    final StringBuilder sb = new StringBuilder();
+    sb.append("\n");
+    final BiConsumer<String, String> _function = (String k, String v) -> {
+      sb.append((v + "\n"));
+    };
+    this.codeMap.forEach(_function);
+    return sb.toString();
+  }
+  
+  public String generateLogic(final Board board, final Resource resource) {
+    final StringBuilder sb = new StringBuilder();
+    sb.append("\n");
+    final BiConsumer<String, String> _function = (String k, String v) -> {
+      sb.append((v + "\n"));
+    };
+    this.logicmap.forEach(_function);
+    return sb.toString();
+  }
+  
+  public String genFunctions(final Board board, final Resource resource) {
+    final StringBuilder sb = new StringBuilder();
+    sb.append("\n");
+    final BiConsumer<String, String> _function = (String k, String v) -> {
+      sb.append((v + "\n"));
+    };
+    this.functionmap.forEach(_function);
+    return sb.toString();
+  }
+  
+  public void generatePycom(final Board b, final Resource r) {
+    HashMap<String, String> _hashMap = new HashMap<String, String>();
+    this.importcode = _hashMap;
+    HashMap<String, String> _hashMap_1 = new HashMap<String, String>();
+    this.codeMap = _hashMap_1;
+    HashMap<String, String> _hashMap_2 = new HashMap<String, String>();
+    this.logicmap = _hashMap_2;
+    HashMap<String, String> _hashMap_3 = new HashMap<String, String>();
+    this.functionmap = _hashMap_3;
+    this.generatePycomConnection(b, r);
+    this.generatePycomActuator(b, r);
+    this.generatePycomSensor(b, r);
+    this.generateFunctions(b, r);
+  }
+  
+  public void generateFunctions(final Board board, final Resource resource) {
+    Iterable<Server> _filter = Iterables.<Server>filter(IteratorExtensions.<EObject>toIterable(resource.getAllContents()), Server.class);
+    for (final Server server : _filter) {
+      EList<ConditionalAction> _exps = server.getExps();
+      for (final ConditionalAction condaction : _exps) {
+        this.genConditionalAction(board, resource, condaction, server);
+      }
+    }
+  }
+  
+  public void genConditionalAction(final Board board, final Resource resource, final ConditionalAction conAction, final Server server) {
+    this.genCondition(board, resource, conAction.getCondition(), server);
+    EList<ExpMember> _expMembers = conAction.getExpMembers();
+    for (final ExpMember exp : _expMembers) {
+      if ((exp instanceof ConditionalAction)) {
+        this.genConditionalAction(board, resource, ((ConditionalAction)exp), server);
+      } else {
+        if ((exp instanceof Function)) {
+          this.genFunction(board, resource, ((Function)exp), server);
+        }
+      }
+    }
+  }
+  
+  public void genCondition(final Board board, final Resource resource, final Condition condition, final Server server) {
+    Condition _nestedCondition = condition.getNestedCondition();
+    boolean _tripleNotEquals = (_nestedCondition != null);
+    if (_tripleNotEquals) {
+      this.genCondition(board, resource, condition.getNestedCondition(), server);
+    }
+    Function _outputfunction = condition.getLogicEx().getCompExp().getLeft().getOutputfunction();
+    boolean _tripleNotEquals_1 = (_outputfunction != null);
+    if (_tripleNotEquals_1) {
+      boolean _equals = condition.getLogicEx().getCompExp().getLeft().getOutputfunction().getBoard().equals(board);
+      if (_equals) {
+        Function func = condition.getLogicEx().getCompExp().getLeft().getOutputfunction();
+        String op = condition.getLogicEx().getCompExp().getOp();
+        Function _outputfunction_1 = condition.getLogicEx().getCompExp().getRight().getOutputfunction();
+        boolean _tripleEquals = (_outputfunction_1 == null);
+        if (_tripleEquals) {
+          int thresholdvalue = condition.getLogicEx().getCompExp().getRight().getOutputValue();
+          this.generateThresholdFunction(board, resource, func, thresholdvalue, op, server);
+        } else {
+          boolean _equals_1 = condition.getLogicEx().getCompExp().getRight().getOutputfunction().getBoard().equals(board);
+          if (_equals_1) {
+            Function thresholdfunc = condition.getLogicEx().getCompExp().getRight().getOutputfunction();
+            this.generateDoubleFunction(board, resource, func, thresholdfunc, op, server);
+          }
+        }
+      }
+    }
+    Function _outputfunction_2 = condition.getLogicEx().getCompExp().getRight().getOutputfunction();
+    boolean _tripleNotEquals_2 = (_outputfunction_2 != null);
+    if (_tripleNotEquals_2) {
+      boolean _equals_2 = condition.getLogicEx().getCompExp().getRight().getOutputfunction().getBoard().equals(board);
+      if (_equals_2) {
+        Function func_1 = condition.getLogicEx().getCompExp().getRight().getOutputfunction();
+        String op_1 = condition.getLogicEx().getCompExp().getOp();
+        Function _outputfunction_3 = condition.getLogicEx().getCompExp().getLeft().getOutputfunction();
+        boolean _tripleEquals_1 = (_outputfunction_3 == null);
+        if (_tripleEquals_1) {
+          int thresholdvalue_1 = condition.getLogicEx().getCompExp().getLeft().getOutputValue();
+          this.generateThresholdFunction(board, resource, func_1, thresholdvalue_1, op_1, server);
+        } else {
+          boolean _equals_3 = condition.getLogicEx().getCompExp().getLeft().getOutputfunction().getBoard().equals(board);
+          if (_equals_3) {
+            Function thresholdfunc_1 = condition.getLogicEx().getCompExp().getLeft().getOutputfunction();
+            this.generateDoubleFunction(board, resource, func_1, thresholdfunc_1, op_1, server);
+          }
+        }
+      }
+    }
+  }
+  
+  public String getServerAddress(final Connection conn) {
+    String adress = null;
+    boolean _isNullOrEmpty = StringExtensions.isNullOrEmpty(conn.getHost().getIpAdr());
+    boolean _not = (!_isNullOrEmpty);
+    if (_not) {
+      adress = conn.getHost().getIpAdr();
+    } else {
+      boolean _isNullOrEmpty_1 = StringExtensions.isNullOrEmpty(conn.getHost().getWebsite());
+      boolean _not_1 = (!_isNullOrEmpty_1);
+      if (_not_1) {
+        adress = conn.getHost().getWebsite();
+      } else {
+        adress = "#Undefined Address";
+      }
+    }
+    String _portnumber = conn.getPortnumber();
+    String _plus = ((adress + ":") + _portnumber);
+    adress = _plus;
+    return adress;
+  }
+  
+  public String getPostAddress(final Board board, final Function function) {
+    if ((function instanceof ModuleFunction)) {
+      StringConcatenation _builder = new StringConcatenation();
+      _builder.append("/");
+      String _name = board.getName();
+      _builder.append(_name);
+      _builder.append("/");
+      String _typeName = ((ModuleFunction)function).getModuleType().getTypeName();
+      _builder.append(_typeName);
+      _builder.append("/");
+      String _name_1 = ((ModuleFunction)function).getModuleType().getName();
+      _builder.append(_name_1);
+      _builder.append("/");
+      String _name_2 = ((ModuleFunction)function).getFunctionName().getName();
+      _builder.append(_name_2);
+      _builder.append("/{}");
+      return _builder.toString();
+    } else {
+      StringConcatenation _builder_1 = new StringConcatenation();
+      _builder_1.append("/");
+      String _name_3 = board.getName();
+      _builder_1.append(_name_3);
+      _builder_1.append("/");
+      String _name_4 = function.getFunctionName().getName();
+      _builder_1.append(_name_4);
+      _builder_1.append("/{}");
+      return _builder_1.toString();
+    }
+  }
+  
+  public String generateThresholdFunction(final Board board, final Resource resource, final Function function, final int i, final String op, final Server server) {
+    String _xblockexpression = null;
+    {
+      String postaddress = this.getPostAddress(board, function);
+      StringConcatenation _builder = new StringConcatenation();
+      String _name = function.getFunctionName().getName();
+      _builder.append(_name);
+      _builder.append("Threshold = ");
+      _builder.append(i);
+      _builder.newLineIfNotEmpty();
+      String _name_1 = function.getFunctionName().getName();
+      _builder.append(_name_1);
+      _builder.append("Value = ");
+      String _name_2 = function.getFunctionName().getName();
+      _builder.append(_name_2);
+      _builder.append("()");
+      _builder.newLineIfNotEmpty();
+      _builder.append("if (");
+      String _name_3 = function.getFunctionName().getName();
+      _builder.append(_name_3);
+      _builder.append("Value ");
+      _builder.append(op);
+      _builder.append(" ");
+      String _name_4 = function.getFunctionName().getName();
+      _builder.append(_name_4);
+      _builder.append("Threshold):");
+      _builder.newLineIfNotEmpty();
+      _builder.append("\t");
+      _builder.append("sendurl = \"");
+      String _serverAddress = this.getServerAddress(server.getConn());
+      _builder.append(_serverAddress, "\t");
+      _builder.append(postaddress, "\t");
+      _builder.append("\".format(");
+      String _name_5 = function.getFunctionName().getName();
+      _builder.append(_name_5, "\t");
+      _builder.append("Value)");
+      _builder.newLineIfNotEmpty();
+      _builder.append("\t");
+      _builder.append("res = urequests.post(sendurl)   ");
+      _builder.newLine();
+      _builder.append("\t");
+      _builder.append("print(\"Res code: \", res.status_code)");
+      _builder.newLine();
+      _builder.append("\t");
+      _builder.append("print(\"Res: \", res.reason)");
+      _builder.newLine();
+      _builder.append("if (");
+      String _name_6 = function.getFunctionName().getName();
+      _builder.append(_name_6);
+      _builder.append("Value ");
+      String _oppositeOP = this.oppositeOP(op);
+      _builder.append(_oppositeOP);
+      _builder.append(" ");
+      String _name_7 = function.getFunctionName().getName();
+      _builder.append(_name_7);
+      _builder.append("Threshold):");
+      _builder.newLineIfNotEmpty();
+      _builder.append("\t\t\t");
+      _builder.append("sendurl = ");
+      String _serverAddress_1 = this.getServerAddress(server.getConn());
+      _builder.append(_serverAddress_1, "\t\t\t");
+      _builder.append(".format(");
+      String _name_8 = function.getFunctionName().getName();
+      _builder.append(_name_8, "\t\t\t");
+      _builder.append("Value)");
+      _builder.newLineIfNotEmpty();
+      _builder.append("\t\t\t");
+      _builder.append("res = urequests.post(sendurl)   ");
+      _builder.newLine();
+      _builder.append("\t\t\t");
+      _builder.append("print(\"Res code: \", res.status_code)");
+      _builder.newLine();
+      _builder.append("\t\t\t");
+      _builder.append("print(\"Res: \", res.reason)");
+      _builder.newLine();
+      String threshold = _builder.toString();
+      StringConcatenation _builder_1 = new StringConcatenation();
+      _builder_1.append("def ");
+      String _name_9 = function.getFunctionName().getName();
+      _builder_1.append(_name_9);
+      _builder_1.append("():");
+      _builder_1.newLineIfNotEmpty();
+      _builder_1.append("\t");
+      _builder_1.append("#Write your code here\t\t");
+      _builder_1.newLine();
+      String funk = _builder_1.toString();
+      this.logicmap.put(function.getFunctionName().getName(), threshold);
+      _xblockexpression = this.functionmap.put(function.getFunctionName().getName(), funk);
+    }
+    return _xblockexpression;
+  }
+  
+  public String generateDoubleFunction(final Board board, final Resource resource, final Function function, final Function function2, final String op, final Server server) {
+    String _xblockexpression = null;
+    {
+      String postaddress = this.getPostAddress(board, function);
+      StringConcatenation _builder = new StringConcatenation();
+      String _name = function.getFunctionName().getName();
+      _builder.append(_name);
+      _builder.append("Value = ");
+      String _name_1 = function.getFunctionName().getName();
+      _builder.append(_name_1);
+      _builder.append("()");
+      _builder.newLineIfNotEmpty();
+      String _name_2 = function2.getFunctionName().getName();
+      _builder.append(_name_2);
+      _builder.append("Value = ");
+      String _name_3 = function2.getFunctionName().getName();
+      _builder.append(_name_3);
+      _builder.append("()");
+      _builder.newLineIfNotEmpty();
+      _builder.append("if (");
+      String _name_4 = function.getFunctionName().getName();
+      _builder.append(_name_4);
+      _builder.append("Value ");
+      _builder.append(op);
+      _builder.append(" ");
+      String _name_5 = function2.getFunctionName().getName();
+      _builder.append(_name_5);
+      _builder.append("Value):");
+      _builder.newLineIfNotEmpty();
+      _builder.append("\t");
+      _builder.append("sendurl = \"");
+      String _serverAddress = this.getServerAddress(server.getConn());
+      _builder.append(_serverAddress, "\t");
+      _builder.append("\".format(true)");
+      _builder.newLineIfNotEmpty();
+      _builder.append("\t");
+      _builder.append("res = urequests.post(sendurl)   ");
+      _builder.newLine();
+      _builder.append("\t");
+      _builder.append("print(\"Res code: \", res.status_code)");
+      _builder.newLine();
+      _builder.append("\t");
+      _builder.append("print(\"Res: \", res.reason)");
+      _builder.newLine();
+      _builder.append("if (");
+      String _name_6 = function.getFunctionName().getName();
+      _builder.append(_name_6);
+      _builder.append("Value ");
+      String _oppositeOP = this.oppositeOP(op);
+      _builder.append(_oppositeOP);
+      _builder.append(" ");
+      String _name_7 = function2.getFunctionName().getName();
+      _builder.append(_name_7);
+      _builder.append("Value):");
+      _builder.newLineIfNotEmpty();
+      _builder.append("\t");
+      _builder.append("sendurl = \"");
+      String _serverAddress_1 = this.getServerAddress(server.getConn());
+      _builder.append(_serverAddress_1, "\t");
+      _builder.append("/send/{}\".format(false)");
+      _builder.newLineIfNotEmpty();
+      _builder.append("\t");
+      _builder.append("res = urequests.post(sendurl)   ");
+      _builder.newLine();
+      _builder.append("\t");
+      _builder.append("print(\"Res code: \", res.status_code)");
+      _builder.newLine();
+      _builder.append("\t");
+      _builder.append("print(\"Res: \", res.reason)");
+      _builder.newLine();
+      String transmitcode = _builder.toString();
+      StringConcatenation _builder_1 = new StringConcatenation();
+      _builder_1.append("def ");
+      String _name_8 = function.getFunctionName().getName();
+      _builder_1.append(_name_8);
+      _builder_1.append("():");
+      _builder_1.newLineIfNotEmpty();
+      _builder_1.append("\t");
+      _builder_1.append("#Write your code here\t\t");
+      _builder_1.newLine();
+      String funk = _builder_1.toString();
+      StringConcatenation _builder_2 = new StringConcatenation();
+      _builder_2.append("def ");
+      String _name_9 = function2.getFunctionName().getName();
+      _builder_2.append(_name_9);
+      _builder_2.append("():");
+      _builder_2.newLineIfNotEmpty();
+      _builder_2.append("\t");
+      _builder_2.append("#Write your code here\t\t");
+      _builder_2.newLine();
+      String funk2 = _builder_2.toString();
+      this.logicmap.put(function.getFunctionName().getName(), transmitcode);
+      this.functionmap.put(function.getFunctionName().getName(), funk);
+      _xblockexpression = this.functionmap.put(function.getFunctionName().getName(), funk2);
+    }
+    return _xblockexpression;
+  }
+  
+  public String genFunction(final Board board, final Resource resource, final Function function, final Server server) {
+    String _xifexpression = null;
+    boolean _equals = function.getBoard().equals(board);
+    if (_equals) {
+      String _xblockexpression = null;
+      {
+        String address = this.getServerAddress(server.getConn());
+        String sendUrl = null;
+        String functionname = null;
+        if ((function instanceof ModuleFunction)) {
+          StringConcatenation _builder = new StringConcatenation();
+          _builder.append("sendurl = \"");
+          _builder.append(address);
+          _builder.append("/");
+          String _name = board.getName();
+          _builder.append(_name);
+          _builder.append("/");
+          String _typeName = ((ModuleFunction)function).getModuleType().getTypeName();
+          _builder.append(_typeName);
+          _builder.append("/");
+          String _name_1 = ((ModuleFunction)function).getModuleType().getName();
+          _builder.append(_name_1);
+          _builder.append("/");
+          String _name_2 = ((ModuleFunction)function).getFunctionName().getName();
+          _builder.append(_name_2);
+          _builder.append("/{}");
+          sendUrl = _builder.toString();
+        } else {
+          StringConcatenation _builder_1 = new StringConcatenation();
+          _builder_1.append("sendurl = \"");
+          _builder_1.append(address);
+          _builder_1.append("/");
+          String _name_3 = board.getName();
+          _builder_1.append(_name_3);
+          _builder_1.append("/");
+          String _name_4 = function.getFunctionName().getName();
+          _builder_1.append(_name_4);
+          _builder_1.append("/{}");
+          sendUrl = _builder_1.toString();
+        }
+        StringConcatenation _builder_2 = new StringConcatenation();
+        _builder_2.append(sendUrl);
+        _builder_2.newLineIfNotEmpty();
+        _builder_2.append("urequests.get(sendurl) ");
+        _builder_2.newLine();
+        _builder_2.append("    ");
+        _builder_2.append("response = res.text");
+        _builder_2.newLine();
+        _builder_2.append("    ");
+        _builder_2.append("print(\'sending\')");
+        _builder_2.newLine();
+        _builder_2.append("    ");
+        _builder_2.append("print(\"Res code: \", res.status_code)");
+        _builder_2.newLine();
+        _builder_2.append("    ");
+        _builder_2.append("print(\"Response: \" + response)");
+        _builder_2.newLine();
+        _builder_2.append("    ");
+        String _name_5 = function.getFunctionName().getName();
+        _builder_2.append(_name_5, "    ");
+        _builder_2.append("(response)");
+        _builder_2.newLineIfNotEmpty();
+        String getCode = _builder_2.toString();
+        this.logicmap.put(function.getFunctionName().getName(), getCode);
+        StringConcatenation _builder_3 = new StringConcatenation();
+        _builder_3.append("def ");
+        String _name_6 = function.getFunctionName().getName();
+        _builder_3.append(_name_6);
+        _builder_3.append("(serverResponse):");
+        _builder_3.newLineIfNotEmpty();
+        _builder_3.append("\t");
+        _builder_3.append("#Write your code here\t");
+        _builder_3.newLine();
+        String funk = _builder_3.toString();
+        _xblockexpression = this.functionmap.put(function.getFunctionName().getName(), funk);
+      }
+      _xifexpression = _xblockexpression;
+    }
+    return _xifexpression;
+  }
+  
+  public void generatePycomSensor(final Board b, final Resource r) {
+    Iterable<Sensor> _filter = Iterables.<Sensor>filter(b.getBoardMembers(), Sensor.class);
+    for (final Sensor sensor : _filter) {
+      Iterable<SensorType> _filter_1 = Iterables.<SensorType>filter(sensor.getSensorTypes(), SensorType.class);
+      for (final SensorType sensortype : _filter_1) {
+        boolean _containsKey = this.importcode.containsKey(sensortype.getTypeName());
+        boolean _not = (!_containsKey);
+        if (_not) {
+          this.importcode.put(sensortype.getTypeName(), this.generateSensorImport(b, r, sensortype).toString());
+          this.codeMap.put(sensortype.getName(), this.generateSensorCode(b, r, sensortype));
+        }
+      }
+    }
+  }
+  
+  public String generateSensorCode(final Board board, final Resource resource, final SensorType type) {
+    Pin _pins = type.getPins();
+    boolean _tripleNotEquals = (_pins != null);
+    if (_tripleNotEquals) {
+      String power = type.getPins().getPower().getName();
+      String input = type.getPins().getInput().getName();
+      if ((Objects.equal(power, null) || Objects.equal(input, null))) {
+        boolean _containsKey = this.moduleMap.containsKey(type.getTypeName());
+        if (_containsKey) {
+          StringConcatenation _builder = new StringConcatenation();
+          String _name = type.getName();
+          _builder.append(_name);
+          _builder.append(" = ");
+          String _get = this.moduleMap.get(type.getTypeName());
+          _builder.append(_get);
+          _builder.append("(Pin.IN = ");
+          _builder.append(input);
+          _builder.append(", Pin.OUT = ");
+          _builder.append(power);
+          _builder.append(")");
+          return _builder.toString();
+        } else {
+          StringConcatenation _builder_1 = new StringConcatenation();
+          String _name_1 = type.getName();
+          _builder_1.append(_name_1);
+          _builder_1.append(" = #Unknown Sensor");
+          return _builder_1.toString();
+        }
+      }
+    }
+    boolean _containsKey_1 = this.moduleMap.containsKey(type.getTypeName());
+    if (_containsKey_1) {
+      StringConcatenation _builder_2 = new StringConcatenation();
+      String _name_2 = type.getName();
+      _builder_2.append(_name_2);
+      _builder_2.append(" = ");
+      String _get_1 = this.moduleMap.get(type.getTypeName());
+      _builder_2.append(_get_1);
+      _builder_2.append("()");
+      return _builder_2.toString();
+    } else {
+      StringConcatenation _builder_3 = new StringConcatenation();
+      String _name_3 = type.getName();
+      _builder_3.append(_name_3);
+      _builder_3.append(" = #Unknown Sensor");
+      return _builder_3.toString();
+    }
+  }
+  
+  public String generateSensorImport(final Board b, final Resource r, final SensorType sensorType) {
+    boolean _containsKey = this.moduleMap.containsKey(sensorType.getTypeName());
+    if (_containsKey) {
+      StringConcatenation _builder = new StringConcatenation();
+      _builder.append("from ");
+      String _get = this.moduleMap.get(sensorType.getTypeName());
+      _builder.append(_get);
+      _builder.append(" import ");
+      String _get_1 = this.moduleMap.get(sensorType.getTypeName());
+      _builder.append(_get_1);
+      return _builder.toString();
+    } else {
+      StringConcatenation _builder_1 = new StringConcatenation();
+      _builder_1.append("import ");
+      String _typeName = sensorType.getTypeName();
+      _builder_1.append(_typeName);
+      return _builder_1.toString();
+    }
+  }
+  
+  public void generatePycomActuator(final Board b, final Resource r) {
+    Iterable<Actuator> _filter = Iterables.<Actuator>filter(b.getBoardMembers(), Actuator.class);
+    for (final Actuator actuator : _filter) {
+      Iterable<ActuatorType> _filter_1 = Iterables.<ActuatorType>filter(actuator.getActuatorTypes(), ActuatorType.class);
+      for (final ActuatorType actuatortype : _filter_1) {
+        boolean _containsKey = this.importcode.containsKey(actuatortype.getTypeName());
+        boolean _not = (!_containsKey);
+        if (_not) {
+          this.importcode.put(actuatortype.getTypeName(), this.generateActuatorImports(b, r, actuatortype).toString());
+          this.codeMap.put(actuatortype.getName(), this.generateActuatorCode(b, r, actuatortype));
+        }
+      }
+    }
+  }
+  
+  public String generateActuatorCode(final Board board, final Resource resource, final ActuatorType type) {
+    Pin _pins = type.getPins();
+    boolean _tripleNotEquals = (_pins != null);
+    if (_tripleNotEquals) {
+      String power = type.getPins().getPower().getName();
+      String input = type.getPins().getInput().getName();
+      if ((Objects.equal(power, null) || Objects.equal(input, null))) {
+        boolean _containsKey = this.moduleMap.containsKey(type.getTypeName());
+        if (_containsKey) {
+          StringConcatenation _builder = new StringConcatenation();
+          String _name = type.getName();
+          _builder.append(_name);
+          _builder.append(" = ");
+          String _get = this.moduleMap.get(type.getTypeName());
+          _builder.append(_get);
+          _builder.append("(Pin.IN = ");
+          _builder.append(input);
+          _builder.append(", Pin.OUT = ");
+          _builder.append(power);
+          _builder.append(")");
+          return _builder.toString();
+        } else {
+          StringConcatenation _builder_1 = new StringConcatenation();
+          String _name_1 = type.getName();
+          _builder_1.append(_name_1);
+          _builder_1.append(" = #Unknown Actuator");
+          return _builder_1.toString();
+        }
+      }
+    }
+    boolean _containsKey_1 = this.moduleMap.containsKey(type.getTypeName());
+    if (_containsKey_1) {
+      StringConcatenation _builder_2 = new StringConcatenation();
+      String _name_2 = type.getName();
+      _builder_2.append(_name_2);
+      _builder_2.append(" = ");
+      String _get_1 = this.moduleMap.get(type.getTypeName());
+      _builder_2.append(_get_1);
+      _builder_2.append("()");
+      return _builder_2.toString();
+    } else {
+      StringConcatenation _builder_3 = new StringConcatenation();
+      String _name_3 = type.getName();
+      _builder_3.append(_name_3);
+      _builder_3.append(" = #Unknown Actuator");
+      return _builder_3.toString();
+    }
+  }
+  
+  public CharSequence generateActuatorImports(final Board b, final Resource r, final ActuatorType actuatorType) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("import ");
+    String _typeName = actuatorType.getTypeName();
+    _builder.append(_typeName);
+    return _builder;
+  }
+  
+  public void generatePycomConnection(final Board b, final Resource r) {
+    Iterable<Communication> _filter = Iterables.<Communication>filter(b.getBoardMembers(), Communication.class);
+    for (final Communication a : _filter) {
+      boolean _containsKey = this.importcode.containsKey(a.getType());
+      boolean _not = (!_containsKey);
+      if (_not) {
+        boolean _equals = a.getType().equals("WiFi");
+        if (_equals) {
+          this.importcode.put(a.getType(), this.generatePycomWifiImport(b, r).toString());
+          this.codeMap.put(a.getType(), this.generatePycomWifiCode(b, r).toString());
+        } else {
+          String _type = a.getType();
+          String _type_1 = a.getType();
+          String _plus = ("#Not Supported Communication-type: " + _type_1);
+          this.importcode.put(_type, _plus);
+          StringConcatenation _builder = new StringConcatenation();
+          _builder.append("#***");
+          String _type_2 = a.getType();
+          _builder.append(_type_2);
+          _builder.append(" SETUP***");
+          _builder.newLineIfNotEmpty();
+          _builder.append("\t\t\t    \t\t");
+          _builder.newLine();
+          _builder.append("#Unsupported Communication, write your own code");
+          _builder.newLine();
+          _builder.append("\t\t\t    \t\t");
+          _builder.newLine();
+          _builder.append("#***");
+          String _type_3 = a.getType();
+          _builder.append(_type_3);
+          _builder.append(" SETUP END***");
+          _builder.newLineIfNotEmpty();
+          String s = _builder.toString();
+          this.codeMap.put(a.getType(), s);
+        }
+      }
+    }
+  }
+  
+  public CharSequence generatePycomWifiImport(final Board b, final Resource r) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("from network import WLAN");
+    _builder.newLine();
+    _builder.newLine();
+    return _builder;
+  }
+  
+  public CharSequence generatePycomWifiCode(final Board b, final Resource r) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("#***WIFI SETUP***");
+    _builder.newLine();
+    _builder.append("wlan = WLAN(mode=WLAN.STA)");
+    _builder.newLine();
+    _builder.append("nets = wlan.scan()");
+    _builder.newLine();
+    _builder.append("ssidname = #***YOUR SSID***");
+    _builder.newLine();
+    _builder.append("password = #***YOUR PASSWORD***");
+    _builder.newLine();
+    _builder.newLine();
+    _builder.append("if wlan.isconnected() == False:");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("for net in nets:");
+    _builder.newLine();
+    _builder.append("        ");
+    _builder.append("print(net.ssid)");
+    _builder.newLine();
+    _builder.append("        ");
+    _builder.append("if net.ssid == ssidname:");
+    _builder.newLine();
+    _builder.append("            ");
+    _builder.append("wlan.connect(net.ssid, auth=(net.sec, password), timeout=5000)");
+    _builder.newLine();
+    _builder.append("            ");
+    _builder.append("break");
+    _builder.newLine();
+    _builder.newLine();
+    _builder.append("while not wlan.isconnected():");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("machine.idle()");
+    _builder.newLine();
+    _builder.append("print (\'wlan connection succeeded!\')");
+    _builder.newLine();
+    _builder.append("print (wlan.ifconfig())");
+    _builder.newLine();
+    _builder.newLine();
+    _builder.append("#***WIFI SETUP END***");
+    _builder.newLine();
+    _builder.newLine();
+    return _builder;
+  }
+  
+  public CharSequence GenerateServerHeader(final Server s) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("var express = require(\'express\');");
+    _builder.newLine();
+    _builder.append("var app = express();");
+    _builder.newLine();
+    _builder.append("var bodyParser = require(\'body-parser\');");
+    _builder.newLine();
+    _builder.append("app.use(bodyParser.json());");
+    _builder.newLine();
+    _builder.newLine();
+    _builder.append("// Host: ");
+    String _xifexpression = null;
+    String _ipAdr = s.getConn().getHost().getIpAdr();
+    boolean _tripleEquals = (_ipAdr == null);
+    if (_tripleEquals) {
+      _xifexpression = s.getConn().getHost().getWebsite();
+    } else {
+      _xifexpression = s.getConn().getHost().getIpAdr();
+    }
+    _builder.append(_xifexpression);
+    _builder.newLineIfNotEmpty();
+    _builder.newLine();
+    _builder.append("app.listen(");
+    String _portnumber = s.getConn().getPortnumber();
+    _builder.append(_portnumber);
+    _builder.append(", () => {");
+    _builder.newLineIfNotEmpty();
+    _builder.append("    ");
+    _builder.append("console.log(\'Started on port ");
+    String _portnumber_1 = s.getConn().getPortnumber();
+    _builder.append(_portnumber_1, "    ");
+    _builder.append("\');");
+    _builder.newLineIfNotEmpty();
+    _builder.append("});");
+    _builder.newLine();
+    _builder.newLine();
+    _builder.append("app.get(\"*\", function(req, res){\t\t     ");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("res.send(\"Default get route\");");
+    _builder.newLine();
+    _builder.append("    ");
+    _builder.append("console.log(\"Default get route\");");
+    _builder.newLine();
+    _builder.append("});\t\t");
+    _builder.newLine();
+    _builder.append("\t\t\t\t");
+    _builder.newLine();
+    return _builder;
+  }
+  
+  public String generateServerFiles(final Server s, final Resource r) {
+    ConditionalAction conditionalAction = s.getExps().get(0);
+    String type = conditionalAction.getType();
+    StringBuilder stringBuilder = new StringBuilder();
+    stringBuilder.append(this.GenerateServerHeader(s));
+    stringBuilder.append(this.GenerateGlobalVariables(s));
+    this.GeneratePostRoutes(stringBuilder, conditionalAction, r, type, s);
+    this.GenerateIfFunctions(stringBuilder, conditionalAction, r, type, s);
+    return stringBuilder.toString();
+  }
+  
+  private HashMap<String, String> globalVariables;
+  
+  private HashMap<String, String> variableNamesForPostAndGetRoutes;
+  
+  public String GenerateGlobalVariables(final Server s) {
+    final StringBuilder sb = new StringBuilder();
+    HashMap<String, String> _hashMap = new HashMap<String, String>();
+    this.globalVariables = _hashMap;
+    HashMap<String, String> _hashMap_1 = new HashMap<String, String>();
+    this.variableNamesForPostAndGetRoutes = _hashMap_1;
+    EList<ConditionalAction> _exps = s.getExps();
+    for (final ConditionalAction exp : _exps) {
+      this.generateVariableConditionalAction(s, exp);
+    }
+    final BiConsumer<String, String> _function = (String k, String v) -> {
+      sb.append(v);
+    };
+    this.globalVariables.forEach(_function);
+    sb.append("\n");
+    return sb.toString();
+  }
+  
+  public void generateVariableConditionalAction(final Server server, final ConditionalAction action) {
+    this.generateVariableFromCondition(action.getCondition());
+    EList<ExpMember> _expMembers = action.getExpMembers();
+    for (final ExpMember exp : _expMembers) {
+      if ((exp instanceof ConditionalAction)) {
+        this.generateVariableConditionalAction(server, ((ConditionalAction)exp));
+      } else {
+        if ((exp instanceof Function)) {
+          this.generateVariableFunction(((Function)exp));
+        }
+      }
+    }
+  }
+  
+  public void generateVariableFunction(final Function exp) {
+    String varname = null;
+    if ((exp instanceof ModuleFunction)) {
+      ModuleType _moduleType = ((ModuleFunction)exp).getModuleType();
+      if ((_moduleType instanceof ActuatorType)) {
+        String _name = ((ModuleFunction)exp).getBoard().getName();
+        String _plus = (_name + "_");
+        String _typeName = ((ModuleFunction)exp).getModuleType().getTypeName();
+        String _plus_1 = (_plus + _typeName);
+        String _plus_2 = (_plus_1 + "_");
+        String _name_1 = ((ModuleFunction)exp).getModuleType().getName();
+        String _plus_3 = (_plus_2 + _name_1);
+        String _plus_4 = (_plus_3 + "_");
+        String _name_2 = ((ModuleFunction)exp).getFunctionName().getName();
+        String _plus_5 = (_plus_4 + _name_2);
+        String _plus_6 = (_plus_5 + "_");
+        String _plus_7 = (_plus_6 + "turnOn");
+        varname = _plus_7;
+      } else {
+        ModuleType _moduleType_1 = ((ModuleFunction)exp).getModuleType();
+        if ((_moduleType_1 instanceof SensorType)) {
+          String _name_3 = ((ModuleFunction)exp).getBoard().getName();
+          String _plus_8 = (_name_3 + "_");
+          String _typeName_1 = ((ModuleFunction)exp).getModuleType().getTypeName();
+          String _plus_9 = (_plus_8 + _typeName_1);
+          String _plus_10 = (_plus_9 + "_");
+          String _name_4 = ((ModuleFunction)exp).getModuleType().getName();
+          String _plus_11 = (_plus_10 + _name_4);
+          String _plus_12 = (_plus_11 + "_");
+          String _name_5 = ((ModuleFunction)exp).getFunctionName().getName();
+          String _plus_13 = (_plus_12 + _name_5);
+          String _plus_14 = (_plus_13 + "_");
+          String _plus_15 = (_plus_14 + "value");
+          varname = _plus_15;
+        } else {
+          String _name_6 = ((ModuleFunction)exp).getBoard().getName();
+          String _plus_16 = (_name_6 + "_");
+          String _typeName_2 = ((ModuleFunction)exp).getModuleType().getTypeName();
+          String _plus_17 = (_plus_16 + _typeName_2);
+          String _plus_18 = (_plus_17 + "_");
+          String _name_7 = ((ModuleFunction)exp).getModuleType().getName();
+          String _plus_19 = (_plus_18 + _name_7);
+          String _plus_20 = (_plus_19 + "_");
+          String _name_8 = ((ModuleFunction)exp).getFunctionName().getName();
+          String _plus_21 = (_plus_20 + _name_8);
+          String _plus_22 = (_plus_21 + "_");
+          String _plus_23 = (_plus_22 + "unknown");
+          varname = _plus_23;
+        }
+      }
+    } else {
+      String _name_9 = exp.getBoard().getName();
+      String _plus_24 = (_name_9 + "_");
+      String _name_10 = exp.getFunctionName().getName();
+      String _plus_25 = (_plus_24 + _name_10);
+      varname = _plus_25;
+    }
+    boolean _containsKey = this.globalVariables.containsKey(varname);
+    boolean _not = (!_containsKey);
+    if (_not) {
+      this.globalVariables.put(varname, ((("var " + varname) + " = undefined") + "\n"));
+      if ((exp instanceof ModuleFunction)) {
+        ModuleType _moduleType_2 = ((ModuleFunction)exp).getModuleType();
+        if ((_moduleType_2 instanceof SensorType)) {
+          this.variableNamesForPostAndGetRoutes.put(varname, "SensorFunction");
+        } else {
+          ModuleType _moduleType_3 = ((ModuleFunction)exp).getModuleType();
+          if ((_moduleType_3 instanceof ActuatorType)) {
+            this.variableNamesForPostAndGetRoutes.put(varname, "ActuatorFunction");
+          } else {
+            this.variableNamesForPostAndGetRoutes.put(varname, "UnknownFunction");
+          }
+        }
+      } else {
+        this.variableNamesForPostAndGetRoutes.put(varname, "Function");
+      }
+    }
+  }
+  
+  public void generateVariableFromCondition(final Condition condition) {
+    Condition _nestedCondition = condition.getNestedCondition();
+    boolean _tripleNotEquals = (_nestedCondition != null);
+    if (_tripleNotEquals) {
+      this.generateVariableFromCondition(condition.getNestedCondition());
+    }
+    Function _outputfunction = condition.getLogicEx().getCompExp().getLeft().getOutputfunction();
+    boolean _tripleNotEquals_1 = (_outputfunction != null);
+    if (_tripleNotEquals_1) {
+      this.generateVariableFunction(condition.getLogicEx().getCompExp().getLeft().getOutputfunction());
+    }
+    Function _outputfunction_1 = condition.getLogicEx().getCompExp().getRight().getOutputfunction();
+    boolean _tripleNotEquals_2 = (_outputfunction_1 != null);
+    if (_tripleNotEquals_2) {
+      this.generateVariableFunction(condition.getLogicEx().getCompExp().getRight().getOutputfunction());
+    }
+  }
+  
+  public String GenerateGlobalVariables(final Resource r) {
+    StringBuilder globalVariablesStringBuilder = new StringBuilder();
+    Iterable<Board> _filter = Iterables.<Board>filter(IteratorExtensions.<EObject>toIterable(r.getAllContents()), Board.class);
+    for (final Board b : _filter) {
+      {
+        Iterable<Sensor> _filter_1 = Iterables.<Sensor>filter(b.getBoardMembers(), Sensor.class);
+        for (final Sensor sensor : _filter_1) {
+          Iterable<SensorType> _filter_2 = Iterables.<SensorType>filter(sensor.getSensorTypes(), SensorType.class);
+          for (final SensorType sensortype : _filter_2) {
+            String _typeName = sensortype.getTypeName();
+            String _plus = ("var " + _typeName);
+            String _plus_1 = (_plus + "_");
+            String _name = sensortype.getName();
+            String _plus_2 = (_plus_1 + _name);
+            String _plus_3 = (_plus_2 + "_value");
+            String _plus_4 = (_plus_3 + " = undefined;\n");
+            globalVariablesStringBuilder.append(_plus_4);
+          }
+        }
+        globalVariablesStringBuilder.append("\n");
+        Iterable<Actuator> _filter_3 = Iterables.<Actuator>filter(b.getBoardMembers(), Actuator.class);
+        for (final Actuator actuator : _filter_3) {
+          Iterable<ActuatorType> _filter_4 = Iterables.<ActuatorType>filter(actuator.getActuatorTypes(), ActuatorType.class);
+          for (final ActuatorType actuatortype : _filter_4) {
+            String _typeName_1 = actuatortype.getTypeName();
+            String _plus_5 = ("var " + _typeName_1);
+            String _plus_6 = (_plus_5 + "_");
+            String _name_1 = actuatortype.getName();
+            String _plus_7 = (_plus_6 + _name_1);
+            String _plus_8 = (_plus_7 + "_turnOn");
+            String _plus_9 = (_plus_8 + " = undefined;\n");
+            globalVariablesStringBuilder.append(_plus_9);
+          }
+        }
+        globalVariablesStringBuilder.append("\n");
+      }
+    }
+    globalVariablesStringBuilder.append("\n");
+    return globalVariablesStringBuilder.toString();
+  }
+  
+  public void GeneratePostRoutes(final StringBuilder stringBuilder, final ConditionalAction conditionalAction, final Resource r, final String type, final Server s) {
+    final BiConsumer<String, String> _function = (String k, String v) -> {
+      boolean _equals = v.equals("SensorFunction");
+      if (_equals) {
+        ArrayList<String> numberList = new ArrayList<String>();
+        for (int i = 0; (i < IterableExtensions.size(Iterables.<ConditionalAction>filter(s.getExps(), ConditionalAction.class))); i++) {
+          numberList.add(Integer.valueOf(i).toString());
+        }
+        String urlSnippet = k.replace("_", "/");
+        StringConcatenation _builder = new StringConcatenation();
+        _builder.append("app.post(\'/");
+        _builder.append(urlSnippet);
+        _builder.append("/:value\', function(req, res)");
+        _builder.newLineIfNotEmpty();
+        _builder.append("\t");
+        _builder.append("{    \t\t\t\t\t    ");
+        _builder.newLine();
+        _builder.append("\t    ");
+        _builder.append(k, "\t    ");
+        _builder.append(" = req.params.value; ");
+        _builder.newLineIfNotEmpty();
+        {
+          for(final String number : numberList) {
+            _builder.append("\t    ");
+            _builder.append("ServerFunction");
+            _builder.append(number, "\t    ");
+            _builder.append("();");
+            _builder.newLineIfNotEmpty();
+          }
+        }
+        _builder.append("\t    \t\t\t\t\t\t\t\t    ");
+        _builder.newLine();
+        _builder.append("    \t");
+        _builder.append("res.send(\"Message received: \" + ");
+        _builder.append(k, "    \t");
+        _builder.append(");");
+        _builder.newLineIfNotEmpty();
+        _builder.append("    \t");
+        _builder.append("console.log(\"Message received: \" + ");
+        _builder.append(k, "    \t");
+        _builder.append(")    \t\t\t\t\t\t\t\t    ");
+        _builder.newLineIfNotEmpty();
+        _builder.append("\t");
+        _builder.append("});\t");
+        _builder.newLine();
+        _builder.append("\t\t\t\t\t\t\t\t\t\t");
+        _builder.newLine();
+        stringBuilder.append(_builder);
+      } else {
+        boolean _equals_1 = v.equals("ActuatorFunction");
+        if (_equals_1) {
+          String urlSnippet_1 = k.replace("_", "/");
+          StringConcatenation _builder_1 = new StringConcatenation();
+          _builder_1.append("app.get(\'/");
+          _builder_1.append(urlSnippet_1);
+          _builder_1.append("\', function(req, res)");
+          _builder_1.newLineIfNotEmpty();
+          _builder_1.append("\t");
+          _builder_1.append("{    \t\t\t\t\t    ");
+          _builder_1.newLine();
+          _builder_1.append("\t    ");
+          _builder_1.append("res.send(");
+          _builder_1.append(k, "\t    ");
+          _builder_1.append(");");
+          _builder_1.newLineIfNotEmpty();
+          _builder_1.append("    \t");
+          _builder_1.append("console.log(\"Return ");
+          _builder_1.append(k, "    \t");
+          _builder_1.append(": \" + ");
+          _builder_1.append(k, "    \t");
+          _builder_1.append(")    \t\t\t\t\t\t\t\t    ");
+          _builder_1.newLineIfNotEmpty();
+          _builder_1.append("\t");
+          _builder_1.append("});\t");
+          _builder_1.newLine();
+          _builder_1.append("\t\t\t\t\t\t\t\t\t\t");
+          _builder_1.newLine();
+          stringBuilder.append(_builder_1);
+        }
+      }
+    };
+    this.variableNamesForPostAndGetRoutes.forEach(_function);
+  }
+  
+  public void GenerateIfFunctions(final StringBuilder stringBuilder, final ConditionalAction conditionalAction, final Resource r, final String type, final Server s) {
+    StringBuilder conditionalStringBuilder = new StringBuilder();
+    String content = this.GetConditionalStatementContent(conditionalStringBuilder, conditionalAction.getCondition());
+    String scopeContent = this.GetConditionalStatementScopeContent(conditionalAction.getExpMembers());
+    int counter = 0;
+    Iterable<ConditionalAction> _filter = Iterables.<ConditionalAction>filter(s.getExps(), ConditionalAction.class);
+    for (final ConditionalAction b : _filter) {
+      {
+        StringConcatenation _builder = new StringConcatenation();
+        _builder.append("function ServerFunction");
+        _builder.append(counter);
+        _builder.append("()");
+        _builder.newLineIfNotEmpty();
+        _builder.append("{    \t\t\t\t\t    \t\t\t    \t\t\t    ");
+        _builder.newLine();
+        _builder.append("    ");
+        _builder.append(type, "    ");
+        _builder.append("(");
+        _builder.append(content, "    ");
+        _builder.append(")");
+        _builder.newLineIfNotEmpty();
+        _builder.append("    ");
+        _builder.append("{  ");
+        _builder.newLine();
+        _builder.append("    \t");
+        _builder.append(scopeContent, "    \t");
+        _builder.append("\t\t\t\t    \t");
+        _builder.newLineIfNotEmpty();
+        _builder.append("    ");
+        _builder.append("}");
+        _builder.newLine();
+        _builder.append("}\t");
+        _builder.newLine();
+        _builder.append("\t\t\t");
+        _builder.newLine();
+        stringBuilder.append(_builder);
+        counter++;
+      }
+    }
+  }
+  
+  public String GetConditionalStatementScopeContent(final List<ExpMember> content) {
+    final StringBuilder scopeContentBuilder = new StringBuilder();
+    for (final ExpMember exp : content) {
+      if ((exp instanceof ConditionalAction)) {
+        StringBuilder tempBuilder = new StringBuilder();
+        String text = this.GetConditionalStatementContent(tempBuilder, ((ConditionalAction)exp).getCondition());
+        String _type = ((ConditionalAction)exp).getType();
+        String _plus = (_type + "(");
+        String _plus_1 = (_plus + text);
+        String _plus_2 = (_plus_1 + ")\n");
+        scopeContentBuilder.append(_plus_2);
+        int _size = ((ConditionalAction)exp).getExpMembers().size();
+        boolean _greaterThan = (_size > 0);
+        if (_greaterThan) {
+          Object _GetConditionalStatementScopeContent = this.GetConditionalStatementScopeContent(((ConditionalAction)exp).getExpMembers());
+          String _plus_3 = ("{\n" + _GetConditionalStatementScopeContent);
+          String _plus_4 = (_plus_3 + "}\n\n");
+          scopeContentBuilder.append(_plus_4);
+        }
+      } else {
+        if ((exp instanceof Function)) {
+          if ((exp instanceof ModuleFunction)) {
+            ModuleType _moduleType = ((ModuleFunction)exp).getModuleType();
+            if ((_moduleType instanceof ActuatorType)) {
+              String _name = ((ModuleFunction)exp).getBoard().getName();
+              String _plus_5 = (_name + "_");
+              String _typeName = ((ModuleFunction)exp).getModuleType().getTypeName();
+              String _plus_6 = (_plus_5 + _typeName);
+              String _plus_7 = (_plus_6 + "_");
+              String _name_1 = ((ModuleFunction)exp).getModuleType().getName();
+              String _plus_8 = (_plus_7 + _name_1);
+              String _plus_9 = (_plus_8 + "_");
+              String _name_2 = ((ModuleFunction)exp).getFunctionName().getName();
+              String _plus_10 = (_plus_9 + _name_2);
+              String _plus_11 = (_plus_10 + "_");
+              String out = (_plus_11 + "turnOn");
+              scopeContentBuilder.append((("\t" + out) + " = true\n"));
+            }
+          }
+        }
+      }
+    }
+    return scopeContentBuilder.toString();
+  }
+  
+  public String GetConditionalStatementContent(final StringBuilder stringBuilder, final Condition condition) {
+    Function _outputfunction = condition.getLogicEx().getCompExp().getLeft().getOutputfunction();
+    boolean _notEquals = (!Objects.equal(_outputfunction, null));
+    if (_notEquals) {
+      final String boardName = condition.getLogicEx().getCompExp().getLeft().getOutputfunction().getBoard().getName();
+      final String functionName = condition.getLogicEx().getCompExp().getLeft().getOutputfunction().getFunctionName().getName();
+      final BiConsumer<String, String> _function = (String k, String v) -> {
+        if ((k.contains(boardName) && k.contains(functionName))) {
+          stringBuilder.append(k);
+        }
+      };
+      this.variableNamesForPostAndGetRoutes.forEach(_function);
+    } else {
+      stringBuilder.append(String.valueOf(condition.getLogicEx().getCompExp().getLeft().getOutputValue()));
+    }
+    String operator = condition.getLogicEx().getCompExp().getOp();
+    stringBuilder.append(((" " + operator) + " "));
+    Function _outputfunction_1 = condition.getLogicEx().getCompExp().getRight().getOutputfunction();
+    boolean _notEquals_1 = (!Objects.equal(_outputfunction_1, null));
+    if (_notEquals_1) {
+      final String boardName_1 = condition.getLogicEx().getCompExp().getLeft().getOutputfunction().getBoard().getName();
+      final String functionName_1 = condition.getLogicEx().getCompExp().getLeft().getOutputfunction().getFunctionName().getName();
+      final BiConsumer<String, String> _function_1 = (String k, String v) -> {
+        if ((k.contains(boardName_1) && k.contains(functionName_1))) {
+          stringBuilder.append(k);
+        }
+      };
+      this.variableNamesForPostAndGetRoutes.forEach(_function_1);
+    } else {
+      stringBuilder.append(String.valueOf(condition.getLogicEx().getCompExp().getRight().getOutputValue()));
+    }
+    String _operator = condition.getOperator();
+    boolean _notEquals_2 = (!Objects.equal(_operator, null));
+    if (_notEquals_2) {
+      String _operator_1 = condition.getOperator();
+      String _plus = (" " + _operator_1);
+      String _plus_1 = (_plus + " ");
+      stringBuilder.append(_plus_1);
+    }
+    Condition _nestedCondition = condition.getNestedCondition();
+    boolean _notEquals_3 = (!Objects.equal(_nestedCondition, null));
+    if (_notEquals_3) {
+      this.GetConditionalStatementContent(stringBuilder, condition.getNestedCondition());
+    }
+    return stringBuilder.toString();
   }
 }
