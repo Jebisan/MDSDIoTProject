@@ -95,21 +95,22 @@ class PycomGenerator extends AbstractGenerator {
 		generatePycom(b, r)
 		
 		'''
-			import pycom
-			import urequests
-			import machine
-			import time 
-			«generatePycomImports(b, r, fsa)»
+		import pycom
+		import urequests
+		import machine
+		import time 
+		#New code
+		«generatePycomImports(b, r, fsa)»
 		
-			isRunning = True
-			pycom.heartbeat(False)
+		isRunning = True
+		pycom.heartbeat(False)
 			
-			«generatePycomCode(b, r)»
+		«generatePycomCode(b, r)»
 			
-			«genFunctions(b, r)»
-			while(isRunning):
-				«generateLogic(b, r)»
-			#CODE GENERATION END
+		«genFunctions(b, r)»
+		while(isRunning):
+			«generateLogic(b, r)»
+		#CODE GENERATION END
 		'''
 	}
 	
@@ -244,20 +245,24 @@ class PycomGenerator extends AbstractGenerator {
 	def generateThresholdFunction(Board board, Resource resource, Function function, int i, String op, Server server) {	
 		var postaddress = getPostAddress(board, function)
 		var threshold = '''
+		var passedTreshold = False
 		«function.functionName.name»Threshold = «i»
 		«function.functionName.name»Value = «function.functionName.name»()
-		if («function.functionName.name»Value «op» «function.functionName.name»Threshold):
+		if («function.functionName.name»Value «op» «function.functionName.name»Threshold and !passedTreshold):
+			passedTreshold = !passedTreshold
 			sendurl = "«getServerAddress(server.conn)»«postaddress»".format(«function.functionName.name»Value)
 			res = urequests.post(sendurl)   
 			print("Res code: ", res.status_code)
 			print("Res: ", res.reason)
-		if («function.functionName.name»Value «oppositeOP(op)» «function.functionName.name»Threshold):
-					sendurl = «getServerAddress(server.conn)».format(«function.functionName.name»Value)
-					res = urequests.post(sendurl)   
-					print("Res code: ", res.status_code)
-					print("Res: ", res.reason)
+		if («function.functionName.name»Value «oppositeOP(op)» «function.functionName.name»Threshold and passedTreshold):
+			passedTreshold = !passedTreshold
+			sendurl = "«getServerAddress(server.conn)»«postaddress»".format(«function.functionName.name»Value)
+			res = urequests.post(sendurl)   
+			print("Res code: ", res.status_code)
+			print("Res: ", res.reason)
 		'''				
-		var funk = '''
+		var funk = 
+		'''
 		def «function.functionName.name»():
 			#Write your code here		
 		'''
@@ -271,12 +276,12 @@ class PycomGenerator extends AbstractGenerator {
 		«function.functionName.name»Value = «function.functionName.name»()
 		«function2.functionName.name»Value = «function2.functionName.name»()
 		if («function.functionName.name»Value «op» «function2.functionName.name»Value):
-			sendurl = "«getServerAddress(server.conn)»«»".format(true)
+			sendurl = "«getServerAddress(server.conn)»«postaddress»".format(True)
 			res = urequests.post(sendurl)   
 			print("Res code: ", res.status_code)
 			print("Res: ", res.reason)
 		if («function.functionName.name»Value «oppositeOP(op)» «function2.functionName.name»Value):
-			sendurl = "«getServerAddress(server.conn)»/send/{}".format(false)
+			sendurl = "«getServerAddress(server.conn)»«postaddress»".format(false)
 			res = urequests.post(sendurl)   
 			print("Res code: ", res.status_code)
 			print("Res: ", res.reason)
@@ -289,7 +294,7 @@ class PycomGenerator extends AbstractGenerator {
 		
 		var funk2 = '''
 		def «function2.functionName.name»():
-			#Write your code here		
+			#Write your code here	
 		'''
 		logicmap.put(function.functionName.name, transmitcode)
 		functionmap.put(function.functionName.name, funk)
@@ -303,9 +308,9 @@ class PycomGenerator extends AbstractGenerator {
 			var String sendUrl;
 			var String functionname
 			if(function instanceof ModuleFunction) {
-				sendUrl = '''sendurl = "«address»/«board.name»/«function.moduleType.typeName»/«function.moduleType.name»/«function.functionName.name»/{}'''
+				sendUrl = '''sendurl = "«address»/«board.name»/«function.moduleType.typeName»/«function.moduleType.name»/«function.functionName.name»/turnOn'''
 			} else {
-				sendUrl = '''sendurl = "«address»/«board.name»/«function.functionName.name»/{}'''
+				sendUrl = '''sendurl = "«address»/«board.name»/«function.functionName.name»/turnOn'''
 			}
 			var getCode='''
 			«sendUrl»
