@@ -28,6 +28,7 @@ import java.util.List
 import xtext.pycom.ExpMember
 import xtext.pycom.Connection
 import xtext.pycom.ModuleFunction
+import java.util.ArrayList
 
 /**
  * Generates code from your model files on save.
@@ -527,12 +528,20 @@ class PycomGenerator extends AbstractGenerator {
 				{
 					var variableName = sensortype.typeName + "_" + sensortype.name + "_" + "value";
 					
+					var numberList = new ArrayList<String>
+					for(var i = 0; i < s.exps.filter(typeof(ConditionalAction)).size; i++)
+					{
+						numberList.add(i.toString)
+					}
+					
 					stringBuilder.append(						
 						'''							
 						app.post('/«b.name»/«sensortype.typeName»/«sensortype.name»/:value', function(req, res)
 							{    					    
 							    «variableName» = req.params.value; 
-							    ServerFunction0();
+							    «FOR number : numberList»							    	
+							    	ServerFunction«number»();
+							    «ENDFOR»
 							    								    
 						    	res.send("Message received: " + «variableName»);
 						    	console.log("Message received: " + «variableName»)    								    
@@ -660,5 +669,5 @@ class PycomGenerator extends AbstractGenerator {
 		}	
 		
 		return stringBuilder.toString;
-	}		
+	}
 }
