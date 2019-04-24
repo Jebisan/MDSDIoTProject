@@ -473,6 +473,96 @@ class PycomGenerator extends AbstractGenerator {
 		'''
 	}
 	
+	def generateServerFiles(Server s, Resource r) 
+	{
+		var conditionalAction = s.exps.get(0);		
+		var type = conditionalAction.type;
+		var stringBuilder = new StringBuilder;
+		
+		stringBuilder.append(GenerateServerHeader(s))	
+		//stringBuilder.append(GenerateGlobalVariables(r))
+		stringBuilder.append(GenerateGlobalVariables(s))	
+		GeneratePostRoutes(stringBuilder, conditionalAction, r, type, s)
+		GenerateIfFunctions(stringBuilder, conditionalAction, r, type, s)
+						
+		return stringBuilder.toString;
+	}	
+	
+	var HashMap<String, String>  globalVariables
+	var HashMap<String, String>  variableNamesForPostAndGetRoutes
+	
+	def GenerateGlobalVariables(Server s) {
+		val sb = new StringBuilder()
+		globalVariables = new HashMap<String, String>
+		variableNamesForPostAndGetRoutes = new HashMap<String, String>
+		for (exp : s.exps) 
+		{
+			generateVariableConditionalAction(s, exp)
+		}
+		globalVariables.forEach[k, v| {
+			sb.append(v)
+		}]
+		
+		return sb.toString
+	}
+	
+	def void generateVariableConditionalAction(Server server, ConditionalAction action) {
+		generateVariableFromCondition(action.condition)
+		for(exp : action.expMembers) {
+			if(exp instanceof ConditionalAction) 
+			{
+				generateVariableConditionalAction(server, exp)
+			} 
+			else if(exp instanceof Function) 
+			{
+				generateVariableFunction(exp)
+			}
+		}
+	}
+	
+	def void generateVariableFunction(Function exp) {
+		var String varname;
+			if(exp instanceof ModuleFunction) {
+				if(exp.moduleType instanceof ActuatorType) {
+					varname = exp.board.name + "_" + exp.moduleType.typeName + "_" + exp.moduleType.name + "_" + exp.functionName.name + "_" + "turnOn"		
+				} else if (exp.moduleType instanceof SensorType) {
+					varname = exp.board.name + "_" + exp.moduleType.typeName + "_" + exp.moduleType.name + "_" + exp.functionName.name + "_" + "value"
+				} else {
+					varname = exp.board.name + "_" + exp.moduleType.typeName + "_" + exp.moduleType.name + "_" + exp.functionName.name + "_" + "unknown"
+				}
+					
+			} else {
+				varname = exp.board.name + "_" + exp.functionName.name
+			}
+			if(!globalVariables.containsKey(varname)) {
+				globalVariables.put(varname,"\t" + varname + " = undefined" + "\n")
+				if(exp instanceof ModuleFunction) {
+					if (exp.moduleType instanceof SensorType) {
+						variableNamesForPostAndGetRoutes.put(varname,"SensorFunction")
+					} else if (exp.moduleType instanceof ActuatorType) {
+						variableNamesForPostAndGetRoutes.put(varname,"ActuatorFunction")
+					} else {
+						variableNamesForPostAndGetRoutes.put(varname,"UnknownFunction")
+					}
+				} else {
+					variableNamesForPostAndGetRoutes.put(varname,"Function")
+				}
+				
+			}														
+	}
+	
+	def void generateVariableFromCondition(Condition condition) {
+		if(condition.nestedCondition !== null) {
+			generateVariableFromCondition(condition.nestedCondition)
+		}
+		if(condition.logicEx.compExp.left.outputfunction !== null) {
+			generateVariableFunction(condition.logicEx.compExp.left.outputfunction)
+		}
+		if(condition.logicEx.compExp.right.outputfunction !== null) {
+			generateVariableFunction(condition.logicEx.compExp.right.outputfunction)
+		}
+	}
+	
 	def GenerateGlobalVariables(Resource r)
 	{
 		var globalVariablesStringBuilder = new StringBuilder()
@@ -504,75 +594,49 @@ class PycomGenerator extends AbstractGenerator {
 		return globalVariablesStringBuilder.toString;				
 	}
 	
-	def generateServerFiles(Server s, Resource r) 
-	{
-		var conditionalAction = s.exps.get(0);		
-		var type = conditionalAction.type;
-		var stringBuilder = new StringBuilder;
-		
-		stringBuilder.append(GenerateServerHeader(s))	
-		stringBuilder.append(GenerateGlobalVariables(r))	
-		GeneratePostRoutes(stringBuilder, conditionalAction, r, type, s)
-		GenerateIfFunctions(stringBuilder, conditionalAction, r, type, s)
-						
-		return stringBuilder.toString;
-	}		
-	
 	def GeneratePostRoutes(StringBuilder stringBuilder, ConditionalAction conditionalAction, Resource r, String type, Server s)
-	{						
-		for (b : r.allContents.toIterable.filter(typeof(Board)))
-		{
-			for (sensor : b.boardMembers.filter(typeof(Sensor))) 
+	{			
+		variableNamesForPostAndGetRoutes.forEach[k, v| {
+			if(v.equals("SensorFunction"))
 			{
-				for (sensortype : sensor.sensorTypes.filter(typeof(SensorType))) 
+				var numberList = new ArrayList<String>
+				for(var i = 0; i < s.exps.filter(typeof(ConditionalAction)).size; i++)
 				{
-					var variableName = sensortype.typeName + "_" + sensortype.name + "_" + "value";
-					
-					var numberList = new ArrayList<String>
-					for(var i = 0; i < s.exps.filter(typeof(ConditionalAction)).size; i++)
-					{
-						numberList.add(i.toString)
-					}
-					
-					stringBuilder.append(						
-						'''							
-						app.post('/«b.name»/«sensortype.typeName»/«sensortype.name»/:value', function(req, res)
-							{    					    
-							    «variableName» = req.params.value; 
-							    «FOR number : numberList»							    	
-							    	ServerFunction«number»();
-							    «ENDFOR»
-							    								    
-						    	res.send("Message received: " + «variableName»);
-						    	console.log("Message received: " + «variableName»)    								    
-							});	
-																
-						'''				
-						)														
+					numberList.add(i.toString)
 				}
-			}			
-			
-			for (actuator : b.boardMembers.filter(typeof(Actuator))) 
-			{
-				for (actuatortype : actuator.actuatorTypes.filter(typeof(ActuatorType))) 
-				{	
-					var variableName = actuatortype.typeName + "_" + actuatortype.name + "_" + "turnOn";
-											
-					stringBuilder.append(						
-						'''							
-						app.get('/«b.name»/«actuatortype.typeName»/«actuatortype.name»', function(req, res)
-							{    					    
-							    res.send(«variableName»);
-						    	console.log("Return «variableName»: " + «variableName»)    								    
-							});	
-																
-						'''				
-						)																									
-				}
+				
+				var String urlSnippet = k.replace("_", "/");
+				stringBuilder.append(						
+					'''							
+					app.post('/«urlSnippet»/:value', function(req, res)
+						{    					    
+						    «k» = req.params.value; 
+						    «FOR number : numberList»							    	
+						    	ServerFunction«number»();
+						    «ENDFOR»
+						    								    
+					    	res.send("Message received: " + «k»);
+					    	console.log("Message received: " + «k»)    								    
+						});	
+															
+					'''				
+					)				
 			}
-			
-			stringBuilder.append("\n\n");
-		}									
+			else if(v.equals("ActuatorFunction"))
+			{
+				var String urlSnippet = k.replace("_", "/");
+				stringBuilder.append(						
+						'''							
+						app.get('/«urlSnippet»', function(req, res)
+							{    					    
+							    res.send(«k»);
+						    	console.log("Return «k»: " + «k»)    								    
+							});	
+																
+						'''				
+						)		
+			}
+		}]
 	}
 	
 	def GenerateIfFunctions(StringBuilder stringBuilder, ConditionalAction conditionalAction, Resource r, String type, Server s)
