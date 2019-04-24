@@ -503,6 +503,7 @@ class PycomGenerator extends AbstractGenerator {
 			sb.append(v)
 		}]
 		
+		sb.append("\n")
 		return sb.toString
 	}
 	
@@ -643,7 +644,7 @@ class PycomGenerator extends AbstractGenerator {
 	{
 		var conditionalStringBuilder = new StringBuilder();
 		var content = GetConditionalStatementContent(conditionalStringBuilder, conditionalAction.condition);		
-		var scopeContent = GetConditionalScopeContent(conditionalAction.expMembers);		
+		var scopeContent = GetConditionalStatementScopeContent(conditionalAction.expMembers);		
 		var counter = 0;
 		
 		for(b : s.exps.filter(typeof(ConditionalAction)))
@@ -665,9 +666,9 @@ class PycomGenerator extends AbstractGenerator {
 		}		
 	}
 	
-	def GetConditionalScopeContent(List<ExpMember> content)
+	def GetConditionalStatementScopeContent(List<ExpMember> content)
 	{
-		var scopeContentBuilder = new StringBuilder();		
+		val scopeContentBuilder = new StringBuilder();		
 		
 		for (exp : content) 
 		{
@@ -679,17 +680,19 @@ class PycomGenerator extends AbstractGenerator {
 				
 				if(exp.expMembers.size > 0)
 				{
-					scopeContentBuilder.append("{\n" + GetConditionalScopeContent(exp.expMembers) + "}\n\n")
+					scopeContentBuilder.append("{\n" + GetConditionalStatementScopeContent(exp.expMembers) + "}\n\n")
 				}
 			} 
 			else if(exp instanceof Function) 
-			{
-				var output = ""
+			{				
 				if(exp instanceof ModuleFunction) 
 				{
-					output = exp.moduleType.typeName + "_" + exp.moduleType.name + "_" + "turnOn"
-				}															
-				scopeContentBuilder.append("\t" + output + " = true" + "\n")
+					if(exp.moduleType instanceof ActuatorType) 
+					{
+						var out = exp.board.name + "_" + exp.moduleType.typeName + "_" + exp.moduleType.name + "_" + exp.functionName.name + "_" + "turnOn"						
+						scopeContentBuilder.append("\t" + out + " = true\n");
+					} // Else: Do nothing - Should only contain global variables for actuators
+				}																			
 			}
 		}
 		
@@ -697,30 +700,39 @@ class PycomGenerator extends AbstractGenerator {
 	}
 	
 	def GetConditionalStatementContent(StringBuilder stringBuilder, Condition condition)
-	{
-		var left = "";
-		var operator = condition.logicEx.compExp.op;
-		var right = "";											
-		
+	{																	
 		if(condition.logicEx.compExp.left.outputfunction != null)
-		{
-			left = "value";
+		{		
+			val String boardName = condition.logicEx.compExp.left.outputfunction.board.name;
+			val String functionName = condition.logicEx.compExp.left.outputfunction.functionName.name;	
+					
+			variableNamesForPostAndGetRoutes.forEach[k, v| {
+				if(k.contains(boardName) && k.contains(functionName))
+					stringBuilder.append(k);
+			}]								
 		}	
 		else
 		{
-			left = String.valueOf(condition.logicEx.compExp.left.outputValue);
+			stringBuilder.append(String.valueOf(condition.logicEx.compExp.left.outputValue));
 		}
+		
+		var operator = condition.logicEx.compExp.op;
+		stringBuilder.append(" " + operator + " ")
 		
 		if(condition.logicEx.compExp.right.outputfunction != null)
 		{
-			right = "value";
+			val String boardName = condition.logicEx.compExp.left.outputfunction.board.name;
+			val String functionName = condition.logicEx.compExp.left.outputfunction.functionName.name;	
+					
+			variableNamesForPostAndGetRoutes.forEach[k, v| {
+				if(k.contains(boardName) && k.contains(functionName))
+					stringBuilder.append(k);
+			}]	
 		}
 		else
 		{
-			right = String.valueOf(condition.logicEx.compExp.right.outputValue);
-		}
-		
-		stringBuilder.append(left + " " + operator + " " + right);
+			stringBuilder.append(String.valueOf(condition.logicEx.compExp.right.outputValue));
+		}				
 		
 		if(condition.operator != null)
 		{
