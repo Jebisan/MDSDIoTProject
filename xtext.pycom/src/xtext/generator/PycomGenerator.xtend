@@ -533,9 +533,9 @@ class PycomGenerator extends AbstractGenerator {
 		var String varname;
 			if(exp instanceof ModuleFunction) {
 				if(exp.moduleType instanceof ActuatorType) {
-					varname = exp.board.name + "_" + exp.moduleType.typeName + "_" + exp.moduleType.name + "_" + exp.functionName.name + "_" + "turnOn"		
+					varname = exp.board.name + "_" + exp.moduleType.typeName + "_" + exp.moduleType.name + "_" + exp.functionName.name + "_" + "boolean"
 				} else if (exp.moduleType instanceof SensorType) {
-					varname = exp.board.name + "_" + exp.moduleType.typeName + "_" + exp.moduleType.name + "_" + exp.functionName.name + "_" + "value"
+					varname = exp.board.name + "_" + exp.moduleType.typeName + "_" + exp.moduleType.name + "_" + exp.functionName.name + "_" + "float"
 				} else {
 					varname = exp.board.name + "_" + exp.moduleType.typeName + "_" + exp.moduleType.name + "_" + exp.functionName.name + "_" + "unknown"
 				}
@@ -660,7 +660,7 @@ class PycomGenerator extends AbstractGenerator {
 				{
 					if(exp.moduleType instanceof ActuatorType) 
 					{
-						var out = exp.board.name + "_" + exp.moduleType.typeName + "_" + exp.moduleType.name + "_" + exp.functionName.name + "_" + "turnOn"						
+						var out = exp.board.name + "_" + exp.moduleType.typeName + "_" + exp.moduleType.name + "_" + exp.functionName.name + "_" + "boolean"						
 						scopeContentBuilder.append("\t" + out + " = true\n");
 					} // Else: Do nothing - Should only contain global variables for actuators
 				}																			
