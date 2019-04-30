@@ -466,11 +466,13 @@ class PycomGenerator extends AbstractGenerator {
 		
 		// Host: «if (s.conn.host.ipAdr === null) s.conn.host.website else s.conn.host.ipAdr »
 		
-		app.listen(«s.conn.portnumber», () => {
+		app.listen(«s.conn.portnumber», () => 
+		{
 		    console.log('Started on port «s.conn.portnumber»');
 		});
 		
-		app.get("*", function(req, res){		     
+		app.get("/", function(req, res)
+		{		     
 		    res.send("Default get route");
 		    console.log("Default get route");
 		});		
@@ -606,8 +608,15 @@ class PycomGenerator extends AbstractGenerator {
 				stringBuilder.append(						
 						'''							
 						app.get('/«urlSnippet»', function(req, res)
-							{    					    
-							    res.send(«k»);
+							{ 
+								if(«k» == undefined)
+								{
+									res.send("undefined");
+								} 
+								else
+								{  					    
+							    	res.send(«k»);
+							    }
 						    	console.log("Return «k»: " + «k»)    								    
 							});	
 																
@@ -621,7 +630,48 @@ class PycomGenerator extends AbstractGenerator {
 	{
 		var conditionalStringBuilder = new StringBuilder();
 		var content = GetConditionalStatementContent(conditionalStringBuilder, conditionalAction.condition);		
-		var scopeContent = GetConditionalStatementScopeContent(conditionalAction.expMembers);		
+		var scopeContent = GetConditionalStatementScopeContent(conditionalAction.expMembers);								
+		var splittedScopeContent = scopeContent.split("");	
+		var elseScopeStringBuilder = new StringBuilder();	
+		
+		var index = 0;		
+		for(String character : splittedScopeContent)
+		{			
+			if(character.equals("=") && splittedScopeContent.get(index-1).equals("!"))
+			{
+				elseScopeStringBuilder.deleteCharAt(index-1)
+				elseScopeStringBuilder.append("==")
+			}
+			else if(character.equals("=") && splittedScopeContent.get(index-1).equals("="))
+			{
+				elseScopeStringBuilder.deleteCharAt(index-1)
+				elseScopeStringBuilder.append("!=")
+			}
+			else if(character.equals("=") && splittedScopeContent.get(index-1).equals("<"))
+			{
+				elseScopeStringBuilder.deleteCharAt(index-1)
+				elseScopeStringBuilder.append(">=")
+			}
+			else if(character.equals("=") && splittedScopeContent.get(index-1).equals(">"))
+			{
+				elseScopeStringBuilder.deleteCharAt(index-1)
+				elseScopeStringBuilder.append("<=")
+			}
+			else if(character.equals("<"))
+			{
+				elseScopeStringBuilder.append(">")				
+			}
+			else if(character.equals(">"))
+			{
+				elseScopeStringBuilder.append("<")
+			}
+			else
+			{
+				elseScopeStringBuilder.append(character)
+			}
+											
+			index++;
+		}					
 						
 		stringBuilder.append(						
 		'''										
@@ -631,10 +681,14 @@ class PycomGenerator extends AbstractGenerator {
 			    {  
 			    	«scopeContent»				    	
 			    }
+			    else
+			    {
+			    	«elseScopeStringBuilder.toString.replace("= true", "= false")»					
+				}
 			}	
 						
 		'''				
-		)											
+		)																		
 	}
 	
 	def GetConditionalStatementScopeContent(List<ExpMember> content)
