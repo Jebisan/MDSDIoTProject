@@ -236,9 +236,9 @@ class PycomGenerator extends AbstractGenerator {
 	
 	def getPostAddress(Board board, Function function) {
 		if(function instanceof ModuleFunction) {
-			return '''/«board.name»/«function.moduleType.typeName»/«function.moduleType.name»/«function.functionName.name»/{}'''
+			return '''/«board.name»/«function.moduleType.typeName»/«function.moduleType.name»/«function.functionName.name»/float/{}'''
 		} else {
-			return '''/«board.name»/«function.functionName.name»/{}'''
+			return '''/«board.name»/«function.functionName.name»/float/{}'''
 		}
 	}
 	
@@ -705,7 +705,7 @@ class PycomGenerator extends AbstractGenerator {
 				
 				if(exp.expMembers.size > 0)
 				{
-					scopeContentBuilder.append("{\n" + GetConditionalStatementScopeContent(exp.expMembers) + "}\n\n")
+					scopeContentBuilder.append("{\n" + GetConditionalStatementScopeContent(exp.expMembers) + "}\n")
 				}
 			} 
 			else if(exp instanceof Function) 
