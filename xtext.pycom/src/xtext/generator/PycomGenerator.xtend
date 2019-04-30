@@ -541,7 +541,7 @@ class PycomGenerator extends AbstractGenerator {
 				varname = exp.board.name + "_" + exp.functionName.name
 			}
 			if(!globalVariables.containsKey(varname)) {
-				globalVariables.put(varname,"\t" + varname + " = undefined" + "\n")
+				globalVariables.put(varname,"var " + varname + " = undefined" + "\n")
 				if(exp instanceof ModuleFunction) {
 					if (exp.moduleType instanceof SensorType) {
 						variableNamesForPostAndGetRoutes.put(varname,"SensorFunction")
