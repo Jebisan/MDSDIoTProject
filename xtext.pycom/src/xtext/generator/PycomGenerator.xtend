@@ -479,19 +479,22 @@ class PycomGenerator extends AbstractGenerator {
 	}
 	
 	def generateServerFiles(Server s, Resource r) 
-	{
-		var conditionalAction = s.exps.get(0);		
-		var type = conditionalAction.type;
-		var stringBuilder = new StringBuilder;
+	{					
+		var stringBuilder = new StringBuilder;		
+		stringBuilder.append(GenerateServerHeader(s))			
+		stringBuilder.append(GenerateGlobalVariables(s))
+		GeneratePostRoutes(stringBuilder, r, s)
 		
-		stringBuilder.append(GenerateServerHeader(s))	
-		//stringBuilder.append(GenerateGlobalVariables(r))
-		stringBuilder.append(GenerateGlobalVariables(s))	
-		GeneratePostRoutes(stringBuilder, conditionalAction, r, type, s)
-		GenerateIfFunctions(stringBuilder, conditionalAction, r, type, s)
-						
+		var counter = 0;
+		for(ConditionalAction conditionalAction : s.exps)
+		{
+			var type = conditionalAction.type;			
+			GenerateIfFunctions(stringBuilder, conditionalAction, r, type, s, counter)
+			counter++;	
+		}
+		
 		return stringBuilder.toString;
-	}	
+	}
 	
 	var HashMap<String, String>  globalVariables
 	var HashMap<String, String>  variableNamesForPostAndGetRoutes
@@ -567,40 +570,9 @@ class PycomGenerator extends AbstractGenerator {
 		if(condition.logicEx.compExp.right.outputfunction !== null) {
 			generateVariableFunction(condition.logicEx.compExp.right.outputfunction)
 		}
-	}
+	}		
 	
-	def GenerateGlobalVariables(Resource r)
-	{
-		var globalVariablesStringBuilder = new StringBuilder()
-		
-		for(b : r.allContents.toIterable.filter(typeof(Board)))
-		{
-			for (sensor : b.boardMembers.filter(typeof(Sensor))) 
-			{
-				for (sensortype : sensor.sensorTypes.filter(typeof(SensorType))) 
-				{
-					globalVariablesStringBuilder.append("var " + sensortype.typeName + "_" + sensortype.name + "_value" + " = undefined;\n")														
-				}
-			}
-			
-			globalVariablesStringBuilder.append("\n");
-			
-			for (actuator : b.boardMembers.filter(typeof(Actuator))) 
-			{
-				for (actuatortype : actuator.actuatorTypes.filter(typeof(ActuatorType))) 
-				{	
-					globalVariablesStringBuilder.append("var " + actuatortype.typeName + "_" + actuatortype.name + "_turnOn" + " = undefined;\n")																								
-				}
-			}
-			
-			globalVariablesStringBuilder.append("\n");
-		}		
-		
-		globalVariablesStringBuilder.append("\n");
-		return globalVariablesStringBuilder.toString;				
-	}
-	
-	def GeneratePostRoutes(StringBuilder stringBuilder, ConditionalAction conditionalAction, Resource r, String type, Server s)
+	def GeneratePostRoutes(StringBuilder stringBuilder, Resource r, Server s)
 	{			
 		variableNamesForPostAndGetRoutes.forEach[k, v| {
 			if(v.equals("SensorFunction"))
@@ -645,30 +617,24 @@ class PycomGenerator extends AbstractGenerator {
 		}]
 	}
 	
-	def GenerateIfFunctions(StringBuilder stringBuilder, ConditionalAction conditionalAction, Resource r, String type, Server s)
+	def GenerateIfFunctions(StringBuilder stringBuilder, ConditionalAction conditionalAction, Resource r, String type, Server s, int counter)
 	{
 		var conditionalStringBuilder = new StringBuilder();
 		var content = GetConditionalStatementContent(conditionalStringBuilder, conditionalAction.condition);		
 		var scopeContent = GetConditionalStatementScopeContent(conditionalAction.expMembers);		
-		var counter = 0;
-		
-		for(b : s.exps.filter(typeof(ConditionalAction)))
-		{
-			stringBuilder.append(						
-			'''										
-				function ServerFunction«counter»()
-				{    					    			    			    
-				    «type»(«content»)
-				    {  
-				    	«scopeContent»				    	
-				    }
-				}	
-							
-			'''				
-			)	
-			
-			counter++;	
-		}		
+						
+		stringBuilder.append(						
+		'''										
+			function ServerFunction«counter»()
+			{    					    			    			    
+			    «type»(«content»)
+			    {  
+			    	«scopeContent»				    	
+			    }
+			}	
+						
+		'''				
+		)											
 	}
 	
 	def GetConditionalStatementScopeContent(List<ExpMember> content)
