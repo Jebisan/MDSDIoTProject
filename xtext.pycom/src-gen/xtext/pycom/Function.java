@@ -14,13 +14,14 @@ package xtext.pycom;
  * </p>
  * <ul>
  *   <li>{@link xtext.pycom.Function#getBoard <em>Board</em>}</li>
+ *   <li>{@link xtext.pycom.Function#getFunctionName <em>Function Name</em>}</li>
  * </ul>
  *
  * @see xtext.pycom.PycomPackage#getFunction()
  * @model
  * @generated
  */
-public interface Function extends ExpMember, Expression
+public interface Function extends ExpMember
 {
   /**
    * Returns the value of the '<em><b>Board</b></em>' reference.
@@ -43,5 +44,27 @@ public interface Function extends ExpMember, Expression
    * @generated
    */
   void setBoard(Board value);
+
+  /**
+   * Returns the value of the '<em><b>Function Name</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Function Name</em>' containment reference.
+   * @see #setFunctionName(FunctionName)
+   * @see xtext.pycom.PycomPackage#getFunction_FunctionName()
+   * @model containment="true"
+   * @generated
+   */
+  FunctionName getFunctionName();
+
+  /**
+   * Sets the value of the '{@link xtext.pycom.Function#getFunctionName <em>Function Name</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Function Name</em>' containment reference.
+   * @see #getFunctionName()
+   * @generated
+   */
+  void setFunctionName(FunctionName value);
 
 } // Function

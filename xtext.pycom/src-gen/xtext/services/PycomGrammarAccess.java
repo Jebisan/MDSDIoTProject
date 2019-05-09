@@ -6,6 +6,7 @@ package xtext.services;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import java.util.List;
+import org.eclipse.xtext.Action;
 import org.eclipse.xtext.Alternatives;
 import org.eclipse.xtext.Assignment;
 import org.eclipse.xtext.CrossReference;
@@ -108,36 +109,24 @@ public class PycomGrammarAccess extends AbstractGrammarElementFinder {
 	public class ConnectionElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "xtext.Pycom.Connection");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Alternatives cAlternatives_0 = (Alternatives)cGroup.eContents().get(0);
-		private final Assignment cIpAdrAssignment_0_0 = (Assignment)cAlternatives_0.eContents().get(0);
-		private final RuleCall cIpAdrIpaddressParserRuleCall_0_0_0 = (RuleCall)cIpAdrAssignment_0_0.eContents().get(0);
-		private final Assignment cWebsiteAssignment_0_1 = (Assignment)cAlternatives_0.eContents().get(1);
-		private final RuleCall cWebsiteSTRINGTerminalRuleCall_0_1_0 = (RuleCall)cWebsiteAssignment_0_1.eContents().get(0);
+		private final Assignment cHostAssignment_0 = (Assignment)cGroup.eContents().get(0);
+		private final RuleCall cHostHostParserRuleCall_0_0 = (RuleCall)cHostAssignment_0.eContents().get(0);
 		private final Keyword cCommaKeyword_1 = (Keyword)cGroup.eContents().get(1);
 		private final Assignment cPortnumberAssignment_2 = (Assignment)cGroup.eContents().get(2);
 		private final RuleCall cPortnumberPortParserRuleCall_2_0 = (RuleCall)cPortnumberAssignment_2.eContents().get(0);
 		
 		//Connection:
-		//	(ipAdr=Ipaddress | website=STRING) ',' portnumber=Port;
+		//	host=Host ',' portnumber=Port;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//(ipAdr=Ipaddress | website=STRING) ',' portnumber=Port
+		//host=Host ',' portnumber=Port
 		public Group getGroup() { return cGroup; }
 		
-		//ipAdr=Ipaddress | website=STRING
-		public Alternatives getAlternatives_0() { return cAlternatives_0; }
+		//host=Host
+		public Assignment getHostAssignment_0() { return cHostAssignment_0; }
 		
-		//ipAdr=Ipaddress
-		public Assignment getIpAdrAssignment_0_0() { return cIpAdrAssignment_0_0; }
-		
-		//Ipaddress
-		public RuleCall getIpAdrIpaddressParserRuleCall_0_0_0() { return cIpAdrIpaddressParserRuleCall_0_0_0; }
-		
-		//website=STRING
-		public Assignment getWebsiteAssignment_0_1() { return cWebsiteAssignment_0_1; }
-		
-		//STRING
-		public RuleCall getWebsiteSTRINGTerminalRuleCall_0_1_0() { return cWebsiteSTRINGTerminalRuleCall_0_1_0; }
+		//Host
+		public RuleCall getHostHostParserRuleCall_0_0() { return cHostHostParserRuleCall_0_0; }
 		
 		//','
 		public Keyword getCommaKeyword_1() { return cCommaKeyword_1; }
@@ -147,6 +136,33 @@ public class PycomGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//Port
 		public RuleCall getPortnumberPortParserRuleCall_2_0() { return cPortnumberPortParserRuleCall_2_0; }
+	}
+	public class HostElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "xtext.Pycom.Host");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final Assignment cIpAdrAssignment_0 = (Assignment)cAlternatives.eContents().get(0);
+		private final RuleCall cIpAdrIpaddressParserRuleCall_0_0 = (RuleCall)cIpAdrAssignment_0.eContents().get(0);
+		private final Assignment cWebsiteAssignment_1 = (Assignment)cAlternatives.eContents().get(1);
+		private final RuleCall cWebsiteSTRINGTerminalRuleCall_1_0 = (RuleCall)cWebsiteAssignment_1.eContents().get(0);
+		
+		//Host:
+		//	ipAdr=Ipaddress | website=STRING;
+		@Override public ParserRule getRule() { return rule; }
+		
+		//ipAdr=Ipaddress | website=STRING
+		public Alternatives getAlternatives() { return cAlternatives; }
+		
+		//ipAdr=Ipaddress
+		public Assignment getIpAdrAssignment_0() { return cIpAdrAssignment_0; }
+		
+		//Ipaddress
+		public RuleCall getIpAdrIpaddressParserRuleCall_0_0() { return cIpAdrIpaddressParserRuleCall_0_0; }
+		
+		//website=STRING
+		public Assignment getWebsiteAssignment_1() { return cWebsiteAssignment_1; }
+		
+		//STRING
+		public RuleCall getWebsiteSTRINGTerminalRuleCall_1_0() { return cWebsiteSTRINGTerminalRuleCall_1_0; }
 	}
 	public class IpaddressElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "xtext.Pycom.Ipaddress");
@@ -264,18 +280,22 @@ public class PycomGrammarAccess extends AbstractGrammarElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "xtext.Pycom.ConditionalAction");
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
 		private final Group cGroup_0 = (Group)cAlternatives.eContents().get(0);
-		private final Keyword cIfKeyword_0_0 = (Keyword)cGroup_0.eContents().get(0);
+		private final Assignment cTypeAssignment_0_0 = (Assignment)cGroup_0.eContents().get(0);
+		private final Keyword cTypeIfKeyword_0_0_0 = (Keyword)cTypeAssignment_0_0.eContents().get(0);
 		private final Keyword cLeftParenthesisKeyword_0_1 = (Keyword)cGroup_0.eContents().get(1);
-		private final RuleCall cConditionParserRuleCall_0_2 = (RuleCall)cGroup_0.eContents().get(2);
+		private final Assignment cConditionAssignment_0_2 = (Assignment)cGroup_0.eContents().get(2);
+		private final RuleCall cConditionConditionParserRuleCall_0_2_0 = (RuleCall)cConditionAssignment_0_2.eContents().get(0);
 		private final Keyword cRightParenthesisKeyword_0_3 = (Keyword)cGroup_0.eContents().get(3);
 		private final Keyword cLeftCurlyBracketKeyword_0_4 = (Keyword)cGroup_0.eContents().get(4);
 		private final Assignment cExpMembersAssignment_0_5 = (Assignment)cGroup_0.eContents().get(5);
 		private final RuleCall cExpMembersExpMemberParserRuleCall_0_5_0 = (RuleCall)cExpMembersAssignment_0_5.eContents().get(0);
 		private final Keyword cRightCurlyBracketKeyword_0_6 = (Keyword)cGroup_0.eContents().get(6);
 		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
-		private final Keyword cWhileKeyword_1_0 = (Keyword)cGroup_1.eContents().get(0);
+		private final Assignment cTypeAssignment_1_0 = (Assignment)cGroup_1.eContents().get(0);
+		private final Keyword cTypeWhileKeyword_1_0_0 = (Keyword)cTypeAssignment_1_0.eContents().get(0);
 		private final Keyword cLeftParenthesisKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
-		private final RuleCall cConditionParserRuleCall_1_2 = (RuleCall)cGroup_1.eContents().get(2);
+		private final Assignment cConditionAssignment_1_2 = (Assignment)cGroup_1.eContents().get(2);
+		private final RuleCall cConditionConditionParserRuleCall_1_2_0 = (RuleCall)cConditionAssignment_1_2.eContents().get(0);
 		private final Keyword cRightParenthesisKeyword_1_3 = (Keyword)cGroup_1.eContents().get(3);
 		private final Keyword cLeftCurlyBracketKeyword_1_4 = (Keyword)cGroup_1.eContents().get(4);
 		private final Assignment cExpMembersAssignment_1_5 = (Assignment)cGroup_1.eContents().get(5);
@@ -283,23 +303,31 @@ public class PycomGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cRightCurlyBracketKeyword_1_6 = (Keyword)cGroup_1.eContents().get(6);
 		
 		//ConditionalAction:
-		//	'if' '(' Condition ')' '{' ExpMembers+=ExpMember* '}' | 'while' '(' Condition ')' '{' ExpMembers+=ExpMember* '}';
+		//	type='if' '(' condition=Condition ')' '{' ExpMembers+=ExpMember* '}' | type='while' '(' condition=Condition ')' '{'
+		//	ExpMembers+=ExpMember* '}';
 		@Override public ParserRule getRule() { return rule; }
 		
-		//'if' '(' Condition ')' '{' ExpMembers+=ExpMember* '}' | 'while' '(' Condition ')' '{' ExpMembers+=ExpMember* '}'
+		//type='if' '(' condition=Condition ')' '{' ExpMembers+=ExpMember* '}' | type='while' '(' condition=Condition ')' '{'
+		//ExpMembers+=ExpMember* '}'
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
-		//'if' '(' Condition ')' '{' ExpMembers+=ExpMember* '}'
+		//type='if' '(' condition=Condition ')' '{' ExpMembers+=ExpMember* '}'
 		public Group getGroup_0() { return cGroup_0; }
 		
+		//type='if'
+		public Assignment getTypeAssignment_0_0() { return cTypeAssignment_0_0; }
+		
 		//'if'
-		public Keyword getIfKeyword_0_0() { return cIfKeyword_0_0; }
+		public Keyword getTypeIfKeyword_0_0_0() { return cTypeIfKeyword_0_0_0; }
 		
 		//'('
 		public Keyword getLeftParenthesisKeyword_0_1() { return cLeftParenthesisKeyword_0_1; }
 		
+		//condition=Condition
+		public Assignment getConditionAssignment_0_2() { return cConditionAssignment_0_2; }
+		
 		//Condition
-		public RuleCall getConditionParserRuleCall_0_2() { return cConditionParserRuleCall_0_2; }
+		public RuleCall getConditionConditionParserRuleCall_0_2_0() { return cConditionConditionParserRuleCall_0_2_0; }
 		
 		//')'
 		public Keyword getRightParenthesisKeyword_0_3() { return cRightParenthesisKeyword_0_3; }
@@ -316,17 +344,23 @@ public class PycomGrammarAccess extends AbstractGrammarElementFinder {
 		//'}'
 		public Keyword getRightCurlyBracketKeyword_0_6() { return cRightCurlyBracketKeyword_0_6; }
 		
-		//'while' '(' Condition ')' '{' ExpMembers+=ExpMember* '}'
+		//type='while' '(' condition=Condition ')' '{' ExpMembers+=ExpMember* '}'
 		public Group getGroup_1() { return cGroup_1; }
 		
+		//type='while'
+		public Assignment getTypeAssignment_1_0() { return cTypeAssignment_1_0; }
+		
 		//'while'
-		public Keyword getWhileKeyword_1_0() { return cWhileKeyword_1_0; }
+		public Keyword getTypeWhileKeyword_1_0_0() { return cTypeWhileKeyword_1_0_0; }
 		
 		//'('
 		public Keyword getLeftParenthesisKeyword_1_1() { return cLeftParenthesisKeyword_1_1; }
 		
+		//condition=Condition
+		public Assignment getConditionAssignment_1_2() { return cConditionAssignment_1_2; }
+		
 		//Condition
-		public RuleCall getConditionParserRuleCall_1_2() { return cConditionParserRuleCall_1_2; }
+		public RuleCall getConditionConditionParserRuleCall_1_2_0() { return cConditionConditionParserRuleCall_1_2_0; }
 		
 		//')'
 		public Keyword getRightParenthesisKeyword_1_3() { return cRightParenthesisKeyword_1_3; }
@@ -445,16 +479,17 @@ public class PycomGrammarAccess extends AbstractGrammarElementFinder {
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Keyword cCommunicationKeyword_0 = (Keyword)cGroup.eContents().get(0);
 		private final Keyword cColonKeyword_1 = (Keyword)cGroup.eContents().get(1);
-		private final Alternatives cAlternatives_2 = (Alternatives)cGroup.eContents().get(2);
-		private final Keyword cWiFiKeyword_2_0 = (Keyword)cAlternatives_2.eContents().get(0);
-		private final Keyword cBluetoothKeyword_2_1 = (Keyword)cAlternatives_2.eContents().get(1);
-		private final Keyword cSigFoxKeyword_2_2 = (Keyword)cAlternatives_2.eContents().get(2);
+		private final Assignment cTypeAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final Alternatives cTypeAlternatives_2_0 = (Alternatives)cTypeAssignment_2.eContents().get(0);
+		private final Keyword cTypeWiFiKeyword_2_0_0 = (Keyword)cTypeAlternatives_2_0.eContents().get(0);
+		private final Keyword cTypeBluetoothKeyword_2_0_1 = (Keyword)cTypeAlternatives_2_0.eContents().get(1);
+		private final Keyword cTypeSigFoxKeyword_2_0_2 = (Keyword)cTypeAlternatives_2_0.eContents().get(2);
 		
 		//Communication:
-		//	'Communication' ':' ('WiFi' | 'Bluetooth' | 'SigFox');
+		//	'Communication' ':' type=('WiFi' | 'Bluetooth' | 'SigFox');
 		@Override public ParserRule getRule() { return rule; }
 		
-		//'Communication' ':' ('WiFi' | 'Bluetooth' | 'SigFox')
+		//'Communication' ':' type=('WiFi' | 'Bluetooth' | 'SigFox')
 		public Group getGroup() { return cGroup; }
 		
 		//'Communication'
@@ -463,119 +498,130 @@ public class PycomGrammarAccess extends AbstractGrammarElementFinder {
 		//':'
 		public Keyword getColonKeyword_1() { return cColonKeyword_1; }
 		
-		//'WiFi' | 'Bluetooth' | 'SigFox'
-		public Alternatives getAlternatives_2() { return cAlternatives_2; }
+		//type=('WiFi' | 'Bluetooth' | 'SigFox')
+		public Assignment getTypeAssignment_2() { return cTypeAssignment_2; }
+		
+		//('WiFi' | 'Bluetooth' | 'SigFox')
+		public Alternatives getTypeAlternatives_2_0() { return cTypeAlternatives_2_0; }
 		
 		//'WiFi'
-		public Keyword getWiFiKeyword_2_0() { return cWiFiKeyword_2_0; }
+		public Keyword getTypeWiFiKeyword_2_0_0() { return cTypeWiFiKeyword_2_0_0; }
 		
 		//'Bluetooth'
-		public Keyword getBluetoothKeyword_2_1() { return cBluetoothKeyword_2_1; }
+		public Keyword getTypeBluetoothKeyword_2_0_1() { return cTypeBluetoothKeyword_2_0_1; }
 		
 		//'SigFox'
-		public Keyword getSigFoxKeyword_2_2() { return cSigFoxKeyword_2_2; }
+		public Keyword getTypeSigFoxKeyword_2_0_2() { return cTypeSigFoxKeyword_2_0_2; }
 	}
 	public class ActuatorTypeElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "xtext.Pycom.ActuatorType");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Assignment cTypeNameAssignment_0 = (Assignment)cGroup.eContents().get(0);
-		private final RuleCall cTypeNameActuatorNameParserRuleCall_0_0 = (RuleCall)cTypeNameAssignment_0.eContents().get(0);
-		private final Keyword cColonKeyword_1 = (Keyword)cGroup.eContents().get(1);
-		private final Assignment cNameAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cNameIDTerminalRuleCall_2_0 = (RuleCall)cNameAssignment_2.eContents().get(0);
-		private final Group cGroup_3 = (Group)cGroup.eContents().get(3);
-		private final Keyword cLeftParenthesisKeyword_3_0 = (Keyword)cGroup_3.eContents().get(0);
-		private final Assignment cPinsAssignment_3_1 = (Assignment)cGroup_3.eContents().get(1);
-		private final RuleCall cPinsPinParserRuleCall_3_1_0 = (RuleCall)cPinsAssignment_3_1.eContents().get(0);
-		private final Keyword cRightParenthesisKeyword_3_2 = (Keyword)cGroup_3.eContents().get(2);
+		private final Action cActuatorTypeAction_0 = (Action)cGroup.eContents().get(0);
+		private final Assignment cTypeNameAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cTypeNameActuatorNameParserRuleCall_1_0 = (RuleCall)cTypeNameAssignment_1.eContents().get(0);
+		private final Keyword cColonKeyword_2 = (Keyword)cGroup.eContents().get(2);
+		private final Assignment cNameAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cNameIDTerminalRuleCall_3_0 = (RuleCall)cNameAssignment_3.eContents().get(0);
+		private final Group cGroup_4 = (Group)cGroup.eContents().get(4);
+		private final Keyword cLeftParenthesisKeyword_4_0 = (Keyword)cGroup_4.eContents().get(0);
+		private final Assignment cPinsAssignment_4_1 = (Assignment)cGroup_4.eContents().get(1);
+		private final RuleCall cPinsPinParserRuleCall_4_1_0 = (RuleCall)cPinsAssignment_4_1.eContents().get(0);
+		private final Keyword cRightParenthesisKeyword_4_2 = (Keyword)cGroup_4.eContents().get(2);
 		
-		//ActuatorType:
-		//	typeName=ActuatorName ':' name=ID ('(' pins+=Pin ')')?;
+		//ActuatorType ModuleType:
+		//	{ActuatorType} typeName=ActuatorName ':' name=ID ('(' pins=Pin ')')?;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//typeName=ActuatorName ':' name=ID ('(' pins+=Pin ')')?
+		//{ActuatorType} typeName=ActuatorName ':' name=ID ('(' pins=Pin ')')?
 		public Group getGroup() { return cGroup; }
 		
+		//{ActuatorType}
+		public Action getActuatorTypeAction_0() { return cActuatorTypeAction_0; }
+		
 		//typeName=ActuatorName
-		public Assignment getTypeNameAssignment_0() { return cTypeNameAssignment_0; }
+		public Assignment getTypeNameAssignment_1() { return cTypeNameAssignment_1; }
 		
 		//ActuatorName
-		public RuleCall getTypeNameActuatorNameParserRuleCall_0_0() { return cTypeNameActuatorNameParserRuleCall_0_0; }
+		public RuleCall getTypeNameActuatorNameParserRuleCall_1_0() { return cTypeNameActuatorNameParserRuleCall_1_0; }
 		
 		//':'
-		public Keyword getColonKeyword_1() { return cColonKeyword_1; }
+		public Keyword getColonKeyword_2() { return cColonKeyword_2; }
 		
 		//name=ID
-		public Assignment getNameAssignment_2() { return cNameAssignment_2; }
+		public Assignment getNameAssignment_3() { return cNameAssignment_3; }
 		
 		//ID
-		public RuleCall getNameIDTerminalRuleCall_2_0() { return cNameIDTerminalRuleCall_2_0; }
+		public RuleCall getNameIDTerminalRuleCall_3_0() { return cNameIDTerminalRuleCall_3_0; }
 		
-		//('(' pins+=Pin ')')?
-		public Group getGroup_3() { return cGroup_3; }
+		//('(' pins=Pin ')')?
+		public Group getGroup_4() { return cGroup_4; }
 		
 		//'('
-		public Keyword getLeftParenthesisKeyword_3_0() { return cLeftParenthesisKeyword_3_0; }
+		public Keyword getLeftParenthesisKeyword_4_0() { return cLeftParenthesisKeyword_4_0; }
 		
-		//pins+=Pin
-		public Assignment getPinsAssignment_3_1() { return cPinsAssignment_3_1; }
+		//pins=Pin
+		public Assignment getPinsAssignment_4_1() { return cPinsAssignment_4_1; }
 		
 		//Pin
-		public RuleCall getPinsPinParserRuleCall_3_1_0() { return cPinsPinParserRuleCall_3_1_0; }
+		public RuleCall getPinsPinParserRuleCall_4_1_0() { return cPinsPinParserRuleCall_4_1_0; }
 		
 		//')'
-		public Keyword getRightParenthesisKeyword_3_2() { return cRightParenthesisKeyword_3_2; }
+		public Keyword getRightParenthesisKeyword_4_2() { return cRightParenthesisKeyword_4_2; }
 	}
 	public class SensorTypeElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "xtext.Pycom.SensorType");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Assignment cTypeNameAssignment_0 = (Assignment)cGroup.eContents().get(0);
-		private final RuleCall cTypeNameSensorNameParserRuleCall_0_0 = (RuleCall)cTypeNameAssignment_0.eContents().get(0);
-		private final Keyword cColonKeyword_1 = (Keyword)cGroup.eContents().get(1);
-		private final Assignment cNameAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cNameIDTerminalRuleCall_2_0 = (RuleCall)cNameAssignment_2.eContents().get(0);
-		private final Group cGroup_3 = (Group)cGroup.eContents().get(3);
-		private final Keyword cLeftParenthesisKeyword_3_0 = (Keyword)cGroup_3.eContents().get(0);
-		private final Assignment cPinsAssignment_3_1 = (Assignment)cGroup_3.eContents().get(1);
-		private final RuleCall cPinsPinParserRuleCall_3_1_0 = (RuleCall)cPinsAssignment_3_1.eContents().get(0);
-		private final Keyword cRightParenthesisKeyword_3_2 = (Keyword)cGroup_3.eContents().get(2);
+		private final Action cSensorTypeAction_0 = (Action)cGroup.eContents().get(0);
+		private final Assignment cTypeNameAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cTypeNameSensorNameParserRuleCall_1_0 = (RuleCall)cTypeNameAssignment_1.eContents().get(0);
+		private final Keyword cColonKeyword_2 = (Keyword)cGroup.eContents().get(2);
+		private final Assignment cNameAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cNameIDTerminalRuleCall_3_0 = (RuleCall)cNameAssignment_3.eContents().get(0);
+		private final Group cGroup_4 = (Group)cGroup.eContents().get(4);
+		private final Keyword cLeftParenthesisKeyword_4_0 = (Keyword)cGroup_4.eContents().get(0);
+		private final Assignment cPinsAssignment_4_1 = (Assignment)cGroup_4.eContents().get(1);
+		private final RuleCall cPinsPinParserRuleCall_4_1_0 = (RuleCall)cPinsAssignment_4_1.eContents().get(0);
+		private final Keyword cRightParenthesisKeyword_4_2 = (Keyword)cGroup_4.eContents().get(2);
 		
-		//SensorType:
-		//	typeName=SensorName ':' name=ID ('(' pins+=Pin ')')?;
+		//SensorType ModuleType:
+		//	{SensorType} typeName=SensorName ':' name=ID ('(' pins=Pin ')')?;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//typeName=SensorName ':' name=ID ('(' pins+=Pin ')')?
+		//{SensorType} typeName=SensorName ':' name=ID ('(' pins=Pin ')')?
 		public Group getGroup() { return cGroup; }
 		
+		//{SensorType}
+		public Action getSensorTypeAction_0() { return cSensorTypeAction_0; }
+		
 		//typeName=SensorName
-		public Assignment getTypeNameAssignment_0() { return cTypeNameAssignment_0; }
+		public Assignment getTypeNameAssignment_1() { return cTypeNameAssignment_1; }
 		
 		//SensorName
-		public RuleCall getTypeNameSensorNameParserRuleCall_0_0() { return cTypeNameSensorNameParserRuleCall_0_0; }
+		public RuleCall getTypeNameSensorNameParserRuleCall_1_0() { return cTypeNameSensorNameParserRuleCall_1_0; }
 		
 		//':'
-		public Keyword getColonKeyword_1() { return cColonKeyword_1; }
+		public Keyword getColonKeyword_2() { return cColonKeyword_2; }
 		
 		//name=ID
-		public Assignment getNameAssignment_2() { return cNameAssignment_2; }
+		public Assignment getNameAssignment_3() { return cNameAssignment_3; }
 		
 		//ID
-		public RuleCall getNameIDTerminalRuleCall_2_0() { return cNameIDTerminalRuleCall_2_0; }
+		public RuleCall getNameIDTerminalRuleCall_3_0() { return cNameIDTerminalRuleCall_3_0; }
 		
-		//('(' pins+=Pin ')')?
-		public Group getGroup_3() { return cGroup_3; }
+		//('(' pins=Pin ')')?
+		public Group getGroup_4() { return cGroup_4; }
 		
 		//'('
-		public Keyword getLeftParenthesisKeyword_3_0() { return cLeftParenthesisKeyword_3_0; }
+		public Keyword getLeftParenthesisKeyword_4_0() { return cLeftParenthesisKeyword_4_0; }
 		
-		//pins+=Pin
-		public Assignment getPinsAssignment_3_1() { return cPinsAssignment_3_1; }
+		//pins=Pin
+		public Assignment getPinsAssignment_4_1() { return cPinsAssignment_4_1; }
 		
 		//Pin
-		public RuleCall getPinsPinParserRuleCall_3_1_0() { return cPinsPinParserRuleCall_3_1_0; }
+		public RuleCall getPinsPinParserRuleCall_4_1_0() { return cPinsPinParserRuleCall_4_1_0; }
 		
 		//')'
-		public Keyword getRightParenthesisKeyword_3_2() { return cRightParenthesisKeyword_3_2; }
+		public Keyword getRightParenthesisKeyword_4_2() { return cRightParenthesisKeyword_4_2; }
 	}
 	public class SensorNameElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "xtext.Pycom.SensorName");
@@ -612,32 +658,47 @@ public class PycomGrammarAccess extends AbstractGrammarElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "xtext.Pycom.Pin");
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Assignment cPowerAssignment_0 = (Assignment)cGroup.eContents().get(0);
-		private final RuleCall cPowerINTTerminalRuleCall_0_0 = (RuleCall)cPowerAssignment_0.eContents().get(0);
+		private final RuleCall cPowerPinNameParserRuleCall_0_0 = (RuleCall)cPowerAssignment_0.eContents().get(0);
 		private final Keyword cCommaKeyword_1 = (Keyword)cGroup.eContents().get(1);
 		private final Assignment cInputAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cInputINTTerminalRuleCall_2_0 = (RuleCall)cInputAssignment_2.eContents().get(0);
+		private final RuleCall cInputPinNameParserRuleCall_2_0 = (RuleCall)cInputAssignment_2.eContents().get(0);
 		
 		//Pin:
-		//	power=INT ',' input=INT;
+		//	power=PinName ',' input=PinName;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//power=INT ',' input=INT
+		//power=PinName ',' input=PinName
 		public Group getGroup() { return cGroup; }
 		
-		//power=INT
+		//power=PinName
 		public Assignment getPowerAssignment_0() { return cPowerAssignment_0; }
 		
-		//INT
-		public RuleCall getPowerINTTerminalRuleCall_0_0() { return cPowerINTTerminalRuleCall_0_0; }
+		//PinName
+		public RuleCall getPowerPinNameParserRuleCall_0_0() { return cPowerPinNameParserRuleCall_0_0; }
 		
 		//','
 		public Keyword getCommaKeyword_1() { return cCommaKeyword_1; }
 		
-		//input=INT
+		//input=PinName
 		public Assignment getInputAssignment_2() { return cInputAssignment_2; }
 		
-		//INT
-		public RuleCall getInputINTTerminalRuleCall_2_0() { return cInputINTTerminalRuleCall_2_0; }
+		//PinName
+		public RuleCall getInputPinNameParserRuleCall_2_0() { return cInputPinNameParserRuleCall_2_0; }
+	}
+	public class PinNameElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "xtext.Pycom.PinName");
+		private final Assignment cNameAssignment = (Assignment)rule.eContents().get(1);
+		private final RuleCall cNameIDTerminalRuleCall_0 = (RuleCall)cNameAssignment.eContents().get(0);
+		
+		//PinName:
+		//	name=ID;
+		@Override public ParserRule getRule() { return rule; }
+		
+		//name=ID
+		public Assignment getNameAssignment() { return cNameAssignment; }
+		
+		//ID
+		public RuleCall getNameIDTerminalRuleCall_0() { return cNameIDTerminalRuleCall_0; }
 	}
 	public class ActuatorNameElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "xtext.Pycom.ActuatorName");
@@ -661,76 +722,106 @@ public class PycomGrammarAccess extends AbstractGrammarElementFinder {
 	public class ConditionElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "xtext.Pycom.Condition");
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
-		private final RuleCall cLogicExpParserRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
+		private final Assignment cLogicExAssignment_0 = (Assignment)cAlternatives.eContents().get(0);
+		private final RuleCall cLogicExLogicExpParserRuleCall_0_0 = (RuleCall)cLogicExAssignment_0.eContents().get(0);
 		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
-		private final RuleCall cLogicExpParserRuleCall_1_0 = (RuleCall)cGroup_1.eContents().get(0);
-		private final Keyword cAmpersandAmpersandKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
-		private final Assignment cConditionAssignment_1_2 = (Assignment)cGroup_1.eContents().get(2);
-		private final RuleCall cConditionConditionParserRuleCall_1_2_0 = (RuleCall)cConditionAssignment_1_2.eContents().get(0);
+		private final Assignment cLogicExAssignment_1_0 = (Assignment)cGroup_1.eContents().get(0);
+		private final RuleCall cLogicExLogicExpParserRuleCall_1_0_0 = (RuleCall)cLogicExAssignment_1_0.eContents().get(0);
+		private final Assignment cOperatorAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
+		private final Keyword cOperatorAmpersandAmpersandKeyword_1_1_0 = (Keyword)cOperatorAssignment_1_1.eContents().get(0);
+		private final Assignment cNestedConditionAssignment_1_2 = (Assignment)cGroup_1.eContents().get(2);
+		private final RuleCall cNestedConditionConditionParserRuleCall_1_2_0 = (RuleCall)cNestedConditionAssignment_1_2.eContents().get(0);
 		private final Group cGroup_2 = (Group)cAlternatives.eContents().get(2);
-		private final RuleCall cLogicExpParserRuleCall_2_0 = (RuleCall)cGroup_2.eContents().get(0);
-		private final Keyword cVerticalLineVerticalLineKeyword_2_1 = (Keyword)cGroup_2.eContents().get(1);
-		private final Assignment cConditionAssignment_2_2 = (Assignment)cGroup_2.eContents().get(2);
-		private final RuleCall cConditionConditionParserRuleCall_2_2_0 = (RuleCall)cConditionAssignment_2_2.eContents().get(0);
+		private final Assignment cLogicExAssignment_2_0 = (Assignment)cGroup_2.eContents().get(0);
+		private final RuleCall cLogicExLogicExpParserRuleCall_2_0_0 = (RuleCall)cLogicExAssignment_2_0.eContents().get(0);
+		private final Assignment cOperatorAssignment_2_1 = (Assignment)cGroup_2.eContents().get(1);
+		private final Keyword cOperatorVerticalLineVerticalLineKeyword_2_1_0 = (Keyword)cOperatorAssignment_2_1.eContents().get(0);
+		private final Assignment cNestedConditionAssignment_2_2 = (Assignment)cGroup_2.eContents().get(2);
+		private final RuleCall cNestedConditionConditionParserRuleCall_2_2_0 = (RuleCall)cNestedConditionAssignment_2_2.eContents().get(0);
 		
 		//Condition:
-		//	LogicExp | LogicExp '&&' condition=Condition | LogicExp '||' condition=Condition;
+		//	logicEx=LogicExp | logicEx=LogicExp operator='&&' nestedCondition=Condition | logicEx=LogicExp operator='||'
+		//	nestedCondition=Condition;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//LogicExp | LogicExp '&&' condition=Condition | LogicExp '||' condition=Condition
+		//logicEx=LogicExp | logicEx=LogicExp operator='&&' nestedCondition=Condition | logicEx=LogicExp operator='||'
+		//nestedCondition=Condition
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
-		//LogicExp
-		public RuleCall getLogicExpParserRuleCall_0() { return cLogicExpParserRuleCall_0; }
+		//logicEx=LogicExp
+		public Assignment getLogicExAssignment_0() { return cLogicExAssignment_0; }
 		
-		//LogicExp '&&' condition=Condition
+		//LogicExp
+		public RuleCall getLogicExLogicExpParserRuleCall_0_0() { return cLogicExLogicExpParserRuleCall_0_0; }
+		
+		//logicEx=LogicExp operator='&&' nestedCondition=Condition
 		public Group getGroup_1() { return cGroup_1; }
 		
+		//logicEx=LogicExp
+		public Assignment getLogicExAssignment_1_0() { return cLogicExAssignment_1_0; }
+		
 		//LogicExp
-		public RuleCall getLogicExpParserRuleCall_1_0() { return cLogicExpParserRuleCall_1_0; }
+		public RuleCall getLogicExLogicExpParserRuleCall_1_0_0() { return cLogicExLogicExpParserRuleCall_1_0_0; }
+		
+		//operator='&&'
+		public Assignment getOperatorAssignment_1_1() { return cOperatorAssignment_1_1; }
 		
 		//'&&'
-		public Keyword getAmpersandAmpersandKeyword_1_1() { return cAmpersandAmpersandKeyword_1_1; }
+		public Keyword getOperatorAmpersandAmpersandKeyword_1_1_0() { return cOperatorAmpersandAmpersandKeyword_1_1_0; }
 		
-		//condition=Condition
-		public Assignment getConditionAssignment_1_2() { return cConditionAssignment_1_2; }
+		//nestedCondition=Condition
+		public Assignment getNestedConditionAssignment_1_2() { return cNestedConditionAssignment_1_2; }
 		
 		//Condition
-		public RuleCall getConditionConditionParserRuleCall_1_2_0() { return cConditionConditionParserRuleCall_1_2_0; }
+		public RuleCall getNestedConditionConditionParserRuleCall_1_2_0() { return cNestedConditionConditionParserRuleCall_1_2_0; }
 		
-		//LogicExp '||' condition=Condition
+		//logicEx=LogicExp operator='||' nestedCondition=Condition
 		public Group getGroup_2() { return cGroup_2; }
 		
+		//logicEx=LogicExp
+		public Assignment getLogicExAssignment_2_0() { return cLogicExAssignment_2_0; }
+		
 		//LogicExp
-		public RuleCall getLogicExpParserRuleCall_2_0() { return cLogicExpParserRuleCall_2_0; }
+		public RuleCall getLogicExLogicExpParserRuleCall_2_0_0() { return cLogicExLogicExpParserRuleCall_2_0_0; }
+		
+		//operator='||'
+		public Assignment getOperatorAssignment_2_1() { return cOperatorAssignment_2_1; }
 		
 		//'||'
-		public Keyword getVerticalLineVerticalLineKeyword_2_1() { return cVerticalLineVerticalLineKeyword_2_1; }
+		public Keyword getOperatorVerticalLineVerticalLineKeyword_2_1_0() { return cOperatorVerticalLineVerticalLineKeyword_2_1_0; }
 		
-		//condition=Condition
-		public Assignment getConditionAssignment_2_2() { return cConditionAssignment_2_2; }
+		//nestedCondition=Condition
+		public Assignment getNestedConditionAssignment_2_2() { return cNestedConditionAssignment_2_2; }
 		
 		//Condition
-		public RuleCall getConditionConditionParserRuleCall_2_2_0() { return cConditionConditionParserRuleCall_2_2_0; }
+		public RuleCall getNestedConditionConditionParserRuleCall_2_2_0() { return cNestedConditionConditionParserRuleCall_2_2_0; }
 	}
 	public class LogicExpElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "xtext.Pycom.LogicExp");
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
-		private final RuleCall cBooleanParserRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
-		private final RuleCall cComparisonExpParserRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
+		private final Assignment cBoolValAssignment_0 = (Assignment)cAlternatives.eContents().get(0);
+		private final RuleCall cBoolValBooleanParserRuleCall_0_0 = (RuleCall)cBoolValAssignment_0.eContents().get(0);
+		private final Assignment cCompExpAssignment_1 = (Assignment)cAlternatives.eContents().get(1);
+		private final RuleCall cCompExpComparisonExpParserRuleCall_1_0 = (RuleCall)cCompExpAssignment_1.eContents().get(0);
 		
 		//LogicExp:
-		//	Boolean | ComparisonExp;
+		//	boolVal=Boolean | compExp=ComparisonExp;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//Boolean | ComparisonExp
+		//boolVal=Boolean | compExp=ComparisonExp
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
+		//boolVal=Boolean
+		public Assignment getBoolValAssignment_0() { return cBoolValAssignment_0; }
+		
 		//Boolean
-		public RuleCall getBooleanParserRuleCall_0() { return cBooleanParserRuleCall_0; }
+		public RuleCall getBoolValBooleanParserRuleCall_0_0() { return cBoolValBooleanParserRuleCall_0_0; }
+		
+		//compExp=ComparisonExp
+		public Assignment getCompExpAssignment_1() { return cCompExpAssignment_1; }
 		
 		//ComparisonExp
-		public RuleCall getComparisonExpParserRuleCall_1() { return cComparisonExpParserRuleCall_1; }
+		public RuleCall getCompExpComparisonExpParserRuleCall_1_0() { return cCompExpComparisonExpParserRuleCall_1_0; }
 	}
 	public class BooleanElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "xtext.Pycom.Boolean");
@@ -766,14 +857,14 @@ public class PycomGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cLeftExpressionParserRuleCall_0_0 = (RuleCall)cLeftAssignment_0.eContents().get(0);
 		private final Assignment cOpAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final RuleCall cOpOperatorParserRuleCall_1_0 = (RuleCall)cOpAssignment_1.eContents().get(0);
-		private final Assignment cRigthAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cRigthExpressionParserRuleCall_2_0 = (RuleCall)cRigthAssignment_2.eContents().get(0);
+		private final Assignment cRightAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cRightExpressionParserRuleCall_2_0 = (RuleCall)cRightAssignment_2.eContents().get(0);
 		
 		//ComparisonExp:
-		//	left=Expression op=Operator rigth=Expression;
+		//	left=Expression op=Operator right=Expression;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//left=Expression op=Operator rigth=Expression
+		//left=Expression op=Operator right=Expression
 		public Group getGroup() { return cGroup; }
 		
 		//left=Expression
@@ -788,11 +879,38 @@ public class PycomGrammarAccess extends AbstractGrammarElementFinder {
 		//Operator
 		public RuleCall getOpOperatorParserRuleCall_1_0() { return cOpOperatorParserRuleCall_1_0; }
 		
-		//rigth=Expression
-		public Assignment getRigthAssignment_2() { return cRigthAssignment_2; }
+		//right=Expression
+		public Assignment getRightAssignment_2() { return cRightAssignment_2; }
 		
 		//Expression
-		public RuleCall getRigthExpressionParserRuleCall_2_0() { return cRigthExpressionParserRuleCall_2_0; }
+		public RuleCall getRightExpressionParserRuleCall_2_0() { return cRightExpressionParserRuleCall_2_0; }
+	}
+	public class ExpressionElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "xtext.Pycom.Expression");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final Assignment cOutputValueAssignment_0 = (Assignment)cAlternatives.eContents().get(0);
+		private final RuleCall cOutputValueINTTerminalRuleCall_0_0 = (RuleCall)cOutputValueAssignment_0.eContents().get(0);
+		private final Assignment cOutputfunctionAssignment_1 = (Assignment)cAlternatives.eContents().get(1);
+		private final RuleCall cOutputfunctionFunctionParserRuleCall_1_0 = (RuleCall)cOutputfunctionAssignment_1.eContents().get(0);
+		
+		//Expression:
+		//	outputValue=INT | outputfunction=Function;
+		@Override public ParserRule getRule() { return rule; }
+		
+		//outputValue=INT | outputfunction=Function
+		public Alternatives getAlternatives() { return cAlternatives; }
+		
+		//outputValue=INT
+		public Assignment getOutputValueAssignment_0() { return cOutputValueAssignment_0; }
+		
+		//INT
+		public RuleCall getOutputValueINTTerminalRuleCall_0_0() { return cOutputValueINTTerminalRuleCall_0_0; }
+		
+		//outputfunction=Function
+		public Assignment getOutputfunctionAssignment_1() { return cOutputfunctionAssignment_1; }
+		
+		//Function
+		public RuleCall getOutputfunctionFunctionParserRuleCall_1_0() { return cOutputfunctionFunctionParserRuleCall_1_0; }
 	}
 	public class OperatorElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "xtext.Pycom.Operator");
@@ -829,258 +947,132 @@ public class PycomGrammarAccess extends AbstractGrammarElementFinder {
 		//'!='
 		public Keyword getExclamationMarkEqualsSignKeyword_5() { return cExclamationMarkEqualsSignKeyword_5; }
 	}
-	public class ExpressionElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "xtext.Pycom.Expression");
-		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
-		private final RuleCall cINTTerminalRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
-		private final RuleCall cFunctionParserRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
+	public class NumberElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "xtext.Pycom.Number");
+		private final RuleCall cINTTerminalRuleCall = (RuleCall)rule.eContents().get(1);
 		
-		//Expression:
-		//	INT | Function;
+		//Number:
+		//	INT;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//INT | Function
-		public Alternatives getAlternatives() { return cAlternatives; }
-		
 		//INT
-		public RuleCall getINTTerminalRuleCall_0() { return cINTTerminalRuleCall_0; }
-		
-		//Function
-		public RuleCall getFunctionParserRuleCall_1() { return cFunctionParserRuleCall_1; }
+		public RuleCall getINTTerminalRuleCall() { return cINTTerminalRuleCall; }
 	}
 	public class FunctionElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "xtext.Pycom.Function");
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
-		private final RuleCall cActuatorFunctionParserRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
-		private final RuleCall cSensorFunctionParserRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
-		private final Group cGroup_2 = (Group)cAlternatives.eContents().get(2);
-		private final Assignment cBoardAssignment_2_0 = (Assignment)cGroup_2.eContents().get(0);
-		private final CrossReference cBoardBoardCrossReference_2_0_0 = (CrossReference)cBoardAssignment_2_0.eContents().get(0);
-		private final RuleCall cBoardBoardIDTerminalRuleCall_2_0_0_1 = (RuleCall)cBoardBoardCrossReference_2_0_0.eContents().get(1);
-		private final Keyword cFullStopKeyword_2_1 = (Keyword)cGroup_2.eContents().get(1);
-		private final RuleCall cBoardFunctionNameParserRuleCall_2_2 = (RuleCall)cGroup_2.eContents().get(2);
+		private final RuleCall cModuleFunctionParserRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
+		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
+		private final Assignment cBoardAssignment_1_0 = (Assignment)cGroup_1.eContents().get(0);
+		private final CrossReference cBoardBoardCrossReference_1_0_0 = (CrossReference)cBoardAssignment_1_0.eContents().get(0);
+		private final RuleCall cBoardBoardIDTerminalRuleCall_1_0_0_1 = (RuleCall)cBoardBoardCrossReference_1_0_0.eContents().get(1);
+		private final Keyword cFullStopKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
+		private final Assignment cFunctionNameAssignment_1_2 = (Assignment)cGroup_1.eContents().get(2);
+		private final RuleCall cFunctionNameFunctionNameParserRuleCall_1_2_0 = (RuleCall)cFunctionNameAssignment_1_2.eContents().get(0);
 		
 		//Function:
-		//	ActuatorFunction | SensorFunction | board=[Board] '.' BoardFunctionName;
+		//	ModuleFunction | board=[Board] '.' functionName=FunctionName;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//ActuatorFunction | SensorFunction | board=[Board] '.' BoardFunctionName
+		//ModuleFunction | board=[Board] '.' functionName=FunctionName
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
-		//ActuatorFunction
-		public RuleCall getActuatorFunctionParserRuleCall_0() { return cActuatorFunctionParserRuleCall_0; }
+		//ModuleFunction
+		public RuleCall getModuleFunctionParserRuleCall_0() { return cModuleFunctionParserRuleCall_0; }
 		
-		//SensorFunction
-		public RuleCall getSensorFunctionParserRuleCall_1() { return cSensorFunctionParserRuleCall_1; }
-		
-		//board=[Board] '.' BoardFunctionName
-		public Group getGroup_2() { return cGroup_2; }
-		
-		//board=[Board]
-		public Assignment getBoardAssignment_2_0() { return cBoardAssignment_2_0; }
-		
-		//[Board]
-		public CrossReference getBoardBoardCrossReference_2_0_0() { return cBoardBoardCrossReference_2_0_0; }
-		
-		//ID
-		public RuleCall getBoardBoardIDTerminalRuleCall_2_0_0_1() { return cBoardBoardIDTerminalRuleCall_2_0_0_1; }
-		
-		//'.'
-		public Keyword getFullStopKeyword_2_1() { return cFullStopKeyword_2_1; }
-		
-		//BoardFunctionName
-		public RuleCall getBoardFunctionNameParserRuleCall_2_2() { return cBoardFunctionNameParserRuleCall_2_2; }
-	}
-	public class ActuatorFunctionElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "xtext.Pycom.ActuatorFunction");
-		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
-		private final Group cGroup_0 = (Group)cAlternatives.eContents().get(0);
-		private final Assignment cBoardAssignment_0_0 = (Assignment)cGroup_0.eContents().get(0);
-		private final CrossReference cBoardBoardCrossReference_0_0_0 = (CrossReference)cBoardAssignment_0_0.eContents().get(0);
-		private final RuleCall cBoardBoardIDTerminalRuleCall_0_0_0_1 = (RuleCall)cBoardBoardCrossReference_0_0_0.eContents().get(1);
-		private final Keyword cFullStopKeyword_0_1 = (Keyword)cGroup_0.eContents().get(1);
-		private final Assignment cActuatorTypeAssignment_0_2 = (Assignment)cGroup_0.eContents().get(2);
-		private final CrossReference cActuatorTypeActuatorTypeCrossReference_0_2_0 = (CrossReference)cActuatorTypeAssignment_0_2.eContents().get(0);
-		private final RuleCall cActuatorTypeActuatorTypeIDTerminalRuleCall_0_2_0_1 = (RuleCall)cActuatorTypeActuatorTypeCrossReference_0_2_0.eContents().get(1);
-		private final Keyword cFullStopKeyword_0_3 = (Keyword)cGroup_0.eContents().get(3);
-		private final RuleCall cActuatorFunctionNameParserRuleCall_0_4 = (RuleCall)cGroup_0.eContents().get(4);
-		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
-		private final Assignment cActuatorTypeAssignment_1_0 = (Assignment)cGroup_1.eContents().get(0);
-		private final CrossReference cActuatorTypeActuatorTypeCrossReference_1_0_0 = (CrossReference)cActuatorTypeAssignment_1_0.eContents().get(0);
-		private final RuleCall cActuatorTypeActuatorTypeIDTerminalRuleCall_1_0_0_1 = (RuleCall)cActuatorTypeActuatorTypeCrossReference_1_0_0.eContents().get(1);
-		private final Keyword cFullStopKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
-		private final RuleCall cActuatorFunctionNameParserRuleCall_1_2 = (RuleCall)cGroup_1.eContents().get(2);
-		
-		//ActuatorFunction:
-		//	board=[Board] '.' actuatorType=[ActuatorType] '.' ActuatorFunctionName | actuatorType=[ActuatorType] '.'
-		//	ActuatorFunctionName;
-		@Override public ParserRule getRule() { return rule; }
-		
-		//board=[Board] '.' actuatorType=[ActuatorType] '.' ActuatorFunctionName | actuatorType=[ActuatorType] '.'
-		//ActuatorFunctionName
-		public Alternatives getAlternatives() { return cAlternatives; }
-		
-		//board=[Board] '.' actuatorType=[ActuatorType] '.' ActuatorFunctionName
-		public Group getGroup_0() { return cGroup_0; }
-		
-		//board=[Board]
-		public Assignment getBoardAssignment_0_0() { return cBoardAssignment_0_0; }
-		
-		//[Board]
-		public CrossReference getBoardBoardCrossReference_0_0_0() { return cBoardBoardCrossReference_0_0_0; }
-		
-		//ID
-		public RuleCall getBoardBoardIDTerminalRuleCall_0_0_0_1() { return cBoardBoardIDTerminalRuleCall_0_0_0_1; }
-		
-		//'.'
-		public Keyword getFullStopKeyword_0_1() { return cFullStopKeyword_0_1; }
-		
-		//actuatorType=[ActuatorType]
-		public Assignment getActuatorTypeAssignment_0_2() { return cActuatorTypeAssignment_0_2; }
-		
-		//[ActuatorType]
-		public CrossReference getActuatorTypeActuatorTypeCrossReference_0_2_0() { return cActuatorTypeActuatorTypeCrossReference_0_2_0; }
-		
-		//ID
-		public RuleCall getActuatorTypeActuatorTypeIDTerminalRuleCall_0_2_0_1() { return cActuatorTypeActuatorTypeIDTerminalRuleCall_0_2_0_1; }
-		
-		//'.'
-		public Keyword getFullStopKeyword_0_3() { return cFullStopKeyword_0_3; }
-		
-		//ActuatorFunctionName
-		public RuleCall getActuatorFunctionNameParserRuleCall_0_4() { return cActuatorFunctionNameParserRuleCall_0_4; }
-		
-		//actuatorType=[ActuatorType] '.' ActuatorFunctionName
+		//board=[Board] '.' functionName=FunctionName
 		public Group getGroup_1() { return cGroup_1; }
 		
-		//actuatorType=[ActuatorType]
-		public Assignment getActuatorTypeAssignment_1_0() { return cActuatorTypeAssignment_1_0; }
+		//board=[Board]
+		public Assignment getBoardAssignment_1_0() { return cBoardAssignment_1_0; }
 		
-		//[ActuatorType]
-		public CrossReference getActuatorTypeActuatorTypeCrossReference_1_0_0() { return cActuatorTypeActuatorTypeCrossReference_1_0_0; }
+		//[Board]
+		public CrossReference getBoardBoardCrossReference_1_0_0() { return cBoardBoardCrossReference_1_0_0; }
 		
 		//ID
-		public RuleCall getActuatorTypeActuatorTypeIDTerminalRuleCall_1_0_0_1() { return cActuatorTypeActuatorTypeIDTerminalRuleCall_1_0_0_1; }
+		public RuleCall getBoardBoardIDTerminalRuleCall_1_0_0_1() { return cBoardBoardIDTerminalRuleCall_1_0_0_1; }
 		
 		//'.'
 		public Keyword getFullStopKeyword_1_1() { return cFullStopKeyword_1_1; }
 		
-		//ActuatorFunctionName
-		public RuleCall getActuatorFunctionNameParserRuleCall_1_2() { return cActuatorFunctionNameParserRuleCall_1_2; }
-	}
-	public class SensorFunctionElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "xtext.Pycom.SensorFunction");
-		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
-		private final Group cGroup_0 = (Group)cAlternatives.eContents().get(0);
-		private final Assignment cBoardAssignment_0_0 = (Assignment)cGroup_0.eContents().get(0);
-		private final CrossReference cBoardBoardCrossReference_0_0_0 = (CrossReference)cBoardAssignment_0_0.eContents().get(0);
-		private final RuleCall cBoardBoardIDTerminalRuleCall_0_0_0_1 = (RuleCall)cBoardBoardCrossReference_0_0_0.eContents().get(1);
-		private final Keyword cFullStopKeyword_0_1 = (Keyword)cGroup_0.eContents().get(1);
-		private final Assignment cSensorTypeAssignment_0_2 = (Assignment)cGroup_0.eContents().get(2);
-		private final CrossReference cSensorTypeSensorTypeCrossReference_0_2_0 = (CrossReference)cSensorTypeAssignment_0_2.eContents().get(0);
-		private final RuleCall cSensorTypeSensorTypeIDTerminalRuleCall_0_2_0_1 = (RuleCall)cSensorTypeSensorTypeCrossReference_0_2_0.eContents().get(1);
-		private final Keyword cFullStopKeyword_0_3 = (Keyword)cGroup_0.eContents().get(3);
-		private final RuleCall cSensorFunctionNameParserRuleCall_0_4 = (RuleCall)cGroup_0.eContents().get(4);
-		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
-		private final Assignment cSensorTypeAssignment_1_0 = (Assignment)cGroup_1.eContents().get(0);
-		private final CrossReference cSensorTypeSensorTypeCrossReference_1_0_0 = (CrossReference)cSensorTypeAssignment_1_0.eContents().get(0);
-		private final RuleCall cSensorTypeSensorTypeIDTerminalRuleCall_1_0_0_1 = (RuleCall)cSensorTypeSensorTypeCrossReference_1_0_0.eContents().get(1);
-		private final Keyword cFullStopKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
-		private final RuleCall cSensorFunctionNameParserRuleCall_1_2 = (RuleCall)cGroup_1.eContents().get(2);
+		//functionName=FunctionName
+		public Assignment getFunctionNameAssignment_1_2() { return cFunctionNameAssignment_1_2; }
 		
-		//SensorFunction:
-		//	board=[Board] '.' sensorType=[SensorType] '.' SensorFunctionName | sensorType=[SensorType] '.' SensorFunctionName;
+		//FunctionName
+		public RuleCall getFunctionNameFunctionNameParserRuleCall_1_2_0() { return cFunctionNameFunctionNameParserRuleCall_1_2_0; }
+	}
+	public class ModuleFunctionElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "xtext.Pycom.ModuleFunction");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Assignment cBoardAssignment_0 = (Assignment)cGroup.eContents().get(0);
+		private final CrossReference cBoardBoardCrossReference_0_0 = (CrossReference)cBoardAssignment_0.eContents().get(0);
+		private final RuleCall cBoardBoardIDTerminalRuleCall_0_0_1 = (RuleCall)cBoardBoardCrossReference_0_0.eContents().get(1);
+		private final Keyword cFullStopKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Assignment cModuleTypeAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final CrossReference cModuleTypeModuleTypeCrossReference_2_0 = (CrossReference)cModuleTypeAssignment_2.eContents().get(0);
+		private final RuleCall cModuleTypeModuleTypeIDTerminalRuleCall_2_0_1 = (RuleCall)cModuleTypeModuleTypeCrossReference_2_0.eContents().get(1);
+		private final Keyword cFullStopKeyword_3 = (Keyword)cGroup.eContents().get(3);
+		private final Assignment cFunctionNameAssignment_4 = (Assignment)cGroup.eContents().get(4);
+		private final RuleCall cFunctionNameFunctionNameParserRuleCall_4_0 = (RuleCall)cFunctionNameAssignment_4.eContents().get(0);
+		
+		//ModuleFunction:
+		//	board=[Board] '.' moduleType=[ModuleType] '.' functionName=FunctionName;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//board=[Board] '.' sensorType=[SensorType] '.' SensorFunctionName | sensorType=[SensorType] '.' SensorFunctionName
-		public Alternatives getAlternatives() { return cAlternatives; }
-		
-		//board=[Board] '.' sensorType=[SensorType] '.' SensorFunctionName
-		public Group getGroup_0() { return cGroup_0; }
+		//board=[Board] '.' moduleType=[ModuleType] '.' functionName=FunctionName
+		public Group getGroup() { return cGroup; }
 		
 		//board=[Board]
-		public Assignment getBoardAssignment_0_0() { return cBoardAssignment_0_0; }
+		public Assignment getBoardAssignment_0() { return cBoardAssignment_0; }
 		
 		//[Board]
-		public CrossReference getBoardBoardCrossReference_0_0_0() { return cBoardBoardCrossReference_0_0_0; }
+		public CrossReference getBoardBoardCrossReference_0_0() { return cBoardBoardCrossReference_0_0; }
 		
 		//ID
-		public RuleCall getBoardBoardIDTerminalRuleCall_0_0_0_1() { return cBoardBoardIDTerminalRuleCall_0_0_0_1; }
+		public RuleCall getBoardBoardIDTerminalRuleCall_0_0_1() { return cBoardBoardIDTerminalRuleCall_0_0_1; }
 		
 		//'.'
-		public Keyword getFullStopKeyword_0_1() { return cFullStopKeyword_0_1; }
+		public Keyword getFullStopKeyword_1() { return cFullStopKeyword_1; }
 		
-		//sensorType=[SensorType]
-		public Assignment getSensorTypeAssignment_0_2() { return cSensorTypeAssignment_0_2; }
+		//moduleType=[ModuleType]
+		public Assignment getModuleTypeAssignment_2() { return cModuleTypeAssignment_2; }
 		
-		//[SensorType]
-		public CrossReference getSensorTypeSensorTypeCrossReference_0_2_0() { return cSensorTypeSensorTypeCrossReference_0_2_0; }
+		//[ModuleType]
+		public CrossReference getModuleTypeModuleTypeCrossReference_2_0() { return cModuleTypeModuleTypeCrossReference_2_0; }
 		
 		//ID
-		public RuleCall getSensorTypeSensorTypeIDTerminalRuleCall_0_2_0_1() { return cSensorTypeSensorTypeIDTerminalRuleCall_0_2_0_1; }
+		public RuleCall getModuleTypeModuleTypeIDTerminalRuleCall_2_0_1() { return cModuleTypeModuleTypeIDTerminalRuleCall_2_0_1; }
 		
 		//'.'
-		public Keyword getFullStopKeyword_0_3() { return cFullStopKeyword_0_3; }
+		public Keyword getFullStopKeyword_3() { return cFullStopKeyword_3; }
 		
-		//SensorFunctionName
-		public RuleCall getSensorFunctionNameParserRuleCall_0_4() { return cSensorFunctionNameParserRuleCall_0_4; }
+		//functionName=FunctionName
+		public Assignment getFunctionNameAssignment_4() { return cFunctionNameAssignment_4; }
 		
-		//sensorType=[SensorType] '.' SensorFunctionName
-		public Group getGroup_1() { return cGroup_1; }
+		//FunctionName
+		public RuleCall getFunctionNameFunctionNameParserRuleCall_4_0() { return cFunctionNameFunctionNameParserRuleCall_4_0; }
+	}
+	public class FunctionNameElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "xtext.Pycom.FunctionName");
+		private final Assignment cNameAssignment = (Assignment)rule.eContents().get(1);
+		private final RuleCall cNameIDTerminalRuleCall_0 = (RuleCall)cNameAssignment.eContents().get(0);
 		
-		//sensorType=[SensorType]
-		public Assignment getSensorTypeAssignment_1_0() { return cSensorTypeAssignment_1_0; }
+		//FunctionName:
+		//	name=ID;
+		@Override public ParserRule getRule() { return rule; }
 		
-		//[SensorType]
-		public CrossReference getSensorTypeSensorTypeCrossReference_1_0_0() { return cSensorTypeSensorTypeCrossReference_1_0_0; }
+		//name=ID
+		public Assignment getNameAssignment() { return cNameAssignment; }
 		
 		//ID
-		public RuleCall getSensorTypeSensorTypeIDTerminalRuleCall_1_0_0_1() { return cSensorTypeSensorTypeIDTerminalRuleCall_1_0_0_1; }
-		
-		//'.'
-		public Keyword getFullStopKeyword_1_1() { return cFullStopKeyword_1_1; }
-		
-		//SensorFunctionName
-		public RuleCall getSensorFunctionNameParserRuleCall_1_2() { return cSensorFunctionNameParserRuleCall_1_2; }
-	}
-	public class SensorFunctionNameElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "xtext.Pycom.SensorFunctionName");
-		private final Keyword cSensorFunctionNameKeyword = (Keyword)rule.eContents().get(1);
-		
-		//SensorFunctionName:
-		//	'SensorFunctionName';
-		@Override public ParserRule getRule() { return rule; }
-		
-		//'SensorFunctionName'
-		public Keyword getSensorFunctionNameKeyword() { return cSensorFunctionNameKeyword; }
-	}
-	public class ActuatorFunctionNameElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "xtext.Pycom.ActuatorFunctionName");
-		private final Keyword cActuatorFunctionNameKeyword = (Keyword)rule.eContents().get(1);
-		
-		//ActuatorFunctionName:
-		//	'ActuatorFunctionName';
-		@Override public ParserRule getRule() { return rule; }
-		
-		//'ActuatorFunctionName'
-		public Keyword getActuatorFunctionNameKeyword() { return cActuatorFunctionNameKeyword; }
-	}
-	public class BoardFunctionNameElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "xtext.Pycom.BoardFunctionName");
-		private final Keyword cBoardFunctionNameKeyword = (Keyword)rule.eContents().get(1);
-		
-		//BoardFunctionName:
-		//	'BoardFunctionName';
-		@Override public ParserRule getRule() { return rule; }
-		
-		//'BoardFunctionName'
-		public Keyword getBoardFunctionNameKeyword() { return cBoardFunctionNameKeyword; }
+		public RuleCall getNameIDTerminalRuleCall_0() { return cNameIDTerminalRuleCall_0; }
 	}
 	
 	
 	private final SystemElements pSystem;
 	private final ServerElements pServer;
 	private final ConnectionElements pConnection;
+	private final HostElements pHost;
 	private final IpaddressElements pIpaddress;
 	private final PortElements pPort;
 	private final BoardElements pBoard;
@@ -1094,19 +1086,18 @@ public class PycomGrammarAccess extends AbstractGrammarElementFinder {
 	private final SensorTypeElements pSensorType;
 	private final SensorNameElements pSensorName;
 	private final PinElements pPin;
+	private final PinNameElements pPinName;
 	private final ActuatorNameElements pActuatorName;
 	private final ConditionElements pCondition;
 	private final LogicExpElements pLogicExp;
 	private final BooleanElements pBoolean;
 	private final ComparisonExpElements pComparisonExp;
-	private final OperatorElements pOperator;
 	private final ExpressionElements pExpression;
+	private final OperatorElements pOperator;
+	private final NumberElements pNumber;
 	private final FunctionElements pFunction;
-	private final ActuatorFunctionElements pActuatorFunction;
-	private final SensorFunctionElements pSensorFunction;
-	private final SensorFunctionNameElements pSensorFunctionName;
-	private final ActuatorFunctionNameElements pActuatorFunctionName;
-	private final BoardFunctionNameElements pBoardFunctionName;
+	private final ModuleFunctionElements pModuleFunction;
+	private final FunctionNameElements pFunctionName;
 	
 	private final Grammar grammar;
 	
@@ -1120,6 +1111,7 @@ public class PycomGrammarAccess extends AbstractGrammarElementFinder {
 		this.pSystem = new SystemElements();
 		this.pServer = new ServerElements();
 		this.pConnection = new ConnectionElements();
+		this.pHost = new HostElements();
 		this.pIpaddress = new IpaddressElements();
 		this.pPort = new PortElements();
 		this.pBoard = new BoardElements();
@@ -1133,19 +1125,18 @@ public class PycomGrammarAccess extends AbstractGrammarElementFinder {
 		this.pSensorType = new SensorTypeElements();
 		this.pSensorName = new SensorNameElements();
 		this.pPin = new PinElements();
+		this.pPinName = new PinNameElements();
 		this.pActuatorName = new ActuatorNameElements();
 		this.pCondition = new ConditionElements();
 		this.pLogicExp = new LogicExpElements();
 		this.pBoolean = new BooleanElements();
 		this.pComparisonExp = new ComparisonExpElements();
-		this.pOperator = new OperatorElements();
 		this.pExpression = new ExpressionElements();
+		this.pOperator = new OperatorElements();
+		this.pNumber = new NumberElements();
 		this.pFunction = new FunctionElements();
-		this.pActuatorFunction = new ActuatorFunctionElements();
-		this.pSensorFunction = new SensorFunctionElements();
-		this.pSensorFunctionName = new SensorFunctionNameElements();
-		this.pActuatorFunctionName = new ActuatorFunctionNameElements();
-		this.pBoardFunctionName = new BoardFunctionNameElements();
+		this.pModuleFunction = new ModuleFunctionElements();
+		this.pFunctionName = new FunctionNameElements();
 	}
 	
 	protected Grammar internalFindGrammar(GrammarProvider grammarProvider) {
@@ -1196,13 +1187,23 @@ public class PycomGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	
 	//Connection:
-	//	(ipAdr=Ipaddress | website=STRING) ',' portnumber=Port;
+	//	host=Host ',' portnumber=Port;
 	public ConnectionElements getConnectionAccess() {
 		return pConnection;
 	}
 	
 	public ParserRule getConnectionRule() {
 		return getConnectionAccess().getRule();
+	}
+	
+	//Host:
+	//	ipAdr=Ipaddress | website=STRING;
+	public HostElements getHostAccess() {
+		return pHost;
+	}
+	
+	public ParserRule getHostRule() {
+		return getHostAccess().getRule();
 	}
 	
 	//Ipaddress:
@@ -1246,7 +1247,8 @@ public class PycomGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	
 	//ConditionalAction:
-	//	'if' '(' Condition ')' '{' ExpMembers+=ExpMember* '}' | 'while' '(' Condition ')' '{' ExpMembers+=ExpMember* '}';
+	//	type='if' '(' condition=Condition ')' '{' ExpMembers+=ExpMember* '}' | type='while' '(' condition=Condition ')' '{'
+	//	ExpMembers+=ExpMember* '}';
 	public ConditionalActionElements getConditionalActionAccess() {
 		return pConditionalAction;
 	}
@@ -1286,7 +1288,7 @@ public class PycomGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	
 	//Communication:
-	//	'Communication' ':' ('WiFi' | 'Bluetooth' | 'SigFox');
+	//	'Communication' ':' type=('WiFi' | 'Bluetooth' | 'SigFox');
 	public CommunicationElements getCommunicationAccess() {
 		return pCommunication;
 	}
@@ -1295,8 +1297,8 @@ public class PycomGrammarAccess extends AbstractGrammarElementFinder {
 		return getCommunicationAccess().getRule();
 	}
 	
-	//ActuatorType:
-	//	typeName=ActuatorName ':' name=ID ('(' pins+=Pin ')')?;
+	//ActuatorType ModuleType:
+	//	{ActuatorType} typeName=ActuatorName ':' name=ID ('(' pins=Pin ')')?;
 	public ActuatorTypeElements getActuatorTypeAccess() {
 		return pActuatorType;
 	}
@@ -1305,8 +1307,8 @@ public class PycomGrammarAccess extends AbstractGrammarElementFinder {
 		return getActuatorTypeAccess().getRule();
 	}
 	
-	//SensorType:
-	//	typeName=SensorName ':' name=ID ('(' pins+=Pin ')')?;
+	//SensorType ModuleType:
+	//	{SensorType} typeName=SensorName ':' name=ID ('(' pins=Pin ')')?;
 	public SensorTypeElements getSensorTypeAccess() {
 		return pSensorType;
 	}
@@ -1326,13 +1328,23 @@ public class PycomGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	
 	//Pin:
-	//	power=INT ',' input=INT;
+	//	power=PinName ',' input=PinName;
 	public PinElements getPinAccess() {
 		return pPin;
 	}
 	
 	public ParserRule getPinRule() {
 		return getPinAccess().getRule();
+	}
+	
+	//PinName:
+	//	name=ID;
+	public PinNameElements getPinNameAccess() {
+		return pPinName;
+	}
+	
+	public ParserRule getPinNameRule() {
+		return getPinNameAccess().getRule();
 	}
 	
 	//ActuatorName:
@@ -1346,7 +1358,8 @@ public class PycomGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	
 	//Condition:
-	//	LogicExp | LogicExp '&&' condition=Condition | LogicExp '||' condition=Condition;
+	//	logicEx=LogicExp | logicEx=LogicExp operator='&&' nestedCondition=Condition | logicEx=LogicExp operator='||'
+	//	nestedCondition=Condition;
 	public ConditionElements getConditionAccess() {
 		return pCondition;
 	}
@@ -1356,7 +1369,7 @@ public class PycomGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	
 	//LogicExp:
-	//	Boolean | ComparisonExp;
+	//	boolVal=Boolean | compExp=ComparisonExp;
 	public LogicExpElements getLogicExpAccess() {
 		return pLogicExp;
 	}
@@ -1376,13 +1389,23 @@ public class PycomGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	
 	//ComparisonExp:
-	//	left=Expression op=Operator rigth=Expression;
+	//	left=Expression op=Operator right=Expression;
 	public ComparisonExpElements getComparisonExpAccess() {
 		return pComparisonExp;
 	}
 	
 	public ParserRule getComparisonExpRule() {
 		return getComparisonExpAccess().getRule();
+	}
+	
+	//Expression:
+	//	outputValue=INT | outputfunction=Function;
+	public ExpressionElements getExpressionAccess() {
+		return pExpression;
+	}
+	
+	public ParserRule getExpressionRule() {
+		return getExpressionAccess().getRule();
 	}
 	
 	//Operator:
@@ -1395,18 +1418,18 @@ public class PycomGrammarAccess extends AbstractGrammarElementFinder {
 		return getOperatorAccess().getRule();
 	}
 	
-	//Expression:
-	//	INT | Function;
-	public ExpressionElements getExpressionAccess() {
-		return pExpression;
+	//Number:
+	//	INT;
+	public NumberElements getNumberAccess() {
+		return pNumber;
 	}
 	
-	public ParserRule getExpressionRule() {
-		return getExpressionAccess().getRule();
+	public ParserRule getNumberRule() {
+		return getNumberAccess().getRule();
 	}
 	
 	//Function:
-	//	ActuatorFunction | SensorFunction | board=[Board] '.' BoardFunctionName;
+	//	ModuleFunction | board=[Board] '.' functionName=FunctionName;
 	public FunctionElements getFunctionAccess() {
 		return pFunction;
 	}
@@ -1415,55 +1438,24 @@ public class PycomGrammarAccess extends AbstractGrammarElementFinder {
 		return getFunctionAccess().getRule();
 	}
 	
-	//ActuatorFunction:
-	//	board=[Board] '.' actuatorType=[ActuatorType] '.' ActuatorFunctionName | actuatorType=[ActuatorType] '.'
-	//	ActuatorFunctionName;
-	public ActuatorFunctionElements getActuatorFunctionAccess() {
-		return pActuatorFunction;
+	//ModuleFunction:
+	//	board=[Board] '.' moduleType=[ModuleType] '.' functionName=FunctionName;
+	public ModuleFunctionElements getModuleFunctionAccess() {
+		return pModuleFunction;
 	}
 	
-	public ParserRule getActuatorFunctionRule() {
-		return getActuatorFunctionAccess().getRule();
+	public ParserRule getModuleFunctionRule() {
+		return getModuleFunctionAccess().getRule();
 	}
 	
-	//SensorFunction:
-	//	board=[Board] '.' sensorType=[SensorType] '.' SensorFunctionName | sensorType=[SensorType] '.' SensorFunctionName;
-	public SensorFunctionElements getSensorFunctionAccess() {
-		return pSensorFunction;
+	//FunctionName:
+	//	name=ID;
+	public FunctionNameElements getFunctionNameAccess() {
+		return pFunctionName;
 	}
 	
-	public ParserRule getSensorFunctionRule() {
-		return getSensorFunctionAccess().getRule();
-	}
-	
-	//SensorFunctionName:
-	//	'SensorFunctionName';
-	public SensorFunctionNameElements getSensorFunctionNameAccess() {
-		return pSensorFunctionName;
-	}
-	
-	public ParserRule getSensorFunctionNameRule() {
-		return getSensorFunctionNameAccess().getRule();
-	}
-	
-	//ActuatorFunctionName:
-	//	'ActuatorFunctionName';
-	public ActuatorFunctionNameElements getActuatorFunctionNameAccess() {
-		return pActuatorFunctionName;
-	}
-	
-	public ParserRule getActuatorFunctionNameRule() {
-		return getActuatorFunctionNameAccess().getRule();
-	}
-	
-	//BoardFunctionName:
-	//	'BoardFunctionName';
-	public BoardFunctionNameElements getBoardFunctionNameAccess() {
-		return pBoardFunctionName;
-	}
-	
-	public ParserRule getBoardFunctionNameRule() {
-		return getBoardFunctionNameAccess().getRule();
+	public ParserRule getFunctionNameRule() {
+		return getFunctionNameAccess().getRule();
 	}
 	
 	//terminal ID:

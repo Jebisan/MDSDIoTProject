@@ -25,7 +25,7 @@ public interface Sensor extends BoardMember
 {
   /**
    * Returns the value of the '<em><b>Sensor Types</b></em>' containment reference list.
-   * The list contents are of type {@link xtext.pycom.SensorType}.
+   * The list contents are of type {@link xtext.pycom.ModuleType}.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the value of the '<em>Sensor Types</em>' containment reference list.
@@ -33,6 +33,6 @@ public interface Sensor extends BoardMember
    * @model containment="true"
    * @generated
    */
-  EList<SensorType> getSensorTypes();
+  EList<ModuleType> getSensorTypes();
 
 } // Sensor

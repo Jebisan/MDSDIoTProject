@@ -9,10 +9,10 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
 
 import xtext.pycom.Actuator;
-import xtext.pycom.ActuatorFunction;
 import xtext.pycom.ActuatorType;
 import xtext.pycom.Board;
 import xtext.pycom.BoardMember;
+import xtext.pycom.Communication;
 import xtext.pycom.ComparisonExp;
 import xtext.pycom.Condition;
 import xtext.pycom.ConditionalAction;
@@ -20,11 +20,15 @@ import xtext.pycom.Connection;
 import xtext.pycom.ExpMember;
 import xtext.pycom.Expression;
 import xtext.pycom.Function;
+import xtext.pycom.FunctionName;
+import xtext.pycom.Host;
 import xtext.pycom.LogicExp;
+import xtext.pycom.ModuleFunction;
+import xtext.pycom.ModuleType;
 import xtext.pycom.Pin;
+import xtext.pycom.PinName;
 import xtext.pycom.PycomPackage;
 import xtext.pycom.Sensor;
-import xtext.pycom.SensorFunction;
 import xtext.pycom.SensorType;
 import xtext.pycom.Server;
 
@@ -112,6 +116,13 @@ public class PycomSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case PycomPackage.HOST:
+      {
+        Host host = (Host)theEObject;
+        T result = caseHost(host);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case PycomPackage.BOARD:
       {
         Board board = (Board)theEObject;
@@ -157,17 +168,18 @@ public class PycomSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case PycomPackage.ACTUATOR_TYPE:
+      case PycomPackage.COMMUNICATION:
       {
-        ActuatorType actuatorType = (ActuatorType)theEObject;
-        T result = caseActuatorType(actuatorType);
+        Communication communication = (Communication)theEObject;
+        T result = caseCommunication(communication);
+        if (result == null) result = caseBoardMember(communication);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case PycomPackage.SENSOR_TYPE:
+      case PycomPackage.MODULE_TYPE:
       {
-        SensorType sensorType = (SensorType)theEObject;
-        T result = caseSensorType(sensorType);
+        ModuleType moduleType = (ModuleType)theEObject;
+        T result = caseModuleType(moduleType);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -178,12 +190,17 @@ public class PycomSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case PycomPackage.PIN_NAME:
+      {
+        PinName pinName = (PinName)theEObject;
+        T result = casePinName(pinName);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case PycomPackage.CONDITION:
       {
         Condition condition = (Condition)theEObject;
         T result = caseCondition(condition);
-        if (result == null) result = caseConditionalAction(condition);
-        if (result == null) result = caseExpMember(condition);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -191,9 +208,6 @@ public class PycomSwitch<T> extends Switch<T>
       {
         LogicExp logicExp = (LogicExp)theEObject;
         T result = caseLogicExp(logicExp);
-        if (result == null) result = caseCondition(logicExp);
-        if (result == null) result = caseConditionalAction(logicExp);
-        if (result == null) result = caseExpMember(logicExp);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -201,10 +215,6 @@ public class PycomSwitch<T> extends Switch<T>
       {
         xtext.pycom.Boolean boolean_ = (xtext.pycom.Boolean)theEObject;
         T result = caseBoolean(boolean_);
-        if (result == null) result = caseLogicExp(boolean_);
-        if (result == null) result = caseCondition(boolean_);
-        if (result == null) result = caseConditionalAction(boolean_);
-        if (result == null) result = caseExpMember(boolean_);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -212,10 +222,6 @@ public class PycomSwitch<T> extends Switch<T>
       {
         ComparisonExp comparisonExp = (ComparisonExp)theEObject;
         T result = caseComparisonExp(comparisonExp);
-        if (result == null) result = caseLogicExp(comparisonExp);
-        if (result == null) result = caseCondition(comparisonExp);
-        if (result == null) result = caseConditionalAction(comparisonExp);
-        if (result == null) result = caseExpMember(comparisonExp);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -231,27 +237,38 @@ public class PycomSwitch<T> extends Switch<T>
         Function function = (Function)theEObject;
         T result = caseFunction(function);
         if (result == null) result = caseExpMember(function);
-        if (result == null) result = caseExpression(function);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case PycomPackage.ACTUATOR_FUNCTION:
+      case PycomPackage.MODULE_FUNCTION:
       {
-        ActuatorFunction actuatorFunction = (ActuatorFunction)theEObject;
-        T result = caseActuatorFunction(actuatorFunction);
-        if (result == null) result = caseFunction(actuatorFunction);
-        if (result == null) result = caseExpMember(actuatorFunction);
-        if (result == null) result = caseExpression(actuatorFunction);
+        ModuleFunction moduleFunction = (ModuleFunction)theEObject;
+        T result = caseModuleFunction(moduleFunction);
+        if (result == null) result = caseFunction(moduleFunction);
+        if (result == null) result = caseExpMember(moduleFunction);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case PycomPackage.SENSOR_FUNCTION:
+      case PycomPackage.FUNCTION_NAME:
       {
-        SensorFunction sensorFunction = (SensorFunction)theEObject;
-        T result = caseSensorFunction(sensorFunction);
-        if (result == null) result = caseFunction(sensorFunction);
-        if (result == null) result = caseExpMember(sensorFunction);
-        if (result == null) result = caseExpression(sensorFunction);
+        FunctionName functionName = (FunctionName)theEObject;
+        T result = caseFunctionName(functionName);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case PycomPackage.ACTUATOR_TYPE:
+      {
+        ActuatorType actuatorType = (ActuatorType)theEObject;
+        T result = caseActuatorType(actuatorType);
+        if (result == null) result = caseModuleType(actuatorType);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case PycomPackage.SENSOR_TYPE:
+      {
+        SensorType sensorType = (SensorType)theEObject;
+        T result = caseSensorType(sensorType);
+        if (result == null) result = caseModuleType(sensorType);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -303,6 +320,22 @@ public class PycomSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseConnection(Connection object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Host</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Host</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseHost(Host object)
   {
     return null;
   }
@@ -404,33 +437,33 @@ public class PycomSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Actuator Type</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Communication</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Actuator Type</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Communication</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseActuatorType(ActuatorType object)
+  public T caseCommunication(Communication object)
   {
     return null;
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Sensor Type</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Module Type</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Sensor Type</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Module Type</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseSensorType(SensorType object)
+  public T caseModuleType(ModuleType object)
   {
     return null;
   }
@@ -447,6 +480,22 @@ public class PycomSwitch<T> extends Switch<T>
    * @generated
    */
   public T casePin(Pin object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Pin Name</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Pin Name</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T casePinName(PinName object)
   {
     return null;
   }
@@ -548,33 +597,65 @@ public class PycomSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Actuator Function</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Module Function</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Actuator Function</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Module Function</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseActuatorFunction(ActuatorFunction object)
+  public T caseModuleFunction(ModuleFunction object)
   {
     return null;
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Sensor Function</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Function Name</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Sensor Function</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Function Name</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseSensorFunction(SensorFunction object)
+  public T caseFunctionName(FunctionName object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Actuator Type</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Actuator Type</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseActuatorType(ActuatorType object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Sensor Type</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Sensor Type</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseSensorType(SensorType object)
   {
     return null;
   }

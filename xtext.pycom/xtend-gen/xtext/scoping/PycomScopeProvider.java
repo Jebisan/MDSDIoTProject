@@ -10,12 +10,10 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.scoping.IScope;
 import org.eclipse.xtext.scoping.Scopes;
-import xtext.pycom.ActuatorFunction;
-import xtext.pycom.ActuatorType;
 import xtext.pycom.Board;
+import xtext.pycom.ModuleFunction;
+import xtext.pycom.ModuleType;
 import xtext.pycom.PycomPackage;
-import xtext.pycom.SensorFunction;
-import xtext.pycom.SensorType;
 import xtext.scoping.AbstractPycomScopeProvider;
 
 /**
@@ -28,15 +26,10 @@ import xtext.scoping.AbstractPycomScopeProvider;
 public class PycomScopeProvider extends AbstractPycomScopeProvider {
   @Override
   public IScope getScope(final EObject context, final EReference reference) {
-    if (((context instanceof ActuatorFunction) && Objects.equal(reference, PycomPackage.Literals.ACTUATOR_FUNCTION__ACTUATOR_TYPE))) {
-      final Board board = ((ActuatorFunction) context).getBoard();
-      final List<ActuatorType> candidates = EcoreUtil2.<ActuatorType>getAllContentsOfType(board, ActuatorType.class);
+    if (((context instanceof ModuleFunction) && Objects.equal(reference, PycomPackage.Literals.MODULE_FUNCTION__MODULE_TYPE))) {
+      final Board board = ((ModuleFunction) context).getBoard();
+      final List<ModuleType> candidates = EcoreUtil2.<ModuleType>getAllContentsOfType(board, ModuleType.class);
       return Scopes.scopeFor(candidates);
-    }
-    if (((context instanceof SensorFunction) && Objects.equal(reference, PycomPackage.Literals.SENSOR_FUNCTION__SENSOR_TYPE))) {
-      final Board board_1 = ((SensorFunction) context).getBoard();
-      final List<SensorType> candidates_1 = EcoreUtil2.<SensorType>getAllContentsOfType(board_1, SensorType.class);
-      return Scopes.scopeFor(candidates_1);
     }
     return super.getScope(context, reference);
   }

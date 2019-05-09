@@ -12,18 +12,15 @@
 '>='=42
 'Accelerometer'=32
 'Actuator'=22
-'ActuatorFunctionName'=46
 'Barometer'=30
 'Bluetooth'=26
 'Board'=18
-'BoardFunctionName'=47
 'Communication'=23
 'Engine'=34
 'Humidity'=31
 'LED'=33
 'Light'=28
 'Sensor'=21
-'SensorFunctionName'=45
 'Server'=11
 'SigFox'=27
 'Temperature'=29
@@ -76,6 +73,3 @@ T__41=41
 T__42=42
 T__43=43
 T__44=44
-T__45=45
-T__46=46
-T__47=47

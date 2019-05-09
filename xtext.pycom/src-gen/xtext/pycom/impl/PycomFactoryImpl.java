@@ -12,10 +12,10 @@ import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import xtext.pycom.Actuator;
-import xtext.pycom.ActuatorFunction;
 import xtext.pycom.ActuatorType;
 import xtext.pycom.Board;
 import xtext.pycom.BoardMember;
+import xtext.pycom.Communication;
 import xtext.pycom.ComparisonExp;
 import xtext.pycom.Condition;
 import xtext.pycom.ConditionalAction;
@@ -23,12 +23,16 @@ import xtext.pycom.Connection;
 import xtext.pycom.ExpMember;
 import xtext.pycom.Expression;
 import xtext.pycom.Function;
+import xtext.pycom.FunctionName;
+import xtext.pycom.Host;
 import xtext.pycom.LogicExp;
+import xtext.pycom.ModuleFunction;
+import xtext.pycom.ModuleType;
 import xtext.pycom.Pin;
+import xtext.pycom.PinName;
 import xtext.pycom.PycomFactory;
 import xtext.pycom.PycomPackage;
 import xtext.pycom.Sensor;
-import xtext.pycom.SensorFunction;
 import xtext.pycom.SensorType;
 import xtext.pycom.Server;
 
@@ -87,23 +91,27 @@ public class PycomFactoryImpl extends EFactoryImpl implements PycomFactory
       case PycomPackage.SYSTEM: return createSystem();
       case PycomPackage.SERVER: return createServer();
       case PycomPackage.CONNECTION: return createConnection();
+      case PycomPackage.HOST: return createHost();
       case PycomPackage.BOARD: return createBoard();
       case PycomPackage.BOARD_MEMBER: return createBoardMember();
       case PycomPackage.CONDITIONAL_ACTION: return createConditionalAction();
       case PycomPackage.EXP_MEMBER: return createExpMember();
       case PycomPackage.SENSOR: return createSensor();
       case PycomPackage.ACTUATOR: return createActuator();
-      case PycomPackage.ACTUATOR_TYPE: return createActuatorType();
-      case PycomPackage.SENSOR_TYPE: return createSensorType();
+      case PycomPackage.COMMUNICATION: return createCommunication();
+      case PycomPackage.MODULE_TYPE: return createModuleType();
       case PycomPackage.PIN: return createPin();
+      case PycomPackage.PIN_NAME: return createPinName();
       case PycomPackage.CONDITION: return createCondition();
       case PycomPackage.LOGIC_EXP: return createLogicExp();
       case PycomPackage.BOOLEAN: return createBoolean();
       case PycomPackage.COMPARISON_EXP: return createComparisonExp();
       case PycomPackage.EXPRESSION: return createExpression();
       case PycomPackage.FUNCTION: return createFunction();
-      case PycomPackage.ACTUATOR_FUNCTION: return createActuatorFunction();
-      case PycomPackage.SENSOR_FUNCTION: return createSensorFunction();
+      case PycomPackage.MODULE_FUNCTION: return createModuleFunction();
+      case PycomPackage.FUNCTION_NAME: return createFunctionName();
+      case PycomPackage.ACTUATOR_TYPE: return createActuatorType();
+      case PycomPackage.SENSOR_TYPE: return createSensorType();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -143,6 +151,18 @@ public class PycomFactoryImpl extends EFactoryImpl implements PycomFactory
   {
     ConnectionImpl connection = new ConnectionImpl();
     return connection;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Host createHost()
+  {
+    HostImpl host = new HostImpl();
+    return host;
   }
 
   /**
@@ -223,10 +243,10 @@ public class PycomFactoryImpl extends EFactoryImpl implements PycomFactory
    * @generated
    */
   @Override
-  public ActuatorType createActuatorType()
+  public Communication createCommunication()
   {
-    ActuatorTypeImpl actuatorType = new ActuatorTypeImpl();
-    return actuatorType;
+    CommunicationImpl communication = new CommunicationImpl();
+    return communication;
   }
 
   /**
@@ -235,10 +255,10 @@ public class PycomFactoryImpl extends EFactoryImpl implements PycomFactory
    * @generated
    */
   @Override
-  public SensorType createSensorType()
+  public ModuleType createModuleType()
   {
-    SensorTypeImpl sensorType = new SensorTypeImpl();
-    return sensorType;
+    ModuleTypeImpl moduleType = new ModuleTypeImpl();
+    return moduleType;
   }
 
   /**
@@ -251,6 +271,18 @@ public class PycomFactoryImpl extends EFactoryImpl implements PycomFactory
   {
     PinImpl pin = new PinImpl();
     return pin;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public PinName createPinName()
+  {
+    PinNameImpl pinName = new PinNameImpl();
+    return pinName;
   }
 
   /**
@@ -331,10 +363,10 @@ public class PycomFactoryImpl extends EFactoryImpl implements PycomFactory
    * @generated
    */
   @Override
-  public ActuatorFunction createActuatorFunction()
+  public ModuleFunction createModuleFunction()
   {
-    ActuatorFunctionImpl actuatorFunction = new ActuatorFunctionImpl();
-    return actuatorFunction;
+    ModuleFunctionImpl moduleFunction = new ModuleFunctionImpl();
+    return moduleFunction;
   }
 
   /**
@@ -343,10 +375,34 @@ public class PycomFactoryImpl extends EFactoryImpl implements PycomFactory
    * @generated
    */
   @Override
-  public SensorFunction createSensorFunction()
+  public FunctionName createFunctionName()
   {
-    SensorFunctionImpl sensorFunction = new SensorFunctionImpl();
-    return sensorFunction;
+    FunctionNameImpl functionName = new FunctionNameImpl();
+    return functionName;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public ActuatorType createActuatorType()
+  {
+    ActuatorTypeImpl actuatorType = new ActuatorTypeImpl();
+    return actuatorType;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public SensorType createSensorType()
+  {
+    SensorTypeImpl sensorType = new SensorTypeImpl();
+    return sensorType;
   }
 
   /**

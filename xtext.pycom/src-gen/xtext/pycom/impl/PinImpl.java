@@ -4,13 +4,16 @@
 package xtext.pycom.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import xtext.pycom.Pin;
+import xtext.pycom.PinName;
 import xtext.pycom.PycomPackage;
 
 /**
@@ -30,44 +33,24 @@ import xtext.pycom.PycomPackage;
 public class PinImpl extends MinimalEObjectImpl.Container implements Pin
 {
   /**
-   * The default value of the '{@link #getPower() <em>Power</em>}' attribute.
+   * The cached value of the '{@link #getPower() <em>Power</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getPower()
    * @generated
    * @ordered
    */
-  protected static final int POWER_EDEFAULT = 0;
+  protected PinName power;
 
   /**
-   * The cached value of the '{@link #getPower() <em>Power</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getPower()
-   * @generated
-   * @ordered
-   */
-  protected int power = POWER_EDEFAULT;
-
-  /**
-   * The default value of the '{@link #getInput() <em>Input</em>}' attribute.
+   * The cached value of the '{@link #getInput() <em>Input</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getInput()
    * @generated
    * @ordered
    */
-  protected static final int INPUT_EDEFAULT = 0;
-
-  /**
-   * The cached value of the '{@link #getInput() <em>Input</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getInput()
-   * @generated
-   * @ordered
-   */
-  protected int input = INPUT_EDEFAULT;
+  protected PinName input;
 
   /**
    * <!-- begin-user-doc -->
@@ -96,7 +79,7 @@ public class PinImpl extends MinimalEObjectImpl.Container implements Pin
    * @generated
    */
   @Override
-  public int getPower()
+  public PinName getPower()
   {
     return power;
   }
@@ -106,13 +89,16 @@ public class PinImpl extends MinimalEObjectImpl.Container implements Pin
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
-  public void setPower(int newPower)
+  public NotificationChain basicSetPower(PinName newPower, NotificationChain msgs)
   {
-    int oldPower = power;
+    PinName oldPower = power;
     power = newPower;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, PycomPackage.PIN__POWER, oldPower, power));
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PycomPackage.PIN__POWER, oldPower, newPower);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
   }
 
   /**
@@ -121,7 +107,29 @@ public class PinImpl extends MinimalEObjectImpl.Container implements Pin
    * @generated
    */
   @Override
-  public int getInput()
+  public void setPower(PinName newPower)
+  {
+    if (newPower != power)
+    {
+      NotificationChain msgs = null;
+      if (power != null)
+        msgs = ((InternalEObject)power).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PycomPackage.PIN__POWER, null, msgs);
+      if (newPower != null)
+        msgs = ((InternalEObject)newPower).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PycomPackage.PIN__POWER, null, msgs);
+      msgs = basicSetPower(newPower, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, PycomPackage.PIN__POWER, newPower, newPower));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public PinName getInput()
   {
     return input;
   }
@@ -131,13 +139,56 @@ public class PinImpl extends MinimalEObjectImpl.Container implements Pin
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
-  public void setInput(int newInput)
+  public NotificationChain basicSetInput(PinName newInput, NotificationChain msgs)
   {
-    int oldInput = input;
+    PinName oldInput = input;
     input = newInput;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, PycomPackage.PIN__INPUT, oldInput, input));
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PycomPackage.PIN__INPUT, oldInput, newInput);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setInput(PinName newInput)
+  {
+    if (newInput != input)
+    {
+      NotificationChain msgs = null;
+      if (input != null)
+        msgs = ((InternalEObject)input).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PycomPackage.PIN__INPUT, null, msgs);
+      if (newInput != null)
+        msgs = ((InternalEObject)newInput).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PycomPackage.PIN__INPUT, null, msgs);
+      msgs = basicSetInput(newInput, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, PycomPackage.PIN__INPUT, newInput, newInput));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  {
+    switch (featureID)
+    {
+      case PycomPackage.PIN__POWER:
+        return basicSetPower(null, msgs);
+      case PycomPackage.PIN__INPUT:
+        return basicSetInput(null, msgs);
+    }
+    return super.eInverseRemove(otherEnd, featureID, msgs);
   }
 
   /**
@@ -169,10 +220,10 @@ public class PinImpl extends MinimalEObjectImpl.Container implements Pin
     switch (featureID)
     {
       case PycomPackage.PIN__POWER:
-        setPower((Integer)newValue);
+        setPower((PinName)newValue);
         return;
       case PycomPackage.PIN__INPUT:
-        setInput((Integer)newValue);
+        setInput((PinName)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -189,10 +240,10 @@ public class PinImpl extends MinimalEObjectImpl.Container implements Pin
     switch (featureID)
     {
       case PycomPackage.PIN__POWER:
-        setPower(POWER_EDEFAULT);
+        setPower((PinName)null);
         return;
       case PycomPackage.PIN__INPUT:
-        setInput(INPUT_EDEFAULT);
+        setInput((PinName)null);
         return;
     }
     super.eUnset(featureID);
@@ -209,30 +260,11 @@ public class PinImpl extends MinimalEObjectImpl.Container implements Pin
     switch (featureID)
     {
       case PycomPackage.PIN__POWER:
-        return power != POWER_EDEFAULT;
+        return power != null;
       case PycomPackage.PIN__INPUT:
-        return input != INPUT_EDEFAULT;
+        return input != null;
     }
     return super.eIsSet(featureID);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public String toString()
-  {
-    if (eIsProxy()) return super.toString();
-
-    StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (power: ");
-    result.append(power);
-    result.append(", input: ");
-    result.append(input);
-    result.append(')');
-    return result.toString();
   }
 
 } //PinImpl

@@ -25,47 +25,47 @@ import org.eclipse.emf.ecore.EObject;
 public interface Pin extends EObject
 {
   /**
-   * Returns the value of the '<em><b>Power</b></em>' attribute.
+   * Returns the value of the '<em><b>Power</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Power</em>' attribute.
-   * @see #setPower(int)
+   * @return the value of the '<em>Power</em>' containment reference.
+   * @see #setPower(PinName)
    * @see xtext.pycom.PycomPackage#getPin_Power()
-   * @model
+   * @model containment="true"
    * @generated
    */
-  int getPower();
+  PinName getPower();
 
   /**
-   * Sets the value of the '{@link xtext.pycom.Pin#getPower <em>Power</em>}' attribute.
+   * Sets the value of the '{@link xtext.pycom.Pin#getPower <em>Power</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Power</em>' attribute.
+   * @param value the new value of the '<em>Power</em>' containment reference.
    * @see #getPower()
    * @generated
    */
-  void setPower(int value);
+  void setPower(PinName value);
 
   /**
-   * Returns the value of the '<em><b>Input</b></em>' attribute.
+   * Returns the value of the '<em><b>Input</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Input</em>' attribute.
-   * @see #setInput(int)
+   * @return the value of the '<em>Input</em>' containment reference.
+   * @see #setInput(PinName)
    * @see xtext.pycom.PycomPackage#getPin_Input()
-   * @model
+   * @model containment="true"
    * @generated
    */
-  int getInput();
+  PinName getInput();
 
   /**
-   * Sets the value of the '{@link xtext.pycom.Pin#getInput <em>Input</em>}' attribute.
+   * Sets the value of the '{@link xtext.pycom.Pin#getInput <em>Input</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Input</em>' attribute.
+   * @param value the new value of the '<em>Input</em>' containment reference.
    * @see #getInput()
    * @generated
    */
-  void setInput(int value);
+  void setInput(PinName value);
 
 } // Pin

@@ -3,6 +3,7 @@
  */
 package xtext.pycom;
 
+import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -13,35 +14,58 @@ package xtext.pycom;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link xtext.pycom.LogicExp#getCondition <em>Condition</em>}</li>
+ *   <li>{@link xtext.pycom.LogicExp#getBoolVal <em>Bool Val</em>}</li>
+ *   <li>{@link xtext.pycom.LogicExp#getCompExp <em>Comp Exp</em>}</li>
  * </ul>
  *
  * @see xtext.pycom.PycomPackage#getLogicExp()
  * @model
  * @generated
  */
-public interface LogicExp extends Condition
+public interface LogicExp extends EObject
 {
   /**
-   * Returns the value of the '<em><b>Condition</b></em>' containment reference.
+   * Returns the value of the '<em><b>Bool Val</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Condition</em>' containment reference.
-   * @see #setCondition(Condition)
-   * @see xtext.pycom.PycomPackage#getLogicExp_Condition()
+   * @return the value of the '<em>Bool Val</em>' containment reference.
+   * @see #setBoolVal(xtext.pycom.Boolean)
+   * @see xtext.pycom.PycomPackage#getLogicExp_BoolVal()
    * @model containment="true"
    * @generated
    */
-  Condition getCondition();
+  xtext.pycom.Boolean getBoolVal();
 
   /**
-   * Sets the value of the '{@link xtext.pycom.LogicExp#getCondition <em>Condition</em>}' containment reference.
+   * Sets the value of the '{@link xtext.pycom.LogicExp#getBoolVal <em>Bool Val</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Condition</em>' containment reference.
-   * @see #getCondition()
+   * @param value the new value of the '<em>Bool Val</em>' containment reference.
+   * @see #getBoolVal()
    * @generated
    */
-  void setCondition(Condition value);
+  void setBoolVal(xtext.pycom.Boolean value);
+
+  /**
+   * Returns the value of the '<em><b>Comp Exp</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Comp Exp</em>' containment reference.
+   * @see #setCompExp(ComparisonExp)
+   * @see xtext.pycom.PycomPackage#getLogicExp_CompExp()
+   * @model containment="true"
+   * @generated
+   */
+  ComparisonExp getCompExp();
+
+  /**
+   * Sets the value of the '{@link xtext.pycom.LogicExp#getCompExp <em>Comp Exp</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Comp Exp</em>' containment reference.
+   * @see #getCompExp()
+   * @generated
+   */
+  void setCompExp(ComparisonExp value);
 
 } // LogicExp

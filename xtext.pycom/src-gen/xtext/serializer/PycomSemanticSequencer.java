@@ -15,16 +15,23 @@ import org.eclipse.xtext.serializer.acceptor.SequenceFeeder;
 import org.eclipse.xtext.serializer.sequencer.AbstractDelegatingSemanticSequencer;
 import org.eclipse.xtext.serializer.sequencer.ITransientValueService.ValueTransient;
 import xtext.pycom.Actuator;
-import xtext.pycom.ActuatorFunction;
 import xtext.pycom.ActuatorType;
 import xtext.pycom.Board;
+import xtext.pycom.Communication;
 import xtext.pycom.ComparisonExp;
+import xtext.pycom.Condition;
+import xtext.pycom.ConditionalAction;
 import xtext.pycom.Connection;
+import xtext.pycom.Expression;
 import xtext.pycom.Function;
+import xtext.pycom.FunctionName;
+import xtext.pycom.Host;
+import xtext.pycom.LogicExp;
+import xtext.pycom.ModuleFunction;
 import xtext.pycom.Pin;
+import xtext.pycom.PinName;
 import xtext.pycom.PycomPackage;
 import xtext.pycom.Sensor;
-import xtext.pycom.SensorFunction;
 import xtext.pycom.SensorType;
 import xtext.pycom.Server;
 import xtext.services.PycomGrammarAccess;
@@ -46,9 +53,6 @@ public class PycomSemanticSequencer extends AbstractDelegatingSemanticSequencer 
 			case PycomPackage.ACTUATOR:
 				sequence_Actuator(context, (Actuator) semanticObject); 
 				return; 
-			case PycomPackage.ACTUATOR_FUNCTION:
-				sequence_ActuatorFunction(context, (ActuatorFunction) semanticObject); 
-				return; 
 			case PycomPackage.ACTUATOR_TYPE:
 				sequence_ActuatorType(context, (ActuatorType) semanticObject); 
 				return; 
@@ -56,51 +60,49 @@ public class PycomSemanticSequencer extends AbstractDelegatingSemanticSequencer 
 				sequence_Board(context, (Board) semanticObject); 
 				return; 
 			case PycomPackage.BOOLEAN:
-				if (rule == grammarAccess.getLogicExpRule()
-						|| rule == grammarAccess.getBooleanRule()) {
-					sequence_Boolean(context, (xtext.pycom.Boolean) semanticObject); 
-					return; 
-				}
-				else if (rule == grammarAccess.getConditionRule()) {
-					sequence_Boolean_Condition(context, (xtext.pycom.Boolean) semanticObject); 
-					return; 
-				}
-				else if (rule == grammarAccess.getConditionalActionRule()
-						|| rule == grammarAccess.getExpMemberRule()) {
-					sequence_Boolean_Condition_ConditionalAction(context, (xtext.pycom.Boolean) semanticObject); 
-					return; 
-				}
-				else break;
+				sequence_Boolean(context, (xtext.pycom.Boolean) semanticObject); 
+				return; 
+			case PycomPackage.COMMUNICATION:
+				sequence_Communication(context, (Communication) semanticObject); 
+				return; 
 			case PycomPackage.COMPARISON_EXP:
-				if (rule == grammarAccess.getLogicExpRule()
-						|| rule == grammarAccess.getComparisonExpRule()) {
-					sequence_ComparisonExp(context, (ComparisonExp) semanticObject); 
-					return; 
-				}
-				else if (rule == grammarAccess.getConditionRule()) {
-					sequence_ComparisonExp_Condition(context, (ComparisonExp) semanticObject); 
-					return; 
-				}
-				else if (rule == grammarAccess.getConditionalActionRule()
-						|| rule == grammarAccess.getExpMemberRule()) {
-					sequence_ComparisonExp_Condition_ConditionalAction(context, (ComparisonExp) semanticObject); 
-					return; 
-				}
-				else break;
+				sequence_ComparisonExp(context, (ComparisonExp) semanticObject); 
+				return; 
+			case PycomPackage.CONDITION:
+				sequence_Condition(context, (Condition) semanticObject); 
+				return; 
+			case PycomPackage.CONDITIONAL_ACTION:
+				sequence_ConditionalAction(context, (ConditionalAction) semanticObject); 
+				return; 
 			case PycomPackage.CONNECTION:
 				sequence_Connection(context, (Connection) semanticObject); 
+				return; 
+			case PycomPackage.EXPRESSION:
+				sequence_Expression(context, (Expression) semanticObject); 
 				return; 
 			case PycomPackage.FUNCTION:
 				sequence_Function(context, (Function) semanticObject); 
 				return; 
+			case PycomPackage.FUNCTION_NAME:
+				sequence_FunctionName(context, (FunctionName) semanticObject); 
+				return; 
+			case PycomPackage.HOST:
+				sequence_Host(context, (Host) semanticObject); 
+				return; 
+			case PycomPackage.LOGIC_EXP:
+				sequence_LogicExp(context, (LogicExp) semanticObject); 
+				return; 
+			case PycomPackage.MODULE_FUNCTION:
+				sequence_ModuleFunction(context, (ModuleFunction) semanticObject); 
+				return; 
 			case PycomPackage.PIN:
 				sequence_Pin(context, (Pin) semanticObject); 
 				return; 
+			case PycomPackage.PIN_NAME:
+				sequence_PinName(context, (PinName) semanticObject); 
+				return; 
 			case PycomPackage.SENSOR:
 				sequence_Sensor(context, (Sensor) semanticObject); 
-				return; 
-			case PycomPackage.SENSOR_FUNCTION:
-				sequence_SensorFunction(context, (SensorFunction) semanticObject); 
 				return; 
 			case PycomPackage.SENSOR_TYPE:
 				sequence_SensorType(context, (SensorType) semanticObject); 
@@ -118,25 +120,10 @@ public class PycomSemanticSequencer extends AbstractDelegatingSemanticSequencer 
 	
 	/**
 	 * Contexts:
-	 *     ExpMember returns ActuatorFunction
-	 *     Expression returns ActuatorFunction
-	 *     Function returns ActuatorFunction
-	 *     ActuatorFunction returns ActuatorFunction
-	 *
-	 * Constraint:
-	 *     ((board=[Board|ID] actuatorType=[ActuatorType|ID]) | actuatorType=[ActuatorType|ID])
-	 */
-	protected void sequence_ActuatorFunction(ISerializationContext context, ActuatorFunction semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Contexts:
 	 *     ActuatorType returns ActuatorType
 	 *
 	 * Constraint:
-	 *     (typeName=ActuatorName name=ID pins+=Pin?)
+	 *     (typeName=ActuatorName name=ID pins=Pin?)
 	 */
 	protected void sequence_ActuatorType(ISerializationContext context, ActuatorType semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -170,7 +157,6 @@ public class PycomSemanticSequencer extends AbstractDelegatingSemanticSequencer 
 	
 	/**
 	 * Contexts:
-	 *     LogicExp returns Boolean
 	 *     Boolean returns Boolean
 	 *
 	 * Constraint:
@@ -183,36 +169,23 @@ public class PycomSemanticSequencer extends AbstractDelegatingSemanticSequencer 
 	
 	/**
 	 * Contexts:
-	 *     Condition returns Boolean
+	 *     BoardMember returns Communication
+	 *     Communication returns Communication
 	 *
 	 * Constraint:
-	 *     ((value='true' | value='false') (condition=Condition | condition=Condition)?)
+	 *     (type='WiFi' | type='Bluetooth' | type='SigFox')
 	 */
-	protected void sequence_Boolean_Condition(ISerializationContext context, xtext.pycom.Boolean semanticObject) {
+	protected void sequence_Communication(ISerializationContext context, Communication semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Contexts:
-	 *     ConditionalAction returns Boolean
-	 *     ExpMember returns Boolean
-	 *
-	 * Constraint:
-	 *     ((value='true' | value='false') (condition=Condition | condition=Condition)? (ExpMembers+=ExpMember+ | ExpMembers+=ExpMember+)?)
-	 */
-	protected void sequence_Boolean_Condition_ConditionalAction(ISerializationContext context, xtext.pycom.Boolean semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     LogicExp returns ComparisonExp
 	 *     ComparisonExp returns ComparisonExp
 	 *
 	 * Constraint:
-	 *     (left=Expression op=Operator rigth=Expression)
+	 *     (left=Expression op=Operator right=Expression)
 	 */
 	protected void sequence_ComparisonExp(ISerializationContext context, ComparisonExp semanticObject) {
 		if (errorAcceptor != null) {
@@ -220,38 +193,38 @@ public class PycomSemanticSequencer extends AbstractDelegatingSemanticSequencer 
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, PycomPackage.Literals.COMPARISON_EXP__LEFT));
 			if (transientValues.isValueTransient(semanticObject, PycomPackage.Literals.COMPARISON_EXP__OP) == ValueTransient.YES)
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, PycomPackage.Literals.COMPARISON_EXP__OP));
-			if (transientValues.isValueTransient(semanticObject, PycomPackage.Literals.COMPARISON_EXP__RIGTH) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, PycomPackage.Literals.COMPARISON_EXP__RIGTH));
+			if (transientValues.isValueTransient(semanticObject, PycomPackage.Literals.COMPARISON_EXP__RIGHT) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, PycomPackage.Literals.COMPARISON_EXP__RIGHT));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
 		feeder.accept(grammarAccess.getComparisonExpAccess().getLeftExpressionParserRuleCall_0_0(), semanticObject.getLeft());
 		feeder.accept(grammarAccess.getComparisonExpAccess().getOpOperatorParserRuleCall_1_0(), semanticObject.getOp());
-		feeder.accept(grammarAccess.getComparisonExpAccess().getRigthExpressionParserRuleCall_2_0(), semanticObject.getRigth());
+		feeder.accept(grammarAccess.getComparisonExpAccess().getRightExpressionParserRuleCall_2_0(), semanticObject.getRight());
 		feeder.finish();
 	}
 	
 	
 	/**
 	 * Contexts:
-	 *     Condition returns ComparisonExp
+	 *     Condition returns Condition
 	 *
 	 * Constraint:
-	 *     (left=Expression op=Operator rigth=Expression (condition=Condition | condition=Condition)?)
+	 *     (logicEx=LogicExp | (logicEx=LogicExp operator='&&' nestedCondition=Condition) | (logicEx=LogicExp operator='||' nestedCondition=Condition))
 	 */
-	protected void sequence_ComparisonExp_Condition(ISerializationContext context, ComparisonExp semanticObject) {
+	protected void sequence_Condition(ISerializationContext context, Condition semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Contexts:
-	 *     ConditionalAction returns ComparisonExp
-	 *     ExpMember returns ComparisonExp
+	 *     ConditionalAction returns ConditionalAction
+	 *     ExpMember returns ConditionalAction
 	 *
 	 * Constraint:
-	 *     (left=Expression op=Operator rigth=Expression (condition=Condition | condition=Condition)? (ExpMembers+=ExpMember+ | ExpMembers+=ExpMember+)?)
+	 *     ((type='if' condition=Condition ExpMembers+=ExpMember*) | (type='while' condition=Condition ExpMembers+=ExpMember*))
 	 */
-	protected void sequence_ComparisonExp_Condition_ConditionalAction(ISerializationContext context, ComparisonExp semanticObject) {
+	protected void sequence_ConditionalAction(ISerializationContext context, ConditionalAction semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -261,29 +234,138 @@ public class PycomSemanticSequencer extends AbstractDelegatingSemanticSequencer 
 	 *     Connection returns Connection
 	 *
 	 * Constraint:
-	 *     ((ipAdr=Ipaddress | website=STRING) portnumber=Port)
+	 *     (host=Host portnumber=Port)
 	 */
 	protected void sequence_Connection(ISerializationContext context, Connection semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, PycomPackage.Literals.CONNECTION__HOST) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, PycomPackage.Literals.CONNECTION__HOST));
+			if (transientValues.isValueTransient(semanticObject, PycomPackage.Literals.CONNECTION__PORTNUMBER) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, PycomPackage.Literals.CONNECTION__PORTNUMBER));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getConnectionAccess().getHostHostParserRuleCall_0_0(), semanticObject.getHost());
+		feeder.accept(grammarAccess.getConnectionAccess().getPortnumberPortParserRuleCall_2_0(), semanticObject.getPortnumber());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     Expression returns Expression
+	 *
+	 * Constraint:
+	 *     (outputValue=INT | outputfunction=Function)
+	 */
+	protected void sequence_Expression(ISerializationContext context, Expression semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Contexts:
+	 *     FunctionName returns FunctionName
+	 *
+	 * Constraint:
+	 *     name=ID
+	 */
+	protected void sequence_FunctionName(ISerializationContext context, FunctionName semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, PycomPackage.Literals.FUNCTION_NAME__NAME) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, PycomPackage.Literals.FUNCTION_NAME__NAME));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getFunctionNameAccess().getNameIDTerminalRuleCall_0(), semanticObject.getName());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
 	 *     ExpMember returns Function
-	 *     Expression returns Function
 	 *     Function returns Function
 	 *
 	 * Constraint:
-	 *     board=[Board|ID]
+	 *     (board=[Board|ID] functionName=FunctionName)
 	 */
 	protected void sequence_Function(ISerializationContext context, Function semanticObject) {
 		if (errorAcceptor != null) {
 			if (transientValues.isValueTransient(semanticObject, PycomPackage.Literals.FUNCTION__BOARD) == ValueTransient.YES)
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, PycomPackage.Literals.FUNCTION__BOARD));
+			if (transientValues.isValueTransient(semanticObject, PycomPackage.Literals.FUNCTION__FUNCTION_NAME) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, PycomPackage.Literals.FUNCTION__FUNCTION_NAME));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getFunctionAccess().getBoardBoardIDTerminalRuleCall_2_0_0_1(), semanticObject.eGet(PycomPackage.Literals.FUNCTION__BOARD, false));
+		feeder.accept(grammarAccess.getFunctionAccess().getBoardBoardIDTerminalRuleCall_1_0_0_1(), semanticObject.eGet(PycomPackage.Literals.FUNCTION__BOARD, false));
+		feeder.accept(grammarAccess.getFunctionAccess().getFunctionNameFunctionNameParserRuleCall_1_2_0(), semanticObject.getFunctionName());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     Host returns Host
+	 *
+	 * Constraint:
+	 *     (ipAdr=Ipaddress | website=STRING)
+	 */
+	protected void sequence_Host(ISerializationContext context, Host semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     LogicExp returns LogicExp
+	 *
+	 * Constraint:
+	 *     (boolVal=Boolean | compExp=ComparisonExp)
+	 */
+	protected void sequence_LogicExp(ISerializationContext context, LogicExp semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     ExpMember returns ModuleFunction
+	 *     Function returns ModuleFunction
+	 *     ModuleFunction returns ModuleFunction
+	 *
+	 * Constraint:
+	 *     (board=[Board|ID] moduleType=[ModuleType|ID] functionName=FunctionName)
+	 */
+	protected void sequence_ModuleFunction(ISerializationContext context, ModuleFunction semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, PycomPackage.Literals.FUNCTION__BOARD) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, PycomPackage.Literals.FUNCTION__BOARD));
+			if (transientValues.isValueTransient(semanticObject, PycomPackage.Literals.MODULE_FUNCTION__MODULE_TYPE) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, PycomPackage.Literals.MODULE_FUNCTION__MODULE_TYPE));
+			if (transientValues.isValueTransient(semanticObject, PycomPackage.Literals.FUNCTION__FUNCTION_NAME) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, PycomPackage.Literals.FUNCTION__FUNCTION_NAME));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getModuleFunctionAccess().getBoardBoardIDTerminalRuleCall_0_0_1(), semanticObject.eGet(PycomPackage.Literals.FUNCTION__BOARD, false));
+		feeder.accept(grammarAccess.getModuleFunctionAccess().getModuleTypeModuleTypeIDTerminalRuleCall_2_0_1(), semanticObject.eGet(PycomPackage.Literals.MODULE_FUNCTION__MODULE_TYPE, false));
+		feeder.accept(grammarAccess.getModuleFunctionAccess().getFunctionNameFunctionNameParserRuleCall_4_0(), semanticObject.getFunctionName());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     PinName returns PinName
+	 *
+	 * Constraint:
+	 *     name=ID
+	 */
+	protected void sequence_PinName(ISerializationContext context, PinName semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, PycomPackage.Literals.PIN_NAME__NAME) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, PycomPackage.Literals.PIN_NAME__NAME));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getPinNameAccess().getNameIDTerminalRuleCall_0(), semanticObject.getName());
 		feeder.finish();
 	}
 	
@@ -293,7 +375,7 @@ public class PycomSemanticSequencer extends AbstractDelegatingSemanticSequencer 
 	 *     Pin returns Pin
 	 *
 	 * Constraint:
-	 *     (power=INT input=INT)
+	 *     (power=PinName input=PinName)
 	 */
 	protected void sequence_Pin(ISerializationContext context, Pin semanticObject) {
 		if (errorAcceptor != null) {
@@ -303,24 +385,9 @@ public class PycomSemanticSequencer extends AbstractDelegatingSemanticSequencer 
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, PycomPackage.Literals.PIN__INPUT));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getPinAccess().getPowerINTTerminalRuleCall_0_0(), semanticObject.getPower());
-		feeder.accept(grammarAccess.getPinAccess().getInputINTTerminalRuleCall_2_0(), semanticObject.getInput());
+		feeder.accept(grammarAccess.getPinAccess().getPowerPinNameParserRuleCall_0_0(), semanticObject.getPower());
+		feeder.accept(grammarAccess.getPinAccess().getInputPinNameParserRuleCall_2_0(), semanticObject.getInput());
 		feeder.finish();
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     ExpMember returns SensorFunction
-	 *     Expression returns SensorFunction
-	 *     Function returns SensorFunction
-	 *     SensorFunction returns SensorFunction
-	 *
-	 * Constraint:
-	 *     ((board=[Board|ID] sensorType=[SensorType|ID]) | sensorType=[SensorType|ID])
-	 */
-	protected void sequence_SensorFunction(ISerializationContext context, SensorFunction semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
@@ -329,7 +396,7 @@ public class PycomSemanticSequencer extends AbstractDelegatingSemanticSequencer 
 	 *     SensorType returns SensorType
 	 *
 	 * Constraint:
-	 *     (typeName=SensorName name=ID pins+=Pin?)
+	 *     (typeName=SensorName name=ID pins=Pin?)
 	 */
 	protected void sequence_SensorType(ISerializationContext context, SensorType semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

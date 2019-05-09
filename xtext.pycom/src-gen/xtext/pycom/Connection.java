@@ -14,8 +14,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link xtext.pycom.Connection#getIpAdr <em>Ip Adr</em>}</li>
- *   <li>{@link xtext.pycom.Connection#getWebsite <em>Website</em>}</li>
+ *   <li>{@link xtext.pycom.Connection#getHost <em>Host</em>}</li>
  *   <li>{@link xtext.pycom.Connection#getPortnumber <em>Portnumber</em>}</li>
  * </ul>
  *
@@ -26,48 +25,26 @@ import org.eclipse.emf.ecore.EObject;
 public interface Connection extends EObject
 {
   /**
-   * Returns the value of the '<em><b>Ip Adr</b></em>' attribute.
+   * Returns the value of the '<em><b>Host</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Ip Adr</em>' attribute.
-   * @see #setIpAdr(String)
-   * @see xtext.pycom.PycomPackage#getConnection_IpAdr()
-   * @model
+   * @return the value of the '<em>Host</em>' containment reference.
+   * @see #setHost(Host)
+   * @see xtext.pycom.PycomPackage#getConnection_Host()
+   * @model containment="true"
    * @generated
    */
-  String getIpAdr();
+  Host getHost();
 
   /**
-   * Sets the value of the '{@link xtext.pycom.Connection#getIpAdr <em>Ip Adr</em>}' attribute.
+   * Sets the value of the '{@link xtext.pycom.Connection#getHost <em>Host</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Ip Adr</em>' attribute.
-   * @see #getIpAdr()
+   * @param value the new value of the '<em>Host</em>' containment reference.
+   * @see #getHost()
    * @generated
    */
-  void setIpAdr(String value);
-
-  /**
-   * Returns the value of the '<em><b>Website</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Website</em>' attribute.
-   * @see #setWebsite(String)
-   * @see xtext.pycom.PycomPackage#getConnection_Website()
-   * @model
-   * @generated
-   */
-  String getWebsite();
-
-  /**
-   * Sets the value of the '{@link xtext.pycom.Connection#getWebsite <em>Website</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Website</em>' attribute.
-   * @see #getWebsite()
-   * @generated
-   */
-  void setWebsite(String value);
+  void setHost(Host value);
 
   /**
    * Returns the value of the '<em><b>Portnumber</b></em>' attribute.

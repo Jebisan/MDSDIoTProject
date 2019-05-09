@@ -11,10 +11,10 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 
 import xtext.pycom.Actuator;
-import xtext.pycom.ActuatorFunction;
 import xtext.pycom.ActuatorType;
 import xtext.pycom.Board;
 import xtext.pycom.BoardMember;
+import xtext.pycom.Communication;
 import xtext.pycom.ComparisonExp;
 import xtext.pycom.Condition;
 import xtext.pycom.ConditionalAction;
@@ -22,11 +22,15 @@ import xtext.pycom.Connection;
 import xtext.pycom.ExpMember;
 import xtext.pycom.Expression;
 import xtext.pycom.Function;
+import xtext.pycom.FunctionName;
+import xtext.pycom.Host;
 import xtext.pycom.LogicExp;
+import xtext.pycom.ModuleFunction;
+import xtext.pycom.ModuleType;
 import xtext.pycom.Pin;
+import xtext.pycom.PinName;
 import xtext.pycom.PycomPackage;
 import xtext.pycom.Sensor;
-import xtext.pycom.SensorFunction;
 import xtext.pycom.SensorType;
 import xtext.pycom.Server;
 
@@ -109,6 +113,11 @@ public class PycomAdapterFactory extends AdapterFactoryImpl
         return createConnectionAdapter();
       }
       @Override
+      public Adapter caseHost(Host object)
+      {
+        return createHostAdapter();
+      }
+      @Override
       public Adapter caseBoard(Board object)
       {
         return createBoardAdapter();
@@ -139,19 +148,24 @@ public class PycomAdapterFactory extends AdapterFactoryImpl
         return createActuatorAdapter();
       }
       @Override
-      public Adapter caseActuatorType(ActuatorType object)
+      public Adapter caseCommunication(Communication object)
       {
-        return createActuatorTypeAdapter();
+        return createCommunicationAdapter();
       }
       @Override
-      public Adapter caseSensorType(SensorType object)
+      public Adapter caseModuleType(ModuleType object)
       {
-        return createSensorTypeAdapter();
+        return createModuleTypeAdapter();
       }
       @Override
       public Adapter casePin(Pin object)
       {
         return createPinAdapter();
+      }
+      @Override
+      public Adapter casePinName(PinName object)
+      {
+        return createPinNameAdapter();
       }
       @Override
       public Adapter caseCondition(Condition object)
@@ -184,14 +198,24 @@ public class PycomAdapterFactory extends AdapterFactoryImpl
         return createFunctionAdapter();
       }
       @Override
-      public Adapter caseActuatorFunction(ActuatorFunction object)
+      public Adapter caseModuleFunction(ModuleFunction object)
       {
-        return createActuatorFunctionAdapter();
+        return createModuleFunctionAdapter();
       }
       @Override
-      public Adapter caseSensorFunction(SensorFunction object)
+      public Adapter caseFunctionName(FunctionName object)
       {
-        return createSensorFunctionAdapter();
+        return createFunctionNameAdapter();
+      }
+      @Override
+      public Adapter caseActuatorType(ActuatorType object)
+      {
+        return createActuatorTypeAdapter();
+      }
+      @Override
+      public Adapter caseSensorType(SensorType object)
+      {
+        return createSensorTypeAdapter();
       }
       @Override
       public Adapter defaultCase(EObject object)
@@ -256,6 +280,21 @@ public class PycomAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createConnectionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link xtext.pycom.Host <em>Host</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see xtext.pycom.Host
+   * @generated
+   */
+  public Adapter createHostAdapter()
   {
     return null;
   }
@@ -351,31 +390,31 @@ public class PycomAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link xtext.pycom.ActuatorType <em>Actuator Type</em>}'.
+   * Creates a new adapter for an object of class '{@link xtext.pycom.Communication <em>Communication</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see xtext.pycom.ActuatorType
+   * @see xtext.pycom.Communication
    * @generated
    */
-  public Adapter createActuatorTypeAdapter()
+  public Adapter createCommunicationAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link xtext.pycom.SensorType <em>Sensor Type</em>}'.
+   * Creates a new adapter for an object of class '{@link xtext.pycom.ModuleType <em>Module Type</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see xtext.pycom.SensorType
+   * @see xtext.pycom.ModuleType
    * @generated
    */
-  public Adapter createSensorTypeAdapter()
+  public Adapter createModuleTypeAdapter()
   {
     return null;
   }
@@ -391,6 +430,21 @@ public class PycomAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createPinAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link xtext.pycom.PinName <em>Pin Name</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see xtext.pycom.PinName
+   * @generated
+   */
+  public Adapter createPinNameAdapter()
   {
     return null;
   }
@@ -486,31 +540,61 @@ public class PycomAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link xtext.pycom.ActuatorFunction <em>Actuator Function</em>}'.
+   * Creates a new adapter for an object of class '{@link xtext.pycom.ModuleFunction <em>Module Function</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see xtext.pycom.ActuatorFunction
+   * @see xtext.pycom.ModuleFunction
    * @generated
    */
-  public Adapter createActuatorFunctionAdapter()
+  public Adapter createModuleFunctionAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link xtext.pycom.SensorFunction <em>Sensor Function</em>}'.
+   * Creates a new adapter for an object of class '{@link xtext.pycom.FunctionName <em>Function Name</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see xtext.pycom.SensorFunction
+   * @see xtext.pycom.FunctionName
    * @generated
    */
-  public Adapter createSensorFunctionAdapter()
+  public Adapter createFunctionNameAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link xtext.pycom.ActuatorType <em>Actuator Type</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see xtext.pycom.ActuatorType
+   * @generated
+   */
+  public Adapter createActuatorTypeAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link xtext.pycom.SensorType <em>Sensor Type</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see xtext.pycom.SensorType
+   * @generated
+   */
+  public Adapter createSensorTypeAdapter()
   {
     return null;
   }

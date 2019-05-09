@@ -3,6 +3,7 @@
  */
 package xtext.pycom;
 
+import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -15,14 +16,14 @@ package xtext.pycom;
  * <ul>
  *   <li>{@link xtext.pycom.ComparisonExp#getLeft <em>Left</em>}</li>
  *   <li>{@link xtext.pycom.ComparisonExp#getOp <em>Op</em>}</li>
- *   <li>{@link xtext.pycom.ComparisonExp#getRigth <em>Rigth</em>}</li>
+ *   <li>{@link xtext.pycom.ComparisonExp#getRight <em>Right</em>}</li>
  * </ul>
  *
  * @see xtext.pycom.PycomPackage#getComparisonExp()
  * @model
  * @generated
  */
-public interface ComparisonExp extends LogicExp
+public interface ComparisonExp extends EObject
 {
   /**
    * Returns the value of the '<em><b>Left</b></em>' containment reference.
@@ -69,25 +70,25 @@ public interface ComparisonExp extends LogicExp
   void setOp(String value);
 
   /**
-   * Returns the value of the '<em><b>Rigth</b></em>' containment reference.
+   * Returns the value of the '<em><b>Right</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Rigth</em>' containment reference.
-   * @see #setRigth(Expression)
-   * @see xtext.pycom.PycomPackage#getComparisonExp_Rigth()
+   * @return the value of the '<em>Right</em>' containment reference.
+   * @see #setRight(Expression)
+   * @see xtext.pycom.PycomPackage#getComparisonExp_Right()
    * @model containment="true"
    * @generated
    */
-  Expression getRigth();
+  Expression getRight();
 
   /**
-   * Sets the value of the '{@link xtext.pycom.ComparisonExp#getRigth <em>Rigth</em>}' containment reference.
+   * Sets the value of the '{@link xtext.pycom.ComparisonExp#getRight <em>Right</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Rigth</em>' containment reference.
-   * @see #getRigth()
+   * @param value the new value of the '<em>Right</em>' containment reference.
+   * @see #getRight()
    * @generated
    */
-  void setRigth(Expression value);
+  void setRight(Expression value);
 
 } // ComparisonExp

@@ -10,8 +10,9 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
-import xtext.pycom.Condition;
+import xtext.pycom.ComparisonExp;
 import xtext.pycom.LogicExp;
 import xtext.pycom.PycomPackage;
 
@@ -23,22 +24,33 @@ import xtext.pycom.PycomPackage;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link xtext.pycom.impl.LogicExpImpl#getCondition <em>Condition</em>}</li>
+ *   <li>{@link xtext.pycom.impl.LogicExpImpl#getBoolVal <em>Bool Val</em>}</li>
+ *   <li>{@link xtext.pycom.impl.LogicExpImpl#getCompExp <em>Comp Exp</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class LogicExpImpl extends ConditionImpl implements LogicExp
+public class LogicExpImpl extends MinimalEObjectImpl.Container implements LogicExp
 {
   /**
-   * The cached value of the '{@link #getCondition() <em>Condition</em>}' containment reference.
+   * The cached value of the '{@link #getBoolVal() <em>Bool Val</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getCondition()
+   * @see #getBoolVal()
    * @generated
    * @ordered
    */
-  protected Condition condition;
+  protected xtext.pycom.Boolean boolVal;
+
+  /**
+   * The cached value of the '{@link #getCompExp() <em>Comp Exp</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getCompExp()
+   * @generated
+   * @ordered
+   */
+  protected ComparisonExp compExp;
 
   /**
    * <!-- begin-user-doc -->
@@ -67,9 +79,9 @@ public class LogicExpImpl extends ConditionImpl implements LogicExp
    * @generated
    */
   @Override
-  public Condition getCondition()
+  public xtext.pycom.Boolean getBoolVal()
   {
-    return condition;
+    return boolVal;
   }
 
   /**
@@ -77,13 +89,13 @@ public class LogicExpImpl extends ConditionImpl implements LogicExp
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetCondition(Condition newCondition, NotificationChain msgs)
+  public NotificationChain basicSetBoolVal(xtext.pycom.Boolean newBoolVal, NotificationChain msgs)
   {
-    Condition oldCondition = condition;
-    condition = newCondition;
+    xtext.pycom.Boolean oldBoolVal = boolVal;
+    boolVal = newBoolVal;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PycomPackage.LOGIC_EXP__CONDITION, oldCondition, newCondition);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PycomPackage.LOGIC_EXP__BOOL_VAL, oldBoolVal, newBoolVal);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -95,20 +107,70 @@ public class LogicExpImpl extends ConditionImpl implements LogicExp
    * @generated
    */
   @Override
-  public void setCondition(Condition newCondition)
+  public void setBoolVal(xtext.pycom.Boolean newBoolVal)
   {
-    if (newCondition != condition)
+    if (newBoolVal != boolVal)
     {
       NotificationChain msgs = null;
-      if (condition != null)
-        msgs = ((InternalEObject)condition).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PycomPackage.LOGIC_EXP__CONDITION, null, msgs);
-      if (newCondition != null)
-        msgs = ((InternalEObject)newCondition).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PycomPackage.LOGIC_EXP__CONDITION, null, msgs);
-      msgs = basicSetCondition(newCondition, msgs);
+      if (boolVal != null)
+        msgs = ((InternalEObject)boolVal).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PycomPackage.LOGIC_EXP__BOOL_VAL, null, msgs);
+      if (newBoolVal != null)
+        msgs = ((InternalEObject)newBoolVal).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PycomPackage.LOGIC_EXP__BOOL_VAL, null, msgs);
+      msgs = basicSetBoolVal(newBoolVal, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, PycomPackage.LOGIC_EXP__CONDITION, newCondition, newCondition));
+      eNotify(new ENotificationImpl(this, Notification.SET, PycomPackage.LOGIC_EXP__BOOL_VAL, newBoolVal, newBoolVal));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public ComparisonExp getCompExp()
+  {
+    return compExp;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetCompExp(ComparisonExp newCompExp, NotificationChain msgs)
+  {
+    ComparisonExp oldCompExp = compExp;
+    compExp = newCompExp;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PycomPackage.LOGIC_EXP__COMP_EXP, oldCompExp, newCompExp);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setCompExp(ComparisonExp newCompExp)
+  {
+    if (newCompExp != compExp)
+    {
+      NotificationChain msgs = null;
+      if (compExp != null)
+        msgs = ((InternalEObject)compExp).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PycomPackage.LOGIC_EXP__COMP_EXP, null, msgs);
+      if (newCompExp != null)
+        msgs = ((InternalEObject)newCompExp).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PycomPackage.LOGIC_EXP__COMP_EXP, null, msgs);
+      msgs = basicSetCompExp(newCompExp, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, PycomPackage.LOGIC_EXP__COMP_EXP, newCompExp, newCompExp));
   }
 
   /**
@@ -121,8 +183,10 @@ public class LogicExpImpl extends ConditionImpl implements LogicExp
   {
     switch (featureID)
     {
-      case PycomPackage.LOGIC_EXP__CONDITION:
-        return basicSetCondition(null, msgs);
+      case PycomPackage.LOGIC_EXP__BOOL_VAL:
+        return basicSetBoolVal(null, msgs);
+      case PycomPackage.LOGIC_EXP__COMP_EXP:
+        return basicSetCompExp(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -137,8 +201,10 @@ public class LogicExpImpl extends ConditionImpl implements LogicExp
   {
     switch (featureID)
     {
-      case PycomPackage.LOGIC_EXP__CONDITION:
-        return getCondition();
+      case PycomPackage.LOGIC_EXP__BOOL_VAL:
+        return getBoolVal();
+      case PycomPackage.LOGIC_EXP__COMP_EXP:
+        return getCompExp();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -153,8 +219,11 @@ public class LogicExpImpl extends ConditionImpl implements LogicExp
   {
     switch (featureID)
     {
-      case PycomPackage.LOGIC_EXP__CONDITION:
-        setCondition((Condition)newValue);
+      case PycomPackage.LOGIC_EXP__BOOL_VAL:
+        setBoolVal((xtext.pycom.Boolean)newValue);
+        return;
+      case PycomPackage.LOGIC_EXP__COMP_EXP:
+        setCompExp((ComparisonExp)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -170,8 +239,11 @@ public class LogicExpImpl extends ConditionImpl implements LogicExp
   {
     switch (featureID)
     {
-      case PycomPackage.LOGIC_EXP__CONDITION:
-        setCondition((Condition)null);
+      case PycomPackage.LOGIC_EXP__BOOL_VAL:
+        setBoolVal((xtext.pycom.Boolean)null);
+        return;
+      case PycomPackage.LOGIC_EXP__COMP_EXP:
+        setCompExp((ComparisonExp)null);
         return;
     }
     super.eUnset(featureID);
@@ -187,8 +259,10 @@ public class LogicExpImpl extends ConditionImpl implements LogicExp
   {
     switch (featureID)
     {
-      case PycomPackage.LOGIC_EXP__CONDITION:
-        return condition != null;
+      case PycomPackage.LOGIC_EXP__BOOL_VAL:
+        return boolVal != null;
+      case PycomPackage.LOGIC_EXP__COMP_EXP:
+        return compExp != null;
     }
     return super.eIsSet(featureID);
   }

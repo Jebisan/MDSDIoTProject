@@ -11,10 +11,10 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import xtext.pycom.Actuator;
-import xtext.pycom.ActuatorFunction;
 import xtext.pycom.ActuatorType;
 import xtext.pycom.Board;
 import xtext.pycom.BoardMember;
+import xtext.pycom.Communication;
 import xtext.pycom.ComparisonExp;
 import xtext.pycom.Condition;
 import xtext.pycom.ConditionalAction;
@@ -22,12 +22,16 @@ import xtext.pycom.Connection;
 import xtext.pycom.ExpMember;
 import xtext.pycom.Expression;
 import xtext.pycom.Function;
+import xtext.pycom.FunctionName;
+import xtext.pycom.Host;
 import xtext.pycom.LogicExp;
+import xtext.pycom.ModuleFunction;
+import xtext.pycom.ModuleType;
 import xtext.pycom.Pin;
+import xtext.pycom.PinName;
 import xtext.pycom.PycomFactory;
 import xtext.pycom.PycomPackage;
 import xtext.pycom.Sensor;
-import xtext.pycom.SensorFunction;
 import xtext.pycom.SensorType;
 import xtext.pycom.Server;
 
@@ -59,6 +63,13 @@ public class PycomPackageImpl extends EPackageImpl implements PycomPackage
    * @generated
    */
   private EClass connectionEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass hostEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -107,14 +118,14 @@ public class PycomPackageImpl extends EPackageImpl implements PycomPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass actuatorTypeEClass = null;
+  private EClass communicationEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass sensorTypeEClass = null;
+  private EClass moduleTypeEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -122,6 +133,13 @@ public class PycomPackageImpl extends EPackageImpl implements PycomPackage
    * @generated
    */
   private EClass pinEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass pinNameEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -170,14 +188,28 @@ public class PycomPackageImpl extends EPackageImpl implements PycomPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass actuatorFunctionEClass = null;
+  private EClass moduleFunctionEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass sensorFunctionEClass = null;
+  private EClass functionNameEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass actuatorTypeEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass sensorTypeEClass = null;
 
   /**
    * Creates an instance of the model <b>Package</b>, registered with
@@ -336,20 +368,9 @@ public class PycomPackageImpl extends EPackageImpl implements PycomPackage
    * @generated
    */
   @Override
-  public EAttribute getConnection_IpAdr()
+  public EReference getConnection_Host()
   {
-    return (EAttribute)connectionEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EAttribute getConnection_Website()
-  {
-    return (EAttribute)connectionEClass.getEStructuralFeatures().get(1);
+    return (EReference)connectionEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -360,7 +381,40 @@ public class PycomPackageImpl extends EPackageImpl implements PycomPackage
   @Override
   public EAttribute getConnection_Portnumber()
   {
-    return (EAttribute)connectionEClass.getEStructuralFeatures().get(2);
+    return (EAttribute)connectionEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EClass getHost()
+  {
+    return hostEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EAttribute getHost_IpAdr()
+  {
+    return (EAttribute)hostEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EAttribute getHost_Website()
+  {
+    return (EAttribute)hostEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -424,6 +478,39 @@ public class PycomPackageImpl extends EPackageImpl implements PycomPackage
    * @generated
    */
   @Override
+  public EAttribute getConditionalAction_Type()
+  {
+    return (EAttribute)conditionalActionEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getConditionalAction_Condition()
+  {
+    return (EReference)conditionalActionEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getConditionalAction_ExpMembers()
+  {
+    return (EReference)conditionalActionEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EClass getExpMember()
   {
     return expMemberEClass;
@@ -479,9 +566,9 @@ public class PycomPackageImpl extends EPackageImpl implements PycomPackage
    * @generated
    */
   @Override
-  public EClass getActuatorType()
+  public EClass getCommunication()
   {
-    return actuatorTypeEClass;
+    return communicationEClass;
   }
 
   /**
@@ -490,9 +577,9 @@ public class PycomPackageImpl extends EPackageImpl implements PycomPackage
    * @generated
    */
   @Override
-  public EAttribute getActuatorType_TypeName()
+  public EAttribute getCommunication_Type()
   {
-    return (EAttribute)actuatorTypeEClass.getEStructuralFeatures().get(0);
+    return (EAttribute)communicationEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -501,9 +588,9 @@ public class PycomPackageImpl extends EPackageImpl implements PycomPackage
    * @generated
    */
   @Override
-  public EAttribute getActuatorType_Name()
+  public EClass getModuleType()
   {
-    return (EAttribute)actuatorTypeEClass.getEStructuralFeatures().get(1);
+    return moduleTypeEClass;
   }
 
   /**
@@ -512,9 +599,9 @@ public class PycomPackageImpl extends EPackageImpl implements PycomPackage
    * @generated
    */
   @Override
-  public EReference getActuatorType_Pins()
+  public EAttribute getModuleType_TypeName()
   {
-    return (EReference)actuatorTypeEClass.getEStructuralFeatures().get(2);
+    return (EAttribute)moduleTypeEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -523,9 +610,9 @@ public class PycomPackageImpl extends EPackageImpl implements PycomPackage
    * @generated
    */
   @Override
-  public EClass getSensorType()
+  public EAttribute getModuleType_Name()
   {
-    return sensorTypeEClass;
+    return (EAttribute)moduleTypeEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -534,31 +621,9 @@ public class PycomPackageImpl extends EPackageImpl implements PycomPackage
    * @generated
    */
   @Override
-  public EAttribute getSensorType_TypeName()
+  public EReference getModuleType_Pins()
   {
-    return (EAttribute)sensorTypeEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EAttribute getSensorType_Name()
-  {
-    return (EAttribute)sensorTypeEClass.getEStructuralFeatures().get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EReference getSensorType_Pins()
-  {
-    return (EReference)sensorTypeEClass.getEStructuralFeatures().get(2);
+    return (EReference)moduleTypeEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -578,9 +643,9 @@ public class PycomPackageImpl extends EPackageImpl implements PycomPackage
    * @generated
    */
   @Override
-  public EAttribute getPin_Power()
+  public EReference getPin_Power()
   {
-    return (EAttribute)pinEClass.getEStructuralFeatures().get(0);
+    return (EReference)pinEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -589,9 +654,31 @@ public class PycomPackageImpl extends EPackageImpl implements PycomPackage
    * @generated
    */
   @Override
-  public EAttribute getPin_Input()
+  public EReference getPin_Input()
   {
-    return (EAttribute)pinEClass.getEStructuralFeatures().get(1);
+    return (EReference)pinEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EClass getPinName()
+  {
+    return pinNameEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EAttribute getPinName_Name()
+  {
+    return (EAttribute)pinNameEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -611,9 +698,31 @@ public class PycomPackageImpl extends EPackageImpl implements PycomPackage
    * @generated
    */
   @Override
-  public EReference getCondition_ExpMembers()
+  public EReference getCondition_LogicEx()
   {
     return (EReference)conditionEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EAttribute getCondition_Operator()
+  {
+    return (EAttribute)conditionEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getCondition_NestedCondition()
+  {
+    return (EReference)conditionEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -633,9 +742,20 @@ public class PycomPackageImpl extends EPackageImpl implements PycomPackage
    * @generated
    */
   @Override
-  public EReference getLogicExp_Condition()
+  public EReference getLogicExp_BoolVal()
   {
     return (EReference)logicExpEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getLogicExp_CompExp()
+  {
+    return (EReference)logicExpEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -699,7 +819,7 @@ public class PycomPackageImpl extends EPackageImpl implements PycomPackage
    * @generated
    */
   @Override
-  public EReference getComparisonExp_Rigth()
+  public EReference getComparisonExp_Right()
   {
     return (EReference)comparisonExpEClass.getEStructuralFeatures().get(2);
   }
@@ -713,6 +833,28 @@ public class PycomPackageImpl extends EPackageImpl implements PycomPackage
   public EClass getExpression()
   {
     return expressionEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EAttribute getExpression_OutputValue()
+  {
+    return (EAttribute)expressionEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getExpression_Outputfunction()
+  {
+    return (EReference)expressionEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -743,9 +885,9 @@ public class PycomPackageImpl extends EPackageImpl implements PycomPackage
    * @generated
    */
   @Override
-  public EClass getActuatorFunction()
+  public EReference getFunction_FunctionName()
   {
-    return actuatorFunctionEClass;
+    return (EReference)functionEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -754,9 +896,9 @@ public class PycomPackageImpl extends EPackageImpl implements PycomPackage
    * @generated
    */
   @Override
-  public EReference getActuatorFunction_ActuatorType()
+  public EClass getModuleFunction()
   {
-    return (EReference)actuatorFunctionEClass.getEStructuralFeatures().get(0);
+    return moduleFunctionEClass;
   }
 
   /**
@@ -765,9 +907,9 @@ public class PycomPackageImpl extends EPackageImpl implements PycomPackage
    * @generated
    */
   @Override
-  public EClass getSensorFunction()
+  public EReference getModuleFunction_ModuleType()
   {
-    return sensorFunctionEClass;
+    return (EReference)moduleFunctionEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -776,9 +918,42 @@ public class PycomPackageImpl extends EPackageImpl implements PycomPackage
    * @generated
    */
   @Override
-  public EReference getSensorFunction_SensorType()
+  public EClass getFunctionName()
   {
-    return (EReference)sensorFunctionEClass.getEStructuralFeatures().get(0);
+    return functionNameEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EAttribute getFunctionName_Name()
+  {
+    return (EAttribute)functionNameEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EClass getActuatorType()
+  {
+    return actuatorTypeEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EClass getSensorType()
+  {
+    return sensorTypeEClass;
   }
 
   /**
@@ -822,9 +997,12 @@ public class PycomPackageImpl extends EPackageImpl implements PycomPackage
     createEReference(serverEClass, SERVER__EXPS);
 
     connectionEClass = createEClass(CONNECTION);
-    createEAttribute(connectionEClass, CONNECTION__IP_ADR);
-    createEAttribute(connectionEClass, CONNECTION__WEBSITE);
+    createEReference(connectionEClass, CONNECTION__HOST);
     createEAttribute(connectionEClass, CONNECTION__PORTNUMBER);
+
+    hostEClass = createEClass(HOST);
+    createEAttribute(hostEClass, HOST__IP_ADR);
+    createEAttribute(hostEClass, HOST__WEBSITE);
 
     boardEClass = createEClass(BOARD);
     createEAttribute(boardEClass, BOARD__NAME);
@@ -833,6 +1011,9 @@ public class PycomPackageImpl extends EPackageImpl implements PycomPackage
     boardMemberEClass = createEClass(BOARD_MEMBER);
 
     conditionalActionEClass = createEClass(CONDITIONAL_ACTION);
+    createEAttribute(conditionalActionEClass, CONDITIONAL_ACTION__TYPE);
+    createEReference(conditionalActionEClass, CONDITIONAL_ACTION__CONDITION);
+    createEReference(conditionalActionEClass, CONDITIONAL_ACTION__EXP_MEMBERS);
 
     expMemberEClass = createEClass(EXP_MEMBER);
 
@@ -842,25 +1023,29 @@ public class PycomPackageImpl extends EPackageImpl implements PycomPackage
     actuatorEClass = createEClass(ACTUATOR);
     createEReference(actuatorEClass, ACTUATOR__ACTUATOR_TYPES);
 
-    actuatorTypeEClass = createEClass(ACTUATOR_TYPE);
-    createEAttribute(actuatorTypeEClass, ACTUATOR_TYPE__TYPE_NAME);
-    createEAttribute(actuatorTypeEClass, ACTUATOR_TYPE__NAME);
-    createEReference(actuatorTypeEClass, ACTUATOR_TYPE__PINS);
+    communicationEClass = createEClass(COMMUNICATION);
+    createEAttribute(communicationEClass, COMMUNICATION__TYPE);
 
-    sensorTypeEClass = createEClass(SENSOR_TYPE);
-    createEAttribute(sensorTypeEClass, SENSOR_TYPE__TYPE_NAME);
-    createEAttribute(sensorTypeEClass, SENSOR_TYPE__NAME);
-    createEReference(sensorTypeEClass, SENSOR_TYPE__PINS);
+    moduleTypeEClass = createEClass(MODULE_TYPE);
+    createEAttribute(moduleTypeEClass, MODULE_TYPE__TYPE_NAME);
+    createEAttribute(moduleTypeEClass, MODULE_TYPE__NAME);
+    createEReference(moduleTypeEClass, MODULE_TYPE__PINS);
 
     pinEClass = createEClass(PIN);
-    createEAttribute(pinEClass, PIN__POWER);
-    createEAttribute(pinEClass, PIN__INPUT);
+    createEReference(pinEClass, PIN__POWER);
+    createEReference(pinEClass, PIN__INPUT);
+
+    pinNameEClass = createEClass(PIN_NAME);
+    createEAttribute(pinNameEClass, PIN_NAME__NAME);
 
     conditionEClass = createEClass(CONDITION);
-    createEReference(conditionEClass, CONDITION__EXP_MEMBERS);
+    createEReference(conditionEClass, CONDITION__LOGIC_EX);
+    createEAttribute(conditionEClass, CONDITION__OPERATOR);
+    createEReference(conditionEClass, CONDITION__NESTED_CONDITION);
 
     logicExpEClass = createEClass(LOGIC_EXP);
-    createEReference(logicExpEClass, LOGIC_EXP__CONDITION);
+    createEReference(logicExpEClass, LOGIC_EXP__BOOL_VAL);
+    createEReference(logicExpEClass, LOGIC_EXP__COMP_EXP);
 
     booleanEClass = createEClass(BOOLEAN);
     createEAttribute(booleanEClass, BOOLEAN__VALUE);
@@ -868,18 +1053,25 @@ public class PycomPackageImpl extends EPackageImpl implements PycomPackage
     comparisonExpEClass = createEClass(COMPARISON_EXP);
     createEReference(comparisonExpEClass, COMPARISON_EXP__LEFT);
     createEAttribute(comparisonExpEClass, COMPARISON_EXP__OP);
-    createEReference(comparisonExpEClass, COMPARISON_EXP__RIGTH);
+    createEReference(comparisonExpEClass, COMPARISON_EXP__RIGHT);
 
     expressionEClass = createEClass(EXPRESSION);
+    createEAttribute(expressionEClass, EXPRESSION__OUTPUT_VALUE);
+    createEReference(expressionEClass, EXPRESSION__OUTPUTFUNCTION);
 
     functionEClass = createEClass(FUNCTION);
     createEReference(functionEClass, FUNCTION__BOARD);
+    createEReference(functionEClass, FUNCTION__FUNCTION_NAME);
 
-    actuatorFunctionEClass = createEClass(ACTUATOR_FUNCTION);
-    createEReference(actuatorFunctionEClass, ACTUATOR_FUNCTION__ACTUATOR_TYPE);
+    moduleFunctionEClass = createEClass(MODULE_FUNCTION);
+    createEReference(moduleFunctionEClass, MODULE_FUNCTION__MODULE_TYPE);
 
-    sensorFunctionEClass = createEClass(SENSOR_FUNCTION);
-    createEReference(sensorFunctionEClass, SENSOR_FUNCTION__SENSOR_TYPE);
+    functionNameEClass = createEClass(FUNCTION_NAME);
+    createEAttribute(functionNameEClass, FUNCTION_NAME__NAME);
+
+    actuatorTypeEClass = createEClass(ACTUATOR_TYPE);
+
+    sensorTypeEClass = createEClass(SENSOR_TYPE);
   }
 
   /**
@@ -914,14 +1106,11 @@ public class PycomPackageImpl extends EPackageImpl implements PycomPackage
     conditionalActionEClass.getESuperTypes().add(this.getExpMember());
     sensorEClass.getESuperTypes().add(this.getBoardMember());
     actuatorEClass.getESuperTypes().add(this.getBoardMember());
-    conditionEClass.getESuperTypes().add(this.getConditionalAction());
-    logicExpEClass.getESuperTypes().add(this.getCondition());
-    booleanEClass.getESuperTypes().add(this.getLogicExp());
-    comparisonExpEClass.getESuperTypes().add(this.getLogicExp());
+    communicationEClass.getESuperTypes().add(this.getBoardMember());
     functionEClass.getESuperTypes().add(this.getExpMember());
-    functionEClass.getESuperTypes().add(this.getExpression());
-    actuatorFunctionEClass.getESuperTypes().add(this.getFunction());
-    sensorFunctionEClass.getESuperTypes().add(this.getFunction());
+    moduleFunctionEClass.getESuperTypes().add(this.getFunction());
+    actuatorTypeEClass.getESuperTypes().add(this.getModuleType());
+    sensorTypeEClass.getESuperTypes().add(this.getModuleType());
 
     // Initialize classes and features; add operations and parameters
     initEClass(systemEClass, xtext.pycom.System.class, "System", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -934,9 +1123,12 @@ public class PycomPackageImpl extends EPackageImpl implements PycomPackage
     initEReference(getServer_Exps(), this.getConditionalAction(), null, "exps", null, 0, -1, Server.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(connectionEClass, Connection.class, "Connection", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getConnection_IpAdr(), ecorePackage.getEString(), "ipAdr", null, 0, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getConnection_Website(), ecorePackage.getEString(), "website", null, 0, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getConnection_Host(), this.getHost(), null, "host", null, 0, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getConnection_Portnumber(), ecorePackage.getEString(), "portnumber", null, 0, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(hostEClass, Host.class, "Host", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getHost_IpAdr(), ecorePackage.getEString(), "ipAdr", null, 0, 1, Host.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getHost_Website(), ecorePackage.getEString(), "website", null, 0, 1, Host.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(boardEClass, Board.class, "Board", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getBoard_Name(), ecorePackage.getEString(), "name", null, 0, 1, Board.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -945,34 +1137,41 @@ public class PycomPackageImpl extends EPackageImpl implements PycomPackage
     initEClass(boardMemberEClass, BoardMember.class, "BoardMember", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(conditionalActionEClass, ConditionalAction.class, "ConditionalAction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getConditionalAction_Type(), ecorePackage.getEString(), "type", null, 0, 1, ConditionalAction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getConditionalAction_Condition(), this.getCondition(), null, "condition", null, 0, 1, ConditionalAction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getConditionalAction_ExpMembers(), this.getExpMember(), null, "ExpMembers", null, 0, -1, ConditionalAction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(expMemberEClass, ExpMember.class, "ExpMember", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(sensorEClass, Sensor.class, "Sensor", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getSensor_SensorTypes(), this.getSensorType(), null, "sensorTypes", null, 0, -1, Sensor.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSensor_SensorTypes(), this.getModuleType(), null, "sensorTypes", null, 0, -1, Sensor.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(actuatorEClass, Actuator.class, "Actuator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getActuator_ActuatorTypes(), this.getActuatorType(), null, "actuatorTypes", null, 0, -1, Actuator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getActuator_ActuatorTypes(), this.getModuleType(), null, "actuatorTypes", null, 0, -1, Actuator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(actuatorTypeEClass, ActuatorType.class, "ActuatorType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getActuatorType_TypeName(), ecorePackage.getEString(), "typeName", null, 0, 1, ActuatorType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getActuatorType_Name(), ecorePackage.getEString(), "name", null, 0, 1, ActuatorType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getActuatorType_Pins(), this.getPin(), null, "pins", null, 0, -1, ActuatorType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(communicationEClass, Communication.class, "Communication", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getCommunication_Type(), ecorePackage.getEString(), "type", null, 0, 1, Communication.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(sensorTypeEClass, SensorType.class, "SensorType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getSensorType_TypeName(), ecorePackage.getEString(), "typeName", null, 0, 1, SensorType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getSensorType_Name(), ecorePackage.getEString(), "name", null, 0, 1, SensorType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getSensorType_Pins(), this.getPin(), null, "pins", null, 0, -1, SensorType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(moduleTypeEClass, ModuleType.class, "ModuleType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getModuleType_TypeName(), ecorePackage.getEString(), "typeName", null, 0, 1, ModuleType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getModuleType_Name(), ecorePackage.getEString(), "name", null, 0, 1, ModuleType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getModuleType_Pins(), this.getPin(), null, "pins", null, 0, 1, ModuleType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(pinEClass, Pin.class, "Pin", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getPin_Power(), ecorePackage.getEInt(), "power", null, 0, 1, Pin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getPin_Input(), ecorePackage.getEInt(), "input", null, 0, 1, Pin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getPin_Power(), this.getPinName(), null, "power", null, 0, 1, Pin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getPin_Input(), this.getPinName(), null, "input", null, 0, 1, Pin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(pinNameEClass, PinName.class, "PinName", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getPinName_Name(), ecorePackage.getEString(), "name", null, 0, 1, PinName.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(conditionEClass, Condition.class, "Condition", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getCondition_ExpMembers(), this.getExpMember(), null, "ExpMembers", null, 0, -1, Condition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getCondition_LogicEx(), this.getLogicExp(), null, "logicEx", null, 0, 1, Condition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getCondition_Operator(), ecorePackage.getEString(), "operator", null, 0, 1, Condition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getCondition_NestedCondition(), this.getCondition(), null, "nestedCondition", null, 0, 1, Condition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(logicExpEClass, LogicExp.class, "LogicExp", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getLogicExp_Condition(), this.getCondition(), null, "condition", null, 0, 1, LogicExp.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getLogicExp_BoolVal(), this.getBoolean(), null, "boolVal", null, 0, 1, LogicExp.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getLogicExp_CompExp(), this.getComparisonExp(), null, "compExp", null, 0, 1, LogicExp.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(booleanEClass, xtext.pycom.Boolean.class, "Boolean", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getBoolean_Value(), ecorePackage.getEString(), "value", null, 0, 1, xtext.pycom.Boolean.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -980,18 +1179,25 @@ public class PycomPackageImpl extends EPackageImpl implements PycomPackage
     initEClass(comparisonExpEClass, ComparisonExp.class, "ComparisonExp", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getComparisonExp_Left(), this.getExpression(), null, "left", null, 0, 1, ComparisonExp.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getComparisonExp_Op(), ecorePackage.getEString(), "op", null, 0, 1, ComparisonExp.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getComparisonExp_Rigth(), this.getExpression(), null, "rigth", null, 0, 1, ComparisonExp.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getComparisonExp_Right(), this.getExpression(), null, "right", null, 0, 1, ComparisonExp.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(expressionEClass, Expression.class, "Expression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getExpression_OutputValue(), ecorePackage.getEInt(), "outputValue", null, 0, 1, Expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getExpression_Outputfunction(), this.getFunction(), null, "outputfunction", null, 0, 1, Expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(functionEClass, Function.class, "Function", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getFunction_Board(), this.getBoard(), null, "board", null, 0, 1, Function.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getFunction_FunctionName(), this.getFunctionName(), null, "functionName", null, 0, 1, Function.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(actuatorFunctionEClass, ActuatorFunction.class, "ActuatorFunction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getActuatorFunction_ActuatorType(), this.getActuatorType(), null, "actuatorType", null, 0, 1, ActuatorFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(moduleFunctionEClass, ModuleFunction.class, "ModuleFunction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getModuleFunction_ModuleType(), this.getModuleType(), null, "moduleType", null, 0, 1, ModuleFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(sensorFunctionEClass, SensorFunction.class, "SensorFunction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getSensorFunction_SensorType(), this.getSensorType(), null, "sensorType", null, 0, 1, SensorFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(functionNameEClass, FunctionName.class, "FunctionName", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getFunctionName_Name(), ecorePackage.getEString(), "name", null, 0, 1, FunctionName.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(actuatorTypeEClass, ActuatorType.class, "ActuatorType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(sensorTypeEClass, SensorType.class, "SensorType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     // Create resource
     createResource(eNS_URI);
