@@ -124,49 +124,40 @@ public class PycomGenerator extends AbstractGenerator {
     {
       this.generatePycom(b, r);
       StringConcatenation _builder = new StringConcatenation();
-      _builder.append("\t");
       _builder.append("import pycom");
       _builder.newLine();
-      _builder.append("\t");
       _builder.append("import urequests");
       _builder.newLine();
-      _builder.append("\t");
       _builder.append("import machine");
       _builder.newLine();
-      _builder.append("\t");
       _builder.append("import time ");
       _builder.newLine();
-      _builder.append("\t");
+      _builder.append("#New code");
+      _builder.newLine();
       String _generatePycomImports = this.generatePycomImports(b, r, fsa);
-      _builder.append(_generatePycomImports, "\t");
+      _builder.append(_generatePycomImports);
       _builder.newLineIfNotEmpty();
       _builder.newLine();
-      _builder.append("\t");
       _builder.append("isRunning = True");
       _builder.newLine();
-      _builder.append("\t");
       _builder.append("pycom.heartbeat(False)");
       _builder.newLine();
       _builder.append("\t");
       _builder.newLine();
-      _builder.append("\t");
       String _generatePycomCode = this.generatePycomCode(b, r);
-      _builder.append(_generatePycomCode, "\t");
+      _builder.append(_generatePycomCode);
       _builder.newLineIfNotEmpty();
       _builder.append("\t");
       _builder.newLine();
-      _builder.append("\t");
       String _genFunctions = this.genFunctions(b, r);
-      _builder.append(_genFunctions, "\t");
+      _builder.append(_genFunctions);
       _builder.newLineIfNotEmpty();
-      _builder.append("\t");
       _builder.append("while(isRunning):");
       _builder.newLine();
-      _builder.append("\t\t");
-      String _generateLogic = this.generateLogic(b, r);
-      _builder.append(_generateLogic, "\t\t");
-      _builder.newLineIfNotEmpty();
       _builder.append("\t");
+      String _generateLogic = this.generateLogic(b, r);
+      _builder.append(_generateLogic, "\t");
+      _builder.newLineIfNotEmpty();
       _builder.append("#CODE GENERATION END");
       _builder.newLine();
       _xblockexpression = _builder;
@@ -359,7 +350,7 @@ public class PycomGenerator extends AbstractGenerator {
       _builder.append("/");
       String _name_2 = ((ModuleFunction)function).getFunctionName().getName();
       _builder.append(_name_2);
-      _builder.append("/{}");
+      _builder.append("/float/{}");
       return _builder.toString();
     } else {
       StringConcatenation _builder_1 = new StringConcatenation();
@@ -369,7 +360,7 @@ public class PycomGenerator extends AbstractGenerator {
       _builder_1.append("/");
       String _name_4 = function.getFunctionName().getName();
       _builder_1.append(_name_4);
-      _builder_1.append("/{}");
+      _builder_1.append("/float/{}");
       return _builder_1.toString();
     }
   }
@@ -379,6 +370,8 @@ public class PycomGenerator extends AbstractGenerator {
     {
       String postaddress = this.getPostAddress(board, function);
       StringConcatenation _builder = new StringConcatenation();
+      _builder.append("var passedTreshold = False");
+      _builder.newLine();
       String _name = function.getFunctionName().getName();
       _builder.append(_name);
       _builder.append("Threshold = ");
@@ -399,8 +392,11 @@ public class PycomGenerator extends AbstractGenerator {
       _builder.append(" ");
       String _name_4 = function.getFunctionName().getName();
       _builder.append(_name_4);
-      _builder.append("Threshold):");
+      _builder.append("Threshold and not passedTreshold):");
       _builder.newLineIfNotEmpty();
+      _builder.append("\t");
+      _builder.append("passedTreshold = not passedTreshold");
+      _builder.newLine();
       _builder.append("\t");
       _builder.append("sendurl = \"");
       String _serverAddress = this.getServerAddress(server.getConn());
@@ -429,24 +425,28 @@ public class PycomGenerator extends AbstractGenerator {
       _builder.append(" ");
       String _name_7 = function.getFunctionName().getName();
       _builder.append(_name_7);
-      _builder.append("Threshold):");
+      _builder.append("Threshold and passedTreshold):");
       _builder.newLineIfNotEmpty();
-      _builder.append("\t\t\t");
-      _builder.append("sendurl = ");
+      _builder.append("\t");
+      _builder.append("passedTreshold = not passedTreshold");
+      _builder.newLine();
+      _builder.append("\t");
+      _builder.append("sendurl = \"");
       String _serverAddress_1 = this.getServerAddress(server.getConn());
-      _builder.append(_serverAddress_1, "\t\t\t");
-      _builder.append(".format(");
+      _builder.append(_serverAddress_1, "\t");
+      _builder.append(postaddress, "\t");
+      _builder.append("\".format(");
       String _name_8 = function.getFunctionName().getName();
-      _builder.append(_name_8, "\t\t\t");
+      _builder.append(_name_8, "\t");
       _builder.append("Value)");
       _builder.newLineIfNotEmpty();
-      _builder.append("\t\t\t");
+      _builder.append("\t");
       _builder.append("res = urequests.post(sendurl)   ");
       _builder.newLine();
-      _builder.append("\t\t\t");
+      _builder.append("\t");
       _builder.append("print(\"Res code: \", res.status_code)");
       _builder.newLine();
-      _builder.append("\t\t\t");
+      _builder.append("\t");
       _builder.append("print(\"Res: \", res.reason)");
       _builder.newLine();
       String threshold = _builder.toString();
@@ -499,7 +499,8 @@ public class PycomGenerator extends AbstractGenerator {
       _builder.append("sendurl = \"");
       String _serverAddress = this.getServerAddress(server.getConn());
       _builder.append(_serverAddress, "\t");
-      _builder.append("\".format(true)");
+      _builder.append(postaddress, "\t");
+      _builder.append("\".format(True)");
       _builder.newLineIfNotEmpty();
       _builder.append("\t");
       _builder.append("res = urequests.post(sendurl)   ");
@@ -525,7 +526,8 @@ public class PycomGenerator extends AbstractGenerator {
       _builder.append("sendurl = \"");
       String _serverAddress_1 = this.getServerAddress(server.getConn());
       _builder.append(_serverAddress_1, "\t");
-      _builder.append("/send/{}\".format(false)");
+      _builder.append(postaddress, "\t");
+      _builder.append("\".format(false)");
       _builder.newLineIfNotEmpty();
       _builder.append("\t");
       _builder.append("res = urequests.post(sendurl)   ");
@@ -554,7 +556,7 @@ public class PycomGenerator extends AbstractGenerator {
       _builder_2.append("():");
       _builder_2.newLineIfNotEmpty();
       _builder_2.append("\t");
-      _builder_2.append("#Write your code here\t\t");
+      _builder_2.append("#Write your code here\t");
       _builder_2.newLine();
       String funk2 = _builder_2.toString();
       this.logicmap.put(function.getFunctionName().getName(), transmitcode);
@@ -589,7 +591,7 @@ public class PycomGenerator extends AbstractGenerator {
           _builder.append("/");
           String _name_2 = ((ModuleFunction)function).getFunctionName().getName();
           _builder.append(_name_2);
-          _builder.append("/{}");
+          _builder.append("/turnOn");
           sendUrl = _builder.toString();
         } else {
           StringConcatenation _builder_1 = new StringConcatenation();
@@ -601,7 +603,7 @@ public class PycomGenerator extends AbstractGenerator {
           _builder_1.append("/");
           String _name_4 = function.getFunctionName().getName();
           _builder_1.append(_name_4);
-          _builder_1.append("/{}");
+          _builder_1.append("/turnOn");
           sendUrl = _builder_1.toString();
         }
         StringConcatenation _builder_2 = new StringConcatenation();
@@ -666,25 +668,62 @@ public class PycomGenerator extends AbstractGenerator {
     if (_tripleNotEquals) {
       String power = type.getPins().getPower().getName();
       String input = type.getPins().getInput().getName();
-      if ((Objects.equal(power, null) || Objects.equal(input, null))) {
+      if (((power != null) || (input != null))) {
         boolean _containsKey = this.moduleMap.containsKey(type.getTypeName());
         if (_containsKey) {
           StringConcatenation _builder = new StringConcatenation();
           String _name = type.getName();
           _builder.append(_name);
+          _builder.append("p_out = Pin(\'");
+          _builder.append(power);
+          _builder.append("\', mode=Pin.OUT)");
+          _builder.newLineIfNotEmpty();
+          _builder.append("\t\t\t\t\t");
+          String _name_1 = type.getName();
+          _builder.append(_name_1, "\t\t\t\t\t");
+          _builder.append("adc = ADC(0)");
+          _builder.newLineIfNotEmpty();
+          _builder.append("\t\t\t\t\t");
+          String _name_2 = type.getName();
+          _builder.append(_name_2, "\t\t\t\t\t");
+          _builder.append("pin = ");
+          String _name_3 = type.getName();
+          _builder.append(_name_3, "\t\t\t\t\t");
+          _builder.append("adc.channel(pin=\'");
+          _builder.append(input, "\t\t\t\t\t");
+          _builder.append("\')");
+          _builder.newLineIfNotEmpty();
+          _builder.append("\t\t\t\t\t");
+          String _name_4 = type.getName();
+          _builder.append(_name_4, "\t\t\t\t\t");
           _builder.append(" = ");
           String _get = this.moduleMap.get(type.getTypeName());
-          _builder.append(_get);
-          _builder.append("(Pin.IN = ");
-          _builder.append(input);
-          _builder.append(", Pin.OUT = ");
-          _builder.append(power);
+          _builder.append(_get, "\t\t\t\t\t");
           _builder.append(")");
           return _builder.toString();
         } else {
           StringConcatenation _builder_1 = new StringConcatenation();
-          String _name_1 = type.getName();
-          _builder_1.append(_name_1);
+          String _name_5 = type.getName();
+          _builder_1.append(_name_5);
+          _builder_1.append("p_out = Pin(\'");
+          _builder_1.append(power);
+          _builder_1.append("\', mode=Pin.OUT)");
+          _builder_1.newLineIfNotEmpty();
+          String _name_6 = type.getName();
+          _builder_1.append(_name_6);
+          _builder_1.append("adc = ADC(0)");
+          _builder_1.newLineIfNotEmpty();
+          String _name_7 = type.getName();
+          _builder_1.append(_name_7);
+          _builder_1.append("pin = ");
+          String _name_8 = type.getName();
+          _builder_1.append(_name_8);
+          _builder_1.append("adc.channel(pin=\'");
+          _builder_1.append(input);
+          _builder_1.append("\')");
+          _builder_1.newLineIfNotEmpty();
+          String _name_9 = type.getName();
+          _builder_1.append(_name_9);
           _builder_1.append(" = #Unknown Sensor");
           return _builder_1.toString();
         }
@@ -693,8 +732,8 @@ public class PycomGenerator extends AbstractGenerator {
     boolean _containsKey_1 = this.moduleMap.containsKey(type.getTypeName());
     if (_containsKey_1) {
       StringConcatenation _builder_2 = new StringConcatenation();
-      String _name_2 = type.getName();
-      _builder_2.append(_name_2);
+      String _name_10 = type.getName();
+      _builder_2.append(_name_10);
       _builder_2.append(" = ");
       String _get_1 = this.moduleMap.get(type.getTypeName());
       _builder_2.append(_get_1);
@@ -702,8 +741,8 @@ public class PycomGenerator extends AbstractGenerator {
       return _builder_2.toString();
     } else {
       StringConcatenation _builder_3 = new StringConcatenation();
-      String _name_3 = type.getName();
-      _builder_3.append(_name_3);
+      String _name_11 = type.getName();
+      _builder_3.append(_name_11);
       _builder_3.append(" = #Unknown Sensor");
       return _builder_3.toString();
     }
@@ -725,6 +764,7 @@ public class PycomGenerator extends AbstractGenerator {
       _builder_1.append("import ");
       String _typeName = sensorType.getTypeName();
       _builder_1.append(_typeName);
+      _builder_1.append(" #CHECK THAT THIS SENSOR  IS GENERATED CORRECTLY");
       return _builder_1.toString();
     }
   }
@@ -750,26 +790,60 @@ public class PycomGenerator extends AbstractGenerator {
     if (_tripleNotEquals) {
       String power = type.getPins().getPower().getName();
       String input = type.getPins().getInput().getName();
-      if ((Objects.equal(power, null) || Objects.equal(input, null))) {
+      if (((power != null) || (input != null))) {
         boolean _containsKey = this.moduleMap.containsKey(type.getTypeName());
         if (_containsKey) {
           StringConcatenation _builder = new StringConcatenation();
           String _name = type.getName();
           _builder.append(_name);
+          _builder.append("p_out = Pin(\'");
+          _builder.append(power);
+          _builder.append("\', mode=Pin.OUT)");
+          _builder.newLineIfNotEmpty();
+          String _name_1 = type.getName();
+          _builder.append(_name_1);
+          _builder.append("adc = ADC(0)");
+          _builder.newLineIfNotEmpty();
+          String _name_2 = type.getName();
+          _builder.append(_name_2);
+          _builder.append("pin = ");
+          String _name_3 = type.getName();
+          _builder.append(_name_3);
+          _builder.append("adc.channel(pin=\'");
+          _builder.append(input);
+          _builder.append("\')");
+          _builder.newLineIfNotEmpty();
+          String _name_4 = type.getName();
+          _builder.append(_name_4);
           _builder.append(" = ");
           String _get = this.moduleMap.get(type.getTypeName());
           _builder.append(_get);
-          _builder.append("(Pin.IN = ");
-          _builder.append(input);
-          _builder.append(", Pin.OUT = ");
-          _builder.append(power);
           _builder.append(")");
           return _builder.toString();
         } else {
           StringConcatenation _builder_1 = new StringConcatenation();
-          String _name_1 = type.getName();
-          _builder_1.append(_name_1);
-          _builder_1.append(" = #Unknown Actuator");
+          String _name_5 = type.getName();
+          _builder_1.append(_name_5);
+          _builder_1.append("p_out = Pin(\'");
+          _builder_1.append(power);
+          _builder_1.append("\', mode=Pin.OUT)");
+          _builder_1.newLineIfNotEmpty();
+          String _name_6 = type.getName();
+          _builder_1.append(_name_6);
+          _builder_1.append("adc = ADC(0)");
+          _builder_1.newLineIfNotEmpty();
+          String _name_7 = type.getName();
+          _builder_1.append(_name_7);
+          _builder_1.append("pin = ");
+          String _name_8 = type.getName();
+          _builder_1.append(_name_8);
+          _builder_1.append("adc.channel(pin=\'");
+          _builder_1.append(input);
+          _builder_1.append("\')");
+          _builder_1.newLineIfNotEmpty();
+          String _name_9 = type.getName();
+          _builder_1.append(_name_9);
+          _builder_1.append(" = #Unknown Sensor");
           return _builder_1.toString();
         }
       }
@@ -777,8 +851,8 @@ public class PycomGenerator extends AbstractGenerator {
     boolean _containsKey_1 = this.moduleMap.containsKey(type.getTypeName());
     if (_containsKey_1) {
       StringConcatenation _builder_2 = new StringConcatenation();
-      String _name_2 = type.getName();
-      _builder_2.append(_name_2);
+      String _name_10 = type.getName();
+      _builder_2.append(_name_10);
       _builder_2.append(" = ");
       String _get_1 = this.moduleMap.get(type.getTypeName());
       _builder_2.append(_get_1);
@@ -786,19 +860,32 @@ public class PycomGenerator extends AbstractGenerator {
       return _builder_2.toString();
     } else {
       StringConcatenation _builder_3 = new StringConcatenation();
-      String _name_3 = type.getName();
-      _builder_3.append(_name_3);
+      String _name_11 = type.getName();
+      _builder_3.append(_name_11);
       _builder_3.append(" = #Unknown Actuator");
       return _builder_3.toString();
     }
   }
   
-  public CharSequence generateActuatorImports(final Board b, final Resource r, final ActuatorType actuatorType) {
-    StringConcatenation _builder = new StringConcatenation();
-    _builder.append("import ");
-    String _typeName = actuatorType.getTypeName();
-    _builder.append(_typeName);
-    return _builder;
+  public String generateActuatorImports(final Board b, final Resource r, final ActuatorType actuatorType) {
+    boolean _containsKey = this.moduleMap.containsKey(actuatorType.getTypeName());
+    if (_containsKey) {
+      StringConcatenation _builder = new StringConcatenation();
+      _builder.append("from ");
+      String _get = this.moduleMap.get(actuatorType.getTypeName());
+      _builder.append(_get);
+      _builder.append(" import ");
+      String _get_1 = this.moduleMap.get(actuatorType.getTypeName());
+      _builder.append(_get_1);
+      return _builder.toString();
+    } else {
+      StringConcatenation _builder_1 = new StringConcatenation();
+      _builder_1.append("import ");
+      String _typeName = actuatorType.getTypeName();
+      _builder_1.append(_typeName);
+      _builder_1.append("  #CHECK THAT THIS ACTUATOR IS GENERATED CORRECTLY");
+      return _builder_1.toString();
+    }
   }
   
   public void generatePycomConnection(final Board b, final Resource r) {
@@ -921,8 +1008,10 @@ public class PycomGenerator extends AbstractGenerator {
     _builder.append("app.listen(");
     String _portnumber = s.getConn().getPortnumber();
     _builder.append(_portnumber);
-    _builder.append(", () => {");
+    _builder.append(", () => ");
     _builder.newLineIfNotEmpty();
+    _builder.append("{");
+    _builder.newLine();
     _builder.append("    ");
     _builder.append("console.log(\'Started on port ");
     String _portnumber_1 = s.getConn().getPortnumber();
@@ -932,7 +1021,9 @@ public class PycomGenerator extends AbstractGenerator {
     _builder.append("});");
     _builder.newLine();
     _builder.newLine();
-    _builder.append("app.get(\"*\", function(req, res){\t\t     ");
+    _builder.append("app.get(\"/\", function(req, res)");
+    _builder.newLine();
+    _builder.append("{\t\t     ");
     _builder.newLine();
     _builder.append("    ");
     _builder.append("res.send(\"Default get route\");");
@@ -948,13 +1039,19 @@ public class PycomGenerator extends AbstractGenerator {
   }
   
   public String generateServerFiles(final Server s, final Resource r) {
-    ConditionalAction conditionalAction = s.getExps().get(0);
-    String type = conditionalAction.getType();
     StringBuilder stringBuilder = new StringBuilder();
     stringBuilder.append(this.GenerateServerHeader(s));
     stringBuilder.append(this.GenerateGlobalVariables(s));
-    this.GeneratePostRoutes(stringBuilder, conditionalAction, r, type, s);
-    this.GenerateIfFunctions(stringBuilder, conditionalAction, r, type, s);
+    this.GeneratePostRoutes(stringBuilder, r, s);
+    int counter = 0;
+    EList<ConditionalAction> _exps = s.getExps();
+    for (final ConditionalAction conditionalAction : _exps) {
+      {
+        String type = conditionalAction.getType();
+        this.GenerateIfFunctions(stringBuilder, conditionalAction, r, type, s, counter);
+        counter++;
+      }
+    }
     return stringBuilder.toString();
   }
   
@@ -1010,7 +1107,7 @@ public class PycomGenerator extends AbstractGenerator {
         String _name_2 = ((ModuleFunction)exp).getFunctionName().getName();
         String _plus_5 = (_plus_4 + _name_2);
         String _plus_6 = (_plus_5 + "_");
-        String _plus_7 = (_plus_6 + "turnOn");
+        String _plus_7 = (_plus_6 + "boolean");
         varname = _plus_7;
       } else {
         ModuleType _moduleType_1 = ((ModuleFunction)exp).getModuleType();
@@ -1026,7 +1123,7 @@ public class PycomGenerator extends AbstractGenerator {
           String _name_5 = ((ModuleFunction)exp).getFunctionName().getName();
           String _plus_13 = (_plus_12 + _name_5);
           String _plus_14 = (_plus_13 + "_");
-          String _plus_15 = (_plus_14 + "value");
+          String _plus_15 = (_plus_14 + "float");
           varname = _plus_15;
         } else {
           String _name_6 = ((ModuleFunction)exp).getBoard().getName();
@@ -1054,7 +1151,7 @@ public class PycomGenerator extends AbstractGenerator {
     boolean _containsKey = this.globalVariables.containsKey(varname);
     boolean _not = (!_containsKey);
     if (_not) {
-      this.globalVariables.put(varname, ((("var " + varname) + " = undefined") + "\n"));
+      this.globalVariables.put(varname, ((varname + " = undefined") + "\n"));
       if ((exp instanceof ModuleFunction)) {
         ModuleType _moduleType_2 = ((ModuleFunction)exp).getModuleType();
         if ((_moduleType_2 instanceof SensorType)) {
@@ -1091,48 +1188,7 @@ public class PycomGenerator extends AbstractGenerator {
     }
   }
   
-  public String GenerateGlobalVariables(final Resource r) {
-    StringBuilder globalVariablesStringBuilder = new StringBuilder();
-    Iterable<Board> _filter = Iterables.<Board>filter(IteratorExtensions.<EObject>toIterable(r.getAllContents()), Board.class);
-    for (final Board b : _filter) {
-      {
-        Iterable<Sensor> _filter_1 = Iterables.<Sensor>filter(b.getBoardMembers(), Sensor.class);
-        for (final Sensor sensor : _filter_1) {
-          Iterable<SensorType> _filter_2 = Iterables.<SensorType>filter(sensor.getSensorTypes(), SensorType.class);
-          for (final SensorType sensortype : _filter_2) {
-            String _typeName = sensortype.getTypeName();
-            String _plus = ("var " + _typeName);
-            String _plus_1 = (_plus + "_");
-            String _name = sensortype.getName();
-            String _plus_2 = (_plus_1 + _name);
-            String _plus_3 = (_plus_2 + "_value");
-            String _plus_4 = (_plus_3 + " = undefined;\n");
-            globalVariablesStringBuilder.append(_plus_4);
-          }
-        }
-        globalVariablesStringBuilder.append("\n");
-        Iterable<Actuator> _filter_3 = Iterables.<Actuator>filter(b.getBoardMembers(), Actuator.class);
-        for (final Actuator actuator : _filter_3) {
-          Iterable<ActuatorType> _filter_4 = Iterables.<ActuatorType>filter(actuator.getActuatorTypes(), ActuatorType.class);
-          for (final ActuatorType actuatortype : _filter_4) {
-            String _typeName_1 = actuatortype.getTypeName();
-            String _plus_5 = ("var " + _typeName_1);
-            String _plus_6 = (_plus_5 + "_");
-            String _name_1 = actuatortype.getName();
-            String _plus_7 = (_plus_6 + _name_1);
-            String _plus_8 = (_plus_7 + "_turnOn");
-            String _plus_9 = (_plus_8 + " = undefined;\n");
-            globalVariablesStringBuilder.append(_plus_9);
-          }
-        }
-        globalVariablesStringBuilder.append("\n");
-      }
-    }
-    globalVariablesStringBuilder.append("\n");
-    return globalVariablesStringBuilder.toString();
-  }
-  
-  public void GeneratePostRoutes(final StringBuilder stringBuilder, final ConditionalAction conditionalAction, final Resource r, final String type, final Server s) {
+  public void GeneratePostRoutes(final StringBuilder stringBuilder, final Resource r, final Server s) {
     final BiConsumer<String, String> _function = (String k, String v) -> {
       boolean _equals = v.equals("SensorFunction");
       if (_equals) {
@@ -1190,13 +1246,36 @@ public class PycomGenerator extends AbstractGenerator {
           _builder_1.append("\', function(req, res)");
           _builder_1.newLineIfNotEmpty();
           _builder_1.append("\t");
-          _builder_1.append("{    \t\t\t\t\t    ");
+          _builder_1.append("{ ");
           _builder_1.newLine();
-          _builder_1.append("\t    ");
+          _builder_1.append("\t\t");
+          _builder_1.append("if(");
+          _builder_1.append(k, "\t\t");
+          _builder_1.append(" == undefined)");
+          _builder_1.newLineIfNotEmpty();
+          _builder_1.append("\t\t");
+          _builder_1.append("{");
+          _builder_1.newLine();
+          _builder_1.append("\t\t\t");
+          _builder_1.append("res.send(\"undefined\");");
+          _builder_1.newLine();
+          _builder_1.append("\t\t");
+          _builder_1.append("} ");
+          _builder_1.newLine();
+          _builder_1.append("\t\t");
+          _builder_1.append("else");
+          _builder_1.newLine();
+          _builder_1.append("\t\t");
+          _builder_1.append("{  \t\t\t\t\t    ");
+          _builder_1.newLine();
+          _builder_1.append("\t    \t");
           _builder_1.append("res.send(");
-          _builder_1.append(k, "\t    ");
+          _builder_1.append(k, "\t    \t");
           _builder_1.append(");");
           _builder_1.newLineIfNotEmpty();
+          _builder_1.append("\t    ");
+          _builder_1.append("}");
+          _builder_1.newLine();
           _builder_1.append("    \t");
           _builder_1.append("console.log(\"Return ");
           _builder_1.append(k, "    \t");
@@ -1216,45 +1295,95 @@ public class PycomGenerator extends AbstractGenerator {
     this.variableNamesForPostAndGetRoutes.forEach(_function);
   }
   
-  public void GenerateIfFunctions(final StringBuilder stringBuilder, final ConditionalAction conditionalAction, final Resource r, final String type, final Server s) {
-    StringBuilder conditionalStringBuilder = new StringBuilder();
-    String content = this.GetConditionalStatementContent(conditionalStringBuilder, conditionalAction.getCondition());
-    String scopeContent = this.GetConditionalStatementScopeContent(conditionalAction.getExpMembers());
-    int counter = 0;
-    Iterable<ConditionalAction> _filter = Iterables.<ConditionalAction>filter(s.getExps(), ConditionalAction.class);
-    for (final ConditionalAction b : _filter) {
-      {
-        StringConcatenation _builder = new StringConcatenation();
-        _builder.append("function ServerFunction");
-        _builder.append(counter);
-        _builder.append("()");
-        _builder.newLineIfNotEmpty();
-        _builder.append("{    \t\t\t\t\t    \t\t\t    \t\t\t    ");
-        _builder.newLine();
-        _builder.append("    ");
-        _builder.append(type, "    ");
-        _builder.append("(");
-        _builder.append(content, "    ");
-        _builder.append(")");
-        _builder.newLineIfNotEmpty();
-        _builder.append("    ");
-        _builder.append("{  ");
-        _builder.newLine();
-        _builder.append("    \t");
-        _builder.append(scopeContent, "    \t");
-        _builder.append("\t\t\t\t    \t");
-        _builder.newLineIfNotEmpty();
-        _builder.append("    ");
-        _builder.append("}");
-        _builder.newLine();
-        _builder.append("}\t");
-        _builder.newLine();
-        _builder.append("\t\t\t");
-        _builder.newLine();
-        stringBuilder.append(_builder);
-        counter++;
+  public StringBuilder GenerateIfFunctions(final StringBuilder stringBuilder, final ConditionalAction conditionalAction, final Resource r, final String type, final Server s, final int counter) {
+    StringBuilder _xblockexpression = null;
+    {
+      StringBuilder conditionalStringBuilder = new StringBuilder();
+      String content = this.GetConditionalStatementContent(conditionalStringBuilder, conditionalAction.getCondition());
+      String scopeContent = this.GetConditionalStatementScopeContent(conditionalAction.getExpMembers());
+      String[] splittedScopeContent = scopeContent.split("");
+      StringBuilder elseScopeStringBuilder = new StringBuilder();
+      int index = 0;
+      for (final String character : splittedScopeContent) {
+        {
+          if ((character.equals("=") && splittedScopeContent[(index - 1)].equals("!"))) {
+            elseScopeStringBuilder.deleteCharAt((index - 1));
+            elseScopeStringBuilder.append("==");
+          } else {
+            if ((character.equals("=") && splittedScopeContent[(index - 1)].equals("="))) {
+              elseScopeStringBuilder.deleteCharAt((index - 1));
+              elseScopeStringBuilder.append("!=");
+            } else {
+              if ((character.equals("=") && splittedScopeContent[(index - 1)].equals("<"))) {
+                elseScopeStringBuilder.deleteCharAt((index - 1));
+                elseScopeStringBuilder.append(">=");
+              } else {
+                if ((character.equals("=") && splittedScopeContent[(index - 1)].equals(">"))) {
+                  elseScopeStringBuilder.deleteCharAt((index - 1));
+                  elseScopeStringBuilder.append("<=");
+                } else {
+                  boolean _equals = character.equals("<");
+                  if (_equals) {
+                    elseScopeStringBuilder.append(">");
+                  } else {
+                    boolean _equals_1 = character.equals(">");
+                    if (_equals_1) {
+                      elseScopeStringBuilder.append("<");
+                    } else {
+                      elseScopeStringBuilder.append(character);
+                    }
+                  }
+                }
+              }
+            }
+          }
+          index++;
+        }
       }
+      StringConcatenation _builder = new StringConcatenation();
+      _builder.append("function ServerFunction");
+      _builder.append(counter);
+      _builder.append("()");
+      _builder.newLineIfNotEmpty();
+      _builder.append("{    \t\t\t\t\t    \t\t\t    \t\t\t    ");
+      _builder.newLine();
+      _builder.append("    ");
+      _builder.append(type, "    ");
+      _builder.append("(");
+      _builder.append(content, "    ");
+      _builder.append(")");
+      _builder.newLineIfNotEmpty();
+      _builder.append("    ");
+      _builder.append("{  ");
+      _builder.newLine();
+      _builder.append("    \t");
+      _builder.append(scopeContent, "    \t");
+      _builder.append("\t\t\t\t    \t");
+      _builder.newLineIfNotEmpty();
+      _builder.append("    ");
+      _builder.append("}");
+      _builder.newLine();
+      _builder.append("    ");
+      _builder.append("else");
+      _builder.newLine();
+      _builder.append("    ");
+      _builder.append("{");
+      _builder.newLine();
+      _builder.append("    \t");
+      String _replace = elseScopeStringBuilder.toString().replace("= true", "= false");
+      _builder.append(_replace, "    \t");
+      _builder.append("\t\t\t\t\t");
+      _builder.newLineIfNotEmpty();
+      _builder.append("\t");
+      _builder.append("}");
+      _builder.newLine();
+      _builder.append("}\t");
+      _builder.newLine();
+      _builder.append("\t\t\t");
+      _builder.newLine();
+      _xblockexpression = stringBuilder.append(_builder);
     }
+    return _xblockexpression;
   }
   
   public String GetConditionalStatementScopeContent(final List<ExpMember> content) {
@@ -1273,7 +1402,7 @@ public class PycomGenerator extends AbstractGenerator {
         if (_greaterThan) {
           Object _GetConditionalStatementScopeContent = this.GetConditionalStatementScopeContent(((ConditionalAction)exp).getExpMembers());
           String _plus_3 = ("{\n" + _GetConditionalStatementScopeContent);
-          String _plus_4 = (_plus_3 + "}\n\n");
+          String _plus_4 = (_plus_3 + "}\n");
           scopeContentBuilder.append(_plus_4);
         }
       } else {
@@ -1292,7 +1421,7 @@ public class PycomGenerator extends AbstractGenerator {
               String _name_2 = ((ModuleFunction)exp).getFunctionName().getName();
               String _plus_10 = (_plus_9 + _name_2);
               String _plus_11 = (_plus_10 + "_");
-              String out = (_plus_11 + "turnOn");
+              String out = (_plus_11 + "boolean");
               scopeContentBuilder.append((("\t" + out) + " = true\n"));
             }
           }

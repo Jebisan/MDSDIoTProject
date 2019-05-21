@@ -9,7 +9,11 @@ Server:
 ;
 
 Connection:
-	(ipAdr= Ipaddress | website=STRING) ',' portnumber=Port 
+	host=Host ',' portnumber=Port 
+;
+
+Host:
+	ipAdr= Ipaddress | website=STRING
 ;
 
 Ipaddress:
@@ -27,7 +31,7 @@ BoardMember:
 	Sensor | Actuator | Communication;
 
 ConditionalAction:
-	'if' '(' Condition ')' '{' ExpMembers+=ExpMember* '}' | 'while' '(' Condition ')' '{' ExpMembers+=ExpMember* '}';
+	type='if' '(' condition=Condition ')' '{' ExpMembers+=ExpMember* '}' | type='while' '(' condition=Condition ')' '{' ExpMembers+=ExpMember* '}';
 
 ExpMember:
 	Function | ConditionalAction;
@@ -39,58 +43,59 @@ Actuator:
 	'Actuator' actuatorTypes+=ActuatorType (',' actuatorTypes+=ActuatorType)*;
 
 Communication:
-	'Communication' ':' ('WiFi' | 'Bluetooth' | 'SigFox');
+	'Communication' ':' type=('WiFi' | 'Bluetooth' | 'SigFox');
 
-ActuatorType:
-	typeName=ActuatorName ':' name=ID ('(' pins+=Pin ')')?;
+ActuatorType returns ModuleType:
+	{ActuatorType} typeName=ActuatorName ':' name=ID ('(' pins=Pin ')')?;
 
-SensorType:
-	typeName=SensorName ':' name=ID ('(' pins+=Pin ')')?;
+SensorType returns ModuleType:
+	{SensorType} typeName=SensorName ':' name=ID ('(' pins=Pin ')')?;
 
 SensorName:
 	'Light' | 'Temperature' | 'Barometer' | 'Humidity' | 'Accelerometer';
 
 Pin:
-	power=INT ',' input=INT;
+	power=PinName ',' input=PinName;
+	
+PinName:
+	name=ID
+;
 
 ActuatorName:
 	'LED' | 'Engine';
 
 Condition:
-	LogicExp | LogicExp '&&' condition=Condition | LogicExp '||' condition=Condition;
+	logicEx=LogicExp | logicEx=LogicExp operator='&&' nestedCondition=Condition | logicEx=LogicExp operator='||' nestedCondition=Condition;
 
 LogicExp:
-	Boolean | ComparisonExp;
+	boolVal=Boolean | compExp=ComparisonExp;
 	
 Boolean:
 	value='true' | value='false';
 	
 ComparisonExp: 
-	left=Expression op=Operator rigth=Expression 	
+	left=Expression op=Operator right=Expression 	
+;
+
+Expression:
+	outputValue=INT | outputfunction=Function
 ;
 
 Operator:
-	'<' | '<=' | '==' | '>=' | '>' | '!='
+	'<' | '<=' | '==' | '>=' | '>' | '!=';
+	
+Number: 
+	INT
 ;
 	
-Expression:
-	INT | Function
+Function: 
+	ModuleFunction | board=[Board] '.' functionName=FunctionName
 ;
 	
-Function:
-	ActuatorFunction | SensorFunction | board=[Board] '.' BoardFunctionName;
-
-ActuatorFunction: 
-	board=[Board] '.' actuatorType=[ActuatorType] '.' ActuatorFunctionName | actuatorType=[ActuatorType] '.' ActuatorFunctionName;
+ModuleFunction: 
+	board=[Board] '.' moduleType=[ModuleType] '.' functionName=FunctionName
+;
 	
-SensorFunction: 
-	board=[Board] '.' sensorType=[SensorType] '.' SensorFunctionName | sensorType=[SensorType] '.' SensorFunctionName;
-	
-SensorFunctionName:
-	'SensorFunctionName';
-
-ActuatorFunctionName:
-	'ActuatorFunctionName';
-	
-BoardFunctionName:
-	'BoardFunctionName';
+FunctionName:
+	name=ID
+;

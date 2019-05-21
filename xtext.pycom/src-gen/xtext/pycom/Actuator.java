@@ -25,7 +25,7 @@ public interface Actuator extends BoardMember
 {
   /**
    * Returns the value of the '<em><b>Actuator Types</b></em>' containment reference list.
-   * The list contents are of type {@link xtext.pycom.ActuatorType}.
+   * The list contents are of type {@link xtext.pycom.ModuleType}.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the value of the '<em>Actuator Types</em>' containment reference list.
@@ -33,6 +33,6 @@ public interface Actuator extends BoardMember
    * @model containment="true"
    * @generated
    */
-  EList<ActuatorType> getActuatorTypes();
+  EList<ModuleType> getActuatorTypes();
 
 } // Actuator

@@ -3,20 +3,17 @@
  */
 package xtext.pycom.impl;
 
-import java.util.Collection;
-
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import xtext.pycom.Condition;
-import xtext.pycom.ExpMember;
+import xtext.pycom.LogicExp;
 import xtext.pycom.PycomPackage;
 
 /**
@@ -27,22 +24,54 @@ import xtext.pycom.PycomPackage;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link xtext.pycom.impl.ConditionImpl#getExpMembers <em>Exp Members</em>}</li>
+ *   <li>{@link xtext.pycom.impl.ConditionImpl#getLogicEx <em>Logic Ex</em>}</li>
+ *   <li>{@link xtext.pycom.impl.ConditionImpl#getOperator <em>Operator</em>}</li>
+ *   <li>{@link xtext.pycom.impl.ConditionImpl#getNestedCondition <em>Nested Condition</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class ConditionImpl extends ConditionalActionImpl implements Condition
+public class ConditionImpl extends MinimalEObjectImpl.Container implements Condition
 {
   /**
-   * The cached value of the '{@link #getExpMembers() <em>Exp Members</em>}' containment reference list.
+   * The cached value of the '{@link #getLogicEx() <em>Logic Ex</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getExpMembers()
+   * @see #getLogicEx()
    * @generated
    * @ordered
    */
-  protected EList<ExpMember> expMembers;
+  protected LogicExp logicEx;
+
+  /**
+   * The default value of the '{@link #getOperator() <em>Operator</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getOperator()
+   * @generated
+   * @ordered
+   */
+  protected static final String OPERATOR_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getOperator() <em>Operator</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getOperator()
+   * @generated
+   * @ordered
+   */
+  protected String operator = OPERATOR_EDEFAULT;
+
+  /**
+   * The cached value of the '{@link #getNestedCondition() <em>Nested Condition</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getNestedCondition()
+   * @generated
+   * @ordered
+   */
+  protected Condition nestedCondition;
 
   /**
    * <!-- begin-user-doc -->
@@ -71,13 +100,123 @@ public class ConditionImpl extends ConditionalActionImpl implements Condition
    * @generated
    */
   @Override
-  public EList<ExpMember> getExpMembers()
+  public LogicExp getLogicEx()
   {
-    if (expMembers == null)
+    return logicEx;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetLogicEx(LogicExp newLogicEx, NotificationChain msgs)
+  {
+    LogicExp oldLogicEx = logicEx;
+    logicEx = newLogicEx;
+    if (eNotificationRequired())
     {
-      expMembers = new EObjectContainmentEList<ExpMember>(ExpMember.class, this, PycomPackage.CONDITION__EXP_MEMBERS);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PycomPackage.CONDITION__LOGIC_EX, oldLogicEx, newLogicEx);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
     }
-    return expMembers;
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setLogicEx(LogicExp newLogicEx)
+  {
+    if (newLogicEx != logicEx)
+    {
+      NotificationChain msgs = null;
+      if (logicEx != null)
+        msgs = ((InternalEObject)logicEx).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PycomPackage.CONDITION__LOGIC_EX, null, msgs);
+      if (newLogicEx != null)
+        msgs = ((InternalEObject)newLogicEx).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PycomPackage.CONDITION__LOGIC_EX, null, msgs);
+      msgs = basicSetLogicEx(newLogicEx, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, PycomPackage.CONDITION__LOGIC_EX, newLogicEx, newLogicEx));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String getOperator()
+  {
+    return operator;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setOperator(String newOperator)
+  {
+    String oldOperator = operator;
+    operator = newOperator;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, PycomPackage.CONDITION__OPERATOR, oldOperator, operator));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Condition getNestedCondition()
+  {
+    return nestedCondition;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetNestedCondition(Condition newNestedCondition, NotificationChain msgs)
+  {
+    Condition oldNestedCondition = nestedCondition;
+    nestedCondition = newNestedCondition;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PycomPackage.CONDITION__NESTED_CONDITION, oldNestedCondition, newNestedCondition);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setNestedCondition(Condition newNestedCondition)
+  {
+    if (newNestedCondition != nestedCondition)
+    {
+      NotificationChain msgs = null;
+      if (nestedCondition != null)
+        msgs = ((InternalEObject)nestedCondition).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PycomPackage.CONDITION__NESTED_CONDITION, null, msgs);
+      if (newNestedCondition != null)
+        msgs = ((InternalEObject)newNestedCondition).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PycomPackage.CONDITION__NESTED_CONDITION, null, msgs);
+      msgs = basicSetNestedCondition(newNestedCondition, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, PycomPackage.CONDITION__NESTED_CONDITION, newNestedCondition, newNestedCondition));
   }
 
   /**
@@ -90,8 +229,10 @@ public class ConditionImpl extends ConditionalActionImpl implements Condition
   {
     switch (featureID)
     {
-      case PycomPackage.CONDITION__EXP_MEMBERS:
-        return ((InternalEList<?>)getExpMembers()).basicRemove(otherEnd, msgs);
+      case PycomPackage.CONDITION__LOGIC_EX:
+        return basicSetLogicEx(null, msgs);
+      case PycomPackage.CONDITION__NESTED_CONDITION:
+        return basicSetNestedCondition(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -106,8 +247,12 @@ public class ConditionImpl extends ConditionalActionImpl implements Condition
   {
     switch (featureID)
     {
-      case PycomPackage.CONDITION__EXP_MEMBERS:
-        return getExpMembers();
+      case PycomPackage.CONDITION__LOGIC_EX:
+        return getLogicEx();
+      case PycomPackage.CONDITION__OPERATOR:
+        return getOperator();
+      case PycomPackage.CONDITION__NESTED_CONDITION:
+        return getNestedCondition();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -117,15 +262,19 @@ public class ConditionImpl extends ConditionalActionImpl implements Condition
    * <!-- end-user-doc -->
    * @generated
    */
-  @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue)
   {
     switch (featureID)
     {
-      case PycomPackage.CONDITION__EXP_MEMBERS:
-        getExpMembers().clear();
-        getExpMembers().addAll((Collection<? extends ExpMember>)newValue);
+      case PycomPackage.CONDITION__LOGIC_EX:
+        setLogicEx((LogicExp)newValue);
+        return;
+      case PycomPackage.CONDITION__OPERATOR:
+        setOperator((String)newValue);
+        return;
+      case PycomPackage.CONDITION__NESTED_CONDITION:
+        setNestedCondition((Condition)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -141,8 +290,14 @@ public class ConditionImpl extends ConditionalActionImpl implements Condition
   {
     switch (featureID)
     {
-      case PycomPackage.CONDITION__EXP_MEMBERS:
-        getExpMembers().clear();
+      case PycomPackage.CONDITION__LOGIC_EX:
+        setLogicEx((LogicExp)null);
+        return;
+      case PycomPackage.CONDITION__OPERATOR:
+        setOperator(OPERATOR_EDEFAULT);
+        return;
+      case PycomPackage.CONDITION__NESTED_CONDITION:
+        setNestedCondition((Condition)null);
         return;
     }
     super.eUnset(featureID);
@@ -158,10 +313,31 @@ public class ConditionImpl extends ConditionalActionImpl implements Condition
   {
     switch (featureID)
     {
-      case PycomPackage.CONDITION__EXP_MEMBERS:
-        return expMembers != null && !expMembers.isEmpty();
+      case PycomPackage.CONDITION__LOGIC_EX:
+        return logicEx != null;
+      case PycomPackage.CONDITION__OPERATOR:
+        return OPERATOR_EDEFAULT == null ? operator != null : !OPERATOR_EDEFAULT.equals(operator);
+      case PycomPackage.CONDITION__NESTED_CONDITION:
+        return nestedCondition != null;
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
+
+    StringBuilder result = new StringBuilder(super.toString());
+    result.append(" (operator: ");
+    result.append(operator);
+    result.append(')');
+    return result.toString();
   }
 
 } //ConditionImpl

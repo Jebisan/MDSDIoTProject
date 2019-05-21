@@ -4,6 +4,7 @@
 package xtext.pycom.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -12,6 +13,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import xtext.pycom.Board;
 import xtext.pycom.Function;
+import xtext.pycom.FunctionName;
 import xtext.pycom.PycomPackage;
 
 /**
@@ -23,6 +25,7 @@ import xtext.pycom.PycomPackage;
  * </p>
  * <ul>
  *   <li>{@link xtext.pycom.impl.FunctionImpl#getBoard <em>Board</em>}</li>
+ *   <li>{@link xtext.pycom.impl.FunctionImpl#getFunctionName <em>Function Name</em>}</li>
  * </ul>
  *
  * @generated
@@ -38,6 +41,16 @@ public class FunctionImpl extends ExpMemberImpl implements Function
    * @ordered
    */
   protected Board board;
+
+  /**
+   * The cached value of the '{@link #getFunctionName() <em>Function Name</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getFunctionName()
+   * @generated
+   * @ordered
+   */
+  protected FunctionName functionName;
 
   /**
    * <!-- begin-user-doc -->
@@ -111,6 +124,72 @@ public class FunctionImpl extends ExpMemberImpl implements Function
    * @generated
    */
   @Override
+  public FunctionName getFunctionName()
+  {
+    return functionName;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetFunctionName(FunctionName newFunctionName, NotificationChain msgs)
+  {
+    FunctionName oldFunctionName = functionName;
+    functionName = newFunctionName;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PycomPackage.FUNCTION__FUNCTION_NAME, oldFunctionName, newFunctionName);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setFunctionName(FunctionName newFunctionName)
+  {
+    if (newFunctionName != functionName)
+    {
+      NotificationChain msgs = null;
+      if (functionName != null)
+        msgs = ((InternalEObject)functionName).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PycomPackage.FUNCTION__FUNCTION_NAME, null, msgs);
+      if (newFunctionName != null)
+        msgs = ((InternalEObject)newFunctionName).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PycomPackage.FUNCTION__FUNCTION_NAME, null, msgs);
+      msgs = basicSetFunctionName(newFunctionName, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, PycomPackage.FUNCTION__FUNCTION_NAME, newFunctionName, newFunctionName));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  {
+    switch (featureID)
+    {
+      case PycomPackage.FUNCTION__FUNCTION_NAME:
+        return basicSetFunctionName(null, msgs);
+    }
+    return super.eInverseRemove(otherEnd, featureID, msgs);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
     switch (featureID)
@@ -118,6 +197,8 @@ public class FunctionImpl extends ExpMemberImpl implements Function
       case PycomPackage.FUNCTION__BOARD:
         if (resolve) return getBoard();
         return basicGetBoard();
+      case PycomPackage.FUNCTION__FUNCTION_NAME:
+        return getFunctionName();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -134,6 +215,9 @@ public class FunctionImpl extends ExpMemberImpl implements Function
     {
       case PycomPackage.FUNCTION__BOARD:
         setBoard((Board)newValue);
+        return;
+      case PycomPackage.FUNCTION__FUNCTION_NAME:
+        setFunctionName((FunctionName)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -152,6 +236,9 @@ public class FunctionImpl extends ExpMemberImpl implements Function
       case PycomPackage.FUNCTION__BOARD:
         setBoard((Board)null);
         return;
+      case PycomPackage.FUNCTION__FUNCTION_NAME:
+        setFunctionName((FunctionName)null);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -168,6 +255,8 @@ public class FunctionImpl extends ExpMemberImpl implements Function
     {
       case PycomPackage.FUNCTION__BOARD:
         return board != null;
+      case PycomPackage.FUNCTION__FUNCTION_NAME:
+        return functionName != null;
     }
     return super.eIsSet(featureID);
   }

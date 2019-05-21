@@ -15,9 +15,9 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import xtext.pycom.ModuleType;
 import xtext.pycom.PycomPackage;
 import xtext.pycom.Sensor;
-import xtext.pycom.SensorType;
 
 /**
  * <!-- begin-user-doc -->
@@ -42,7 +42,7 @@ public class SensorImpl extends BoardMemberImpl implements Sensor
    * @generated
    * @ordered
    */
-  protected EList<SensorType> sensorTypes;
+  protected EList<ModuleType> sensorTypes;
 
   /**
    * <!-- begin-user-doc -->
@@ -71,11 +71,11 @@ public class SensorImpl extends BoardMemberImpl implements Sensor
    * @generated
    */
   @Override
-  public EList<SensorType> getSensorTypes()
+  public EList<ModuleType> getSensorTypes()
   {
     if (sensorTypes == null)
     {
-      sensorTypes = new EObjectContainmentEList<SensorType>(SensorType.class, this, PycomPackage.SENSOR__SENSOR_TYPES);
+      sensorTypes = new EObjectContainmentEList<ModuleType>(ModuleType.class, this, PycomPackage.SENSOR__SENSOR_TYPES);
     }
     return sensorTypes;
   }
@@ -125,7 +125,7 @@ public class SensorImpl extends BoardMemberImpl implements Sensor
     {
       case PycomPackage.SENSOR__SENSOR_TYPES:
         getSensorTypes().clear();
-        getSensorTypes().addAll((Collection<? extends SensorType>)newValue);
+        getSensorTypes().addAll((Collection<? extends ModuleType>)newValue);
         return;
     }
     super.eSet(featureID, newValue);

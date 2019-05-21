@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import xtext.pycom.ComparisonExp;
 import xtext.pycom.Expression;
@@ -25,12 +26,12 @@ import xtext.pycom.PycomPackage;
  * <ul>
  *   <li>{@link xtext.pycom.impl.ComparisonExpImpl#getLeft <em>Left</em>}</li>
  *   <li>{@link xtext.pycom.impl.ComparisonExpImpl#getOp <em>Op</em>}</li>
- *   <li>{@link xtext.pycom.impl.ComparisonExpImpl#getRigth <em>Rigth</em>}</li>
+ *   <li>{@link xtext.pycom.impl.ComparisonExpImpl#getRight <em>Right</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class ComparisonExpImpl extends LogicExpImpl implements ComparisonExp
+public class ComparisonExpImpl extends MinimalEObjectImpl.Container implements ComparisonExp
 {
   /**
    * The cached value of the '{@link #getLeft() <em>Left</em>}' containment reference.
@@ -63,14 +64,14 @@ public class ComparisonExpImpl extends LogicExpImpl implements ComparisonExp
   protected String op = OP_EDEFAULT;
 
   /**
-   * The cached value of the '{@link #getRigth() <em>Rigth</em>}' containment reference.
+   * The cached value of the '{@link #getRight() <em>Right</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getRigth()
+   * @see #getRight()
    * @generated
    * @ordered
    */
-  protected Expression rigth;
+  protected Expression right;
 
   /**
    * <!-- begin-user-doc -->
@@ -174,9 +175,9 @@ public class ComparisonExpImpl extends LogicExpImpl implements ComparisonExp
    * @generated
    */
   @Override
-  public Expression getRigth()
+  public Expression getRight()
   {
-    return rigth;
+    return right;
   }
 
   /**
@@ -184,13 +185,13 @@ public class ComparisonExpImpl extends LogicExpImpl implements ComparisonExp
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetRigth(Expression newRigth, NotificationChain msgs)
+  public NotificationChain basicSetRight(Expression newRight, NotificationChain msgs)
   {
-    Expression oldRigth = rigth;
-    rigth = newRigth;
+    Expression oldRight = right;
+    right = newRight;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PycomPackage.COMPARISON_EXP__RIGTH, oldRigth, newRigth);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PycomPackage.COMPARISON_EXP__RIGHT, oldRight, newRight);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -202,20 +203,20 @@ public class ComparisonExpImpl extends LogicExpImpl implements ComparisonExp
    * @generated
    */
   @Override
-  public void setRigth(Expression newRigth)
+  public void setRight(Expression newRight)
   {
-    if (newRigth != rigth)
+    if (newRight != right)
     {
       NotificationChain msgs = null;
-      if (rigth != null)
-        msgs = ((InternalEObject)rigth).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PycomPackage.COMPARISON_EXP__RIGTH, null, msgs);
-      if (newRigth != null)
-        msgs = ((InternalEObject)newRigth).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PycomPackage.COMPARISON_EXP__RIGTH, null, msgs);
-      msgs = basicSetRigth(newRigth, msgs);
+      if (right != null)
+        msgs = ((InternalEObject)right).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PycomPackage.COMPARISON_EXP__RIGHT, null, msgs);
+      if (newRight != null)
+        msgs = ((InternalEObject)newRight).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PycomPackage.COMPARISON_EXP__RIGHT, null, msgs);
+      msgs = basicSetRight(newRight, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, PycomPackage.COMPARISON_EXP__RIGTH, newRigth, newRigth));
+      eNotify(new ENotificationImpl(this, Notification.SET, PycomPackage.COMPARISON_EXP__RIGHT, newRight, newRight));
   }
 
   /**
@@ -230,8 +231,8 @@ public class ComparisonExpImpl extends LogicExpImpl implements ComparisonExp
     {
       case PycomPackage.COMPARISON_EXP__LEFT:
         return basicSetLeft(null, msgs);
-      case PycomPackage.COMPARISON_EXP__RIGTH:
-        return basicSetRigth(null, msgs);
+      case PycomPackage.COMPARISON_EXP__RIGHT:
+        return basicSetRight(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -250,8 +251,8 @@ public class ComparisonExpImpl extends LogicExpImpl implements ComparisonExp
         return getLeft();
       case PycomPackage.COMPARISON_EXP__OP:
         return getOp();
-      case PycomPackage.COMPARISON_EXP__RIGTH:
-        return getRigth();
+      case PycomPackage.COMPARISON_EXP__RIGHT:
+        return getRight();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -272,8 +273,8 @@ public class ComparisonExpImpl extends LogicExpImpl implements ComparisonExp
       case PycomPackage.COMPARISON_EXP__OP:
         setOp((String)newValue);
         return;
-      case PycomPackage.COMPARISON_EXP__RIGTH:
-        setRigth((Expression)newValue);
+      case PycomPackage.COMPARISON_EXP__RIGHT:
+        setRight((Expression)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -295,8 +296,8 @@ public class ComparisonExpImpl extends LogicExpImpl implements ComparisonExp
       case PycomPackage.COMPARISON_EXP__OP:
         setOp(OP_EDEFAULT);
         return;
-      case PycomPackage.COMPARISON_EXP__RIGTH:
-        setRigth((Expression)null);
+      case PycomPackage.COMPARISON_EXP__RIGHT:
+        setRight((Expression)null);
         return;
     }
     super.eUnset(featureID);
@@ -316,8 +317,8 @@ public class ComparisonExpImpl extends LogicExpImpl implements ComparisonExp
         return left != null;
       case PycomPackage.COMPARISON_EXP__OP:
         return OP_EDEFAULT == null ? op != null : !OP_EDEFAULT.equals(op);
-      case PycomPackage.COMPARISON_EXP__RIGTH:
-        return rigth != null;
+      case PycomPackage.COMPARISON_EXP__RIGHT:
+        return right != null;
     }
     return super.eIsSet(featureID);
   }

@@ -16,16 +16,23 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Pycom.ecore#//Server/exps"/>
     </genClasses>
     <genClasses ecoreClass="Pycom.ecore#//Connection">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Pycom.ecore#//Connection/ipAdr"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Pycom.ecore#//Connection/website"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Pycom.ecore#//Connection/host"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Pycom.ecore#//Connection/portnumber"/>
+    </genClasses>
+    <genClasses ecoreClass="Pycom.ecore#//Host">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Pycom.ecore#//Host/ipAdr"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Pycom.ecore#//Host/website"/>
     </genClasses>
     <genClasses ecoreClass="Pycom.ecore#//Board">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Pycom.ecore#//Board/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Pycom.ecore#//Board/boardMembers"/>
     </genClasses>
     <genClasses ecoreClass="Pycom.ecore#//BoardMember"/>
-    <genClasses ecoreClass="Pycom.ecore#//ConditionalAction"/>
+    <genClasses ecoreClass="Pycom.ecore#//ConditionalAction">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Pycom.ecore#//ConditionalAction/type"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Pycom.ecore#//ConditionalAction/condition"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Pycom.ecore#//ConditionalAction/ExpMembers"/>
+    </genClasses>
     <genClasses ecoreClass="Pycom.ecore#//ExpMember"/>
     <genClasses ecoreClass="Pycom.ecore#//Sensor">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Pycom.ecore#//Sensor/sensorTypes"/>
@@ -33,25 +40,29 @@
     <genClasses ecoreClass="Pycom.ecore#//Actuator">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Pycom.ecore#//Actuator/actuatorTypes"/>
     </genClasses>
-    <genClasses ecoreClass="Pycom.ecore#//ActuatorType">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Pycom.ecore#//ActuatorType/typeName"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Pycom.ecore#//ActuatorType/name"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Pycom.ecore#//ActuatorType/pins"/>
+    <genClasses ecoreClass="Pycom.ecore#//Communication">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Pycom.ecore#//Communication/type"/>
     </genClasses>
-    <genClasses ecoreClass="Pycom.ecore#//SensorType">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Pycom.ecore#//SensorType/typeName"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Pycom.ecore#//SensorType/name"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Pycom.ecore#//SensorType/pins"/>
+    <genClasses ecoreClass="Pycom.ecore#//ModuleType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Pycom.ecore#//ModuleType/typeName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Pycom.ecore#//ModuleType/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Pycom.ecore#//ModuleType/pins"/>
     </genClasses>
     <genClasses ecoreClass="Pycom.ecore#//Pin">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Pycom.ecore#//Pin/power"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Pycom.ecore#//Pin/input"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Pycom.ecore#//Pin/power"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Pycom.ecore#//Pin/input"/>
+    </genClasses>
+    <genClasses ecoreClass="Pycom.ecore#//PinName">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Pycom.ecore#//PinName/name"/>
     </genClasses>
     <genClasses ecoreClass="Pycom.ecore#//Condition">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Pycom.ecore#//Condition/ExpMembers"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Pycom.ecore#//Condition/logicEx"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Pycom.ecore#//Condition/operator"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Pycom.ecore#//Condition/nestedCondition"/>
     </genClasses>
     <genClasses ecoreClass="Pycom.ecore#//LogicExp">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Pycom.ecore#//LogicExp/condition"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Pycom.ecore#//LogicExp/boolVal"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Pycom.ecore#//LogicExp/compExp"/>
     </genClasses>
     <genClasses ecoreClass="Pycom.ecore#//Boolean">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Pycom.ecore#//Boolean/value"/>
@@ -59,17 +70,23 @@
     <genClasses ecoreClass="Pycom.ecore#//ComparisonExp">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Pycom.ecore#//ComparisonExp/left"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Pycom.ecore#//ComparisonExp/op"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Pycom.ecore#//ComparisonExp/rigth"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Pycom.ecore#//ComparisonExp/right"/>
     </genClasses>
-    <genClasses ecoreClass="Pycom.ecore#//Expression"/>
+    <genClasses ecoreClass="Pycom.ecore#//Expression">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Pycom.ecore#//Expression/outputValue"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Pycom.ecore#//Expression/outputfunction"/>
+    </genClasses>
     <genClasses ecoreClass="Pycom.ecore#//Function">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Pycom.ecore#//Function/board"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Pycom.ecore#//Function/functionName"/>
     </genClasses>
-    <genClasses ecoreClass="Pycom.ecore#//ActuatorFunction">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Pycom.ecore#//ActuatorFunction/actuatorType"/>
+    <genClasses ecoreClass="Pycom.ecore#//ModuleFunction">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Pycom.ecore#//ModuleFunction/moduleType"/>
     </genClasses>
-    <genClasses ecoreClass="Pycom.ecore#//SensorFunction">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Pycom.ecore#//SensorFunction/sensorType"/>
+    <genClasses ecoreClass="Pycom.ecore#//FunctionName">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Pycom.ecore#//FunctionName/name"/>
     </genClasses>
+    <genClasses ecoreClass="Pycom.ecore#//ActuatorType"/>
+    <genClasses ecoreClass="Pycom.ecore#//SensorType"/>
   </genPackages>
 </genmodel:GenModel>

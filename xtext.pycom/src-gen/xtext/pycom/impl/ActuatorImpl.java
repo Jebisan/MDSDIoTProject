@@ -16,7 +16,7 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import xtext.pycom.Actuator;
-import xtext.pycom.ActuatorType;
+import xtext.pycom.ModuleType;
 import xtext.pycom.PycomPackage;
 
 /**
@@ -42,7 +42,7 @@ public class ActuatorImpl extends BoardMemberImpl implements Actuator
    * @generated
    * @ordered
    */
-  protected EList<ActuatorType> actuatorTypes;
+  protected EList<ModuleType> actuatorTypes;
 
   /**
    * <!-- begin-user-doc -->
@@ -71,11 +71,11 @@ public class ActuatorImpl extends BoardMemberImpl implements Actuator
    * @generated
    */
   @Override
-  public EList<ActuatorType> getActuatorTypes()
+  public EList<ModuleType> getActuatorTypes()
   {
     if (actuatorTypes == null)
     {
-      actuatorTypes = new EObjectContainmentEList<ActuatorType>(ActuatorType.class, this, PycomPackage.ACTUATOR__ACTUATOR_TYPES);
+      actuatorTypes = new EObjectContainmentEList<ModuleType>(ModuleType.class, this, PycomPackage.ACTUATOR__ACTUATOR_TYPES);
     }
     return actuatorTypes;
   }
@@ -125,7 +125,7 @@ public class ActuatorImpl extends BoardMemberImpl implements Actuator
     {
       case PycomPackage.ACTUATOR__ACTUATOR_TYPES:
         getActuatorTypes().clear();
-        getActuatorTypes().addAll((Collection<? extends ActuatorType>)newValue);
+        getActuatorTypes().addAll((Collection<? extends ModuleType>)newValue);
         return;
     }
     super.eSet(featureID, newValue);

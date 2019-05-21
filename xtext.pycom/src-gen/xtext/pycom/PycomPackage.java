@@ -151,22 +151,13 @@ public interface PycomPackage extends EPackage
   int CONNECTION = 2;
 
   /**
-   * The feature id for the '<em><b>Ip Adr</b></em>' attribute.
+   * The feature id for the '<em><b>Host</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int CONNECTION__IP_ADR = 0;
-
-  /**
-   * The feature id for the '<em><b>Website</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int CONNECTION__WEBSITE = 1;
+  int CONNECTION__HOST = 0;
 
   /**
    * The feature id for the '<em><b>Portnumber</b></em>' attribute.
@@ -175,7 +166,7 @@ public interface PycomPackage extends EPackage
    * @generated
    * @ordered
    */
-  int CONNECTION__PORTNUMBER = 2;
+  int CONNECTION__PORTNUMBER = 1;
 
   /**
    * The number of structural features of the '<em>Connection</em>' class.
@@ -184,7 +175,44 @@ public interface PycomPackage extends EPackage
    * @generated
    * @ordered
    */
-  int CONNECTION_FEATURE_COUNT = 3;
+  int CONNECTION_FEATURE_COUNT = 2;
+
+  /**
+   * The meta object id for the '{@link xtext.pycom.impl.HostImpl <em>Host</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see xtext.pycom.impl.HostImpl
+   * @see xtext.pycom.impl.PycomPackageImpl#getHost()
+   * @generated
+   */
+  int HOST = 3;
+
+  /**
+   * The feature id for the '<em><b>Ip Adr</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int HOST__IP_ADR = 0;
+
+  /**
+   * The feature id for the '<em><b>Website</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int HOST__WEBSITE = 1;
+
+  /**
+   * The number of structural features of the '<em>Host</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int HOST_FEATURE_COUNT = 2;
 
   /**
    * The meta object id for the '{@link xtext.pycom.impl.BoardImpl <em>Board</em>}' class.
@@ -194,7 +222,7 @@ public interface PycomPackage extends EPackage
    * @see xtext.pycom.impl.PycomPackageImpl#getBoard()
    * @generated
    */
-  int BOARD = 3;
+  int BOARD = 4;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -231,7 +259,7 @@ public interface PycomPackage extends EPackage
    * @see xtext.pycom.impl.PycomPackageImpl#getBoardMember()
    * @generated
    */
-  int BOARD_MEMBER = 4;
+  int BOARD_MEMBER = 5;
 
   /**
    * The number of structural features of the '<em>Board Member</em>' class.
@@ -250,7 +278,7 @@ public interface PycomPackage extends EPackage
    * @see xtext.pycom.impl.PycomPackageImpl#getExpMember()
    * @generated
    */
-  int EXP_MEMBER = 6;
+  int EXP_MEMBER = 7;
 
   /**
    * The number of structural features of the '<em>Exp Member</em>' class.
@@ -269,7 +297,34 @@ public interface PycomPackage extends EPackage
    * @see xtext.pycom.impl.PycomPackageImpl#getConditionalAction()
    * @generated
    */
-  int CONDITIONAL_ACTION = 5;
+  int CONDITIONAL_ACTION = 6;
+
+  /**
+   * The feature id for the '<em><b>Type</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONDITIONAL_ACTION__TYPE = EXP_MEMBER_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Condition</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONDITIONAL_ACTION__CONDITION = EXP_MEMBER_FEATURE_COUNT + 1;
+
+  /**
+   * The feature id for the '<em><b>Exp Members</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONDITIONAL_ACTION__EXP_MEMBERS = EXP_MEMBER_FEATURE_COUNT + 2;
 
   /**
    * The number of structural features of the '<em>Conditional Action</em>' class.
@@ -278,7 +333,7 @@ public interface PycomPackage extends EPackage
    * @generated
    * @ordered
    */
-  int CONDITIONAL_ACTION_FEATURE_COUNT = EXP_MEMBER_FEATURE_COUNT + 0;
+  int CONDITIONAL_ACTION_FEATURE_COUNT = EXP_MEMBER_FEATURE_COUNT + 3;
 
   /**
    * The meta object id for the '{@link xtext.pycom.impl.SensorImpl <em>Sensor</em>}' class.
@@ -288,7 +343,7 @@ public interface PycomPackage extends EPackage
    * @see xtext.pycom.impl.PycomPackageImpl#getSensor()
    * @generated
    */
-  int SENSOR = 7;
+  int SENSOR = 8;
 
   /**
    * The feature id for the '<em><b>Sensor Types</b></em>' containment reference list.
@@ -316,7 +371,7 @@ public interface PycomPackage extends EPackage
    * @see xtext.pycom.impl.PycomPackageImpl#getActuator()
    * @generated
    */
-  int ACTUATOR = 8;
+  int ACTUATOR = 9;
 
   /**
    * The feature id for the '<em><b>Actuator Types</b></em>' containment reference list.
@@ -337,14 +392,42 @@ public interface PycomPackage extends EPackage
   int ACTUATOR_FEATURE_COUNT = BOARD_MEMBER_FEATURE_COUNT + 1;
 
   /**
-   * The meta object id for the '{@link xtext.pycom.impl.ActuatorTypeImpl <em>Actuator Type</em>}' class.
+   * The meta object id for the '{@link xtext.pycom.impl.CommunicationImpl <em>Communication</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see xtext.pycom.impl.ActuatorTypeImpl
-   * @see xtext.pycom.impl.PycomPackageImpl#getActuatorType()
+   * @see xtext.pycom.impl.CommunicationImpl
+   * @see xtext.pycom.impl.PycomPackageImpl#getCommunication()
    * @generated
    */
-  int ACTUATOR_TYPE = 9;
+  int COMMUNICATION = 10;
+
+  /**
+   * The feature id for the '<em><b>Type</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int COMMUNICATION__TYPE = BOARD_MEMBER_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Communication</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int COMMUNICATION_FEATURE_COUNT = BOARD_MEMBER_FEATURE_COUNT + 1;
+
+  /**
+   * The meta object id for the '{@link xtext.pycom.impl.ModuleTypeImpl <em>Module Type</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see xtext.pycom.impl.ModuleTypeImpl
+   * @see xtext.pycom.impl.PycomPackageImpl#getModuleType()
+   * @generated
+   */
+  int MODULE_TYPE = 11;
 
   /**
    * The feature id for the '<em><b>Type Name</b></em>' attribute.
@@ -353,7 +436,7 @@ public interface PycomPackage extends EPackage
    * @generated
    * @ordered
    */
-  int ACTUATOR_TYPE__TYPE_NAME = 0;
+  int MODULE_TYPE__TYPE_NAME = 0;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -362,71 +445,25 @@ public interface PycomPackage extends EPackage
    * @generated
    * @ordered
    */
-  int ACTUATOR_TYPE__NAME = 1;
+  int MODULE_TYPE__NAME = 1;
 
   /**
-   * The feature id for the '<em><b>Pins</b></em>' containment reference list.
+   * The feature id for the '<em><b>Pins</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ACTUATOR_TYPE__PINS = 2;
+  int MODULE_TYPE__PINS = 2;
 
   /**
-   * The number of structural features of the '<em>Actuator Type</em>' class.
+   * The number of structural features of the '<em>Module Type</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ACTUATOR_TYPE_FEATURE_COUNT = 3;
-
-  /**
-   * The meta object id for the '{@link xtext.pycom.impl.SensorTypeImpl <em>Sensor Type</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see xtext.pycom.impl.SensorTypeImpl
-   * @see xtext.pycom.impl.PycomPackageImpl#getSensorType()
-   * @generated
-   */
-  int SENSOR_TYPE = 10;
-
-  /**
-   * The feature id for the '<em><b>Type Name</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SENSOR_TYPE__TYPE_NAME = 0;
-
-  /**
-   * The feature id for the '<em><b>Name</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SENSOR_TYPE__NAME = 1;
-
-  /**
-   * The feature id for the '<em><b>Pins</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SENSOR_TYPE__PINS = 2;
-
-  /**
-   * The number of structural features of the '<em>Sensor Type</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SENSOR_TYPE_FEATURE_COUNT = 3;
+  int MODULE_TYPE_FEATURE_COUNT = 3;
 
   /**
    * The meta object id for the '{@link xtext.pycom.impl.PinImpl <em>Pin</em>}' class.
@@ -436,10 +473,10 @@ public interface PycomPackage extends EPackage
    * @see xtext.pycom.impl.PycomPackageImpl#getPin()
    * @generated
    */
-  int PIN = 11;
+  int PIN = 12;
 
   /**
-   * The feature id for the '<em><b>Power</b></em>' attribute.
+   * The feature id for the '<em><b>Power</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -448,7 +485,7 @@ public interface PycomPackage extends EPackage
   int PIN__POWER = 0;
 
   /**
-   * The feature id for the '<em><b>Input</b></em>' attribute.
+   * The feature id for the '<em><b>Input</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -466,6 +503,34 @@ public interface PycomPackage extends EPackage
   int PIN_FEATURE_COUNT = 2;
 
   /**
+   * The meta object id for the '{@link xtext.pycom.impl.PinNameImpl <em>Pin Name</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see xtext.pycom.impl.PinNameImpl
+   * @see xtext.pycom.impl.PycomPackageImpl#getPinName()
+   * @generated
+   */
+  int PIN_NAME = 13;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PIN_NAME__NAME = 0;
+
+  /**
+   * The number of structural features of the '<em>Pin Name</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PIN_NAME_FEATURE_COUNT = 1;
+
+  /**
    * The meta object id for the '{@link xtext.pycom.impl.ConditionImpl <em>Condition</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -473,16 +538,34 @@ public interface PycomPackage extends EPackage
    * @see xtext.pycom.impl.PycomPackageImpl#getCondition()
    * @generated
    */
-  int CONDITION = 12;
+  int CONDITION = 14;
 
   /**
-   * The feature id for the '<em><b>Exp Members</b></em>' containment reference list.
+   * The feature id for the '<em><b>Logic Ex</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int CONDITION__EXP_MEMBERS = CONDITIONAL_ACTION_FEATURE_COUNT + 0;
+  int CONDITION__LOGIC_EX = 0;
+
+  /**
+   * The feature id for the '<em><b>Operator</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONDITION__OPERATOR = 1;
+
+  /**
+   * The feature id for the '<em><b>Nested Condition</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONDITION__NESTED_CONDITION = 2;
 
   /**
    * The number of structural features of the '<em>Condition</em>' class.
@@ -491,7 +574,7 @@ public interface PycomPackage extends EPackage
    * @generated
    * @ordered
    */
-  int CONDITION_FEATURE_COUNT = CONDITIONAL_ACTION_FEATURE_COUNT + 1;
+  int CONDITION_FEATURE_COUNT = 3;
 
   /**
    * The meta object id for the '{@link xtext.pycom.impl.LogicExpImpl <em>Logic Exp</em>}' class.
@@ -501,25 +584,25 @@ public interface PycomPackage extends EPackage
    * @see xtext.pycom.impl.PycomPackageImpl#getLogicExp()
    * @generated
    */
-  int LOGIC_EXP = 13;
+  int LOGIC_EXP = 15;
 
   /**
-   * The feature id for the '<em><b>Exp Members</b></em>' containment reference list.
+   * The feature id for the '<em><b>Bool Val</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int LOGIC_EXP__EXP_MEMBERS = CONDITION__EXP_MEMBERS;
+  int LOGIC_EXP__BOOL_VAL = 0;
 
   /**
-   * The feature id for the '<em><b>Condition</b></em>' containment reference.
+   * The feature id for the '<em><b>Comp Exp</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int LOGIC_EXP__CONDITION = CONDITION_FEATURE_COUNT + 0;
+  int LOGIC_EXP__COMP_EXP = 1;
 
   /**
    * The number of structural features of the '<em>Logic Exp</em>' class.
@@ -528,7 +611,7 @@ public interface PycomPackage extends EPackage
    * @generated
    * @ordered
    */
-  int LOGIC_EXP_FEATURE_COUNT = CONDITION_FEATURE_COUNT + 1;
+  int LOGIC_EXP_FEATURE_COUNT = 2;
 
   /**
    * The meta object id for the '{@link xtext.pycom.impl.BooleanImpl <em>Boolean</em>}' class.
@@ -538,25 +621,7 @@ public interface PycomPackage extends EPackage
    * @see xtext.pycom.impl.PycomPackageImpl#getBoolean()
    * @generated
    */
-  int BOOLEAN = 14;
-
-  /**
-   * The feature id for the '<em><b>Exp Members</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int BOOLEAN__EXP_MEMBERS = LOGIC_EXP__EXP_MEMBERS;
-
-  /**
-   * The feature id for the '<em><b>Condition</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int BOOLEAN__CONDITION = LOGIC_EXP__CONDITION;
+  int BOOLEAN = 16;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -565,7 +630,7 @@ public interface PycomPackage extends EPackage
    * @generated
    * @ordered
    */
-  int BOOLEAN__VALUE = LOGIC_EXP_FEATURE_COUNT + 0;
+  int BOOLEAN__VALUE = 0;
 
   /**
    * The number of structural features of the '<em>Boolean</em>' class.
@@ -574,7 +639,7 @@ public interface PycomPackage extends EPackage
    * @generated
    * @ordered
    */
-  int BOOLEAN_FEATURE_COUNT = LOGIC_EXP_FEATURE_COUNT + 1;
+  int BOOLEAN_FEATURE_COUNT = 1;
 
   /**
    * The meta object id for the '{@link xtext.pycom.impl.ComparisonExpImpl <em>Comparison Exp</em>}' class.
@@ -584,25 +649,7 @@ public interface PycomPackage extends EPackage
    * @see xtext.pycom.impl.PycomPackageImpl#getComparisonExp()
    * @generated
    */
-  int COMPARISON_EXP = 15;
-
-  /**
-   * The feature id for the '<em><b>Exp Members</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int COMPARISON_EXP__EXP_MEMBERS = LOGIC_EXP__EXP_MEMBERS;
-
-  /**
-   * The feature id for the '<em><b>Condition</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int COMPARISON_EXP__CONDITION = LOGIC_EXP__CONDITION;
+  int COMPARISON_EXP = 17;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -611,7 +658,7 @@ public interface PycomPackage extends EPackage
    * @generated
    * @ordered
    */
-  int COMPARISON_EXP__LEFT = LOGIC_EXP_FEATURE_COUNT + 0;
+  int COMPARISON_EXP__LEFT = 0;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -620,16 +667,16 @@ public interface PycomPackage extends EPackage
    * @generated
    * @ordered
    */
-  int COMPARISON_EXP__OP = LOGIC_EXP_FEATURE_COUNT + 1;
+  int COMPARISON_EXP__OP = 1;
 
   /**
-   * The feature id for the '<em><b>Rigth</b></em>' containment reference.
+   * The feature id for the '<em><b>Right</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int COMPARISON_EXP__RIGTH = LOGIC_EXP_FEATURE_COUNT + 2;
+  int COMPARISON_EXP__RIGHT = 2;
 
   /**
    * The number of structural features of the '<em>Comparison Exp</em>' class.
@@ -638,7 +685,7 @@ public interface PycomPackage extends EPackage
    * @generated
    * @ordered
    */
-  int COMPARISON_EXP_FEATURE_COUNT = LOGIC_EXP_FEATURE_COUNT + 3;
+  int COMPARISON_EXP_FEATURE_COUNT = 3;
 
   /**
    * The meta object id for the '{@link xtext.pycom.impl.ExpressionImpl <em>Expression</em>}' class.
@@ -648,7 +695,25 @@ public interface PycomPackage extends EPackage
    * @see xtext.pycom.impl.PycomPackageImpl#getExpression()
    * @generated
    */
-  int EXPRESSION = 16;
+  int EXPRESSION = 18;
+
+  /**
+   * The feature id for the '<em><b>Output Value</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int EXPRESSION__OUTPUT_VALUE = 0;
+
+  /**
+   * The feature id for the '<em><b>Outputfunction</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int EXPRESSION__OUTPUTFUNCTION = 1;
 
   /**
    * The number of structural features of the '<em>Expression</em>' class.
@@ -657,7 +722,7 @@ public interface PycomPackage extends EPackage
    * @generated
    * @ordered
    */
-  int EXPRESSION_FEATURE_COUNT = 0;
+  int EXPRESSION_FEATURE_COUNT = 2;
 
   /**
    * The meta object id for the '{@link xtext.pycom.impl.FunctionImpl <em>Function</em>}' class.
@@ -667,7 +732,7 @@ public interface PycomPackage extends EPackage
    * @see xtext.pycom.impl.PycomPackageImpl#getFunction()
    * @generated
    */
-  int FUNCTION = 17;
+  int FUNCTION = 19;
 
   /**
    * The feature id for the '<em><b>Board</b></em>' reference.
@@ -679,60 +744,32 @@ public interface PycomPackage extends EPackage
   int FUNCTION__BOARD = EXP_MEMBER_FEATURE_COUNT + 0;
 
   /**
+   * The feature id for the '<em><b>Function Name</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FUNCTION__FUNCTION_NAME = EXP_MEMBER_FEATURE_COUNT + 1;
+
+  /**
    * The number of structural features of the '<em>Function</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int FUNCTION_FEATURE_COUNT = EXP_MEMBER_FEATURE_COUNT + 1;
+  int FUNCTION_FEATURE_COUNT = EXP_MEMBER_FEATURE_COUNT + 2;
 
   /**
-   * The meta object id for the '{@link xtext.pycom.impl.ActuatorFunctionImpl <em>Actuator Function</em>}' class.
+   * The meta object id for the '{@link xtext.pycom.impl.ModuleFunctionImpl <em>Module Function</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see xtext.pycom.impl.ActuatorFunctionImpl
-   * @see xtext.pycom.impl.PycomPackageImpl#getActuatorFunction()
+   * @see xtext.pycom.impl.ModuleFunctionImpl
+   * @see xtext.pycom.impl.PycomPackageImpl#getModuleFunction()
    * @generated
    */
-  int ACTUATOR_FUNCTION = 18;
-
-  /**
-   * The feature id for the '<em><b>Board</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ACTUATOR_FUNCTION__BOARD = FUNCTION__BOARD;
-
-  /**
-   * The feature id for the '<em><b>Actuator Type</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ACTUATOR_FUNCTION__ACTUATOR_TYPE = FUNCTION_FEATURE_COUNT + 0;
-
-  /**
-   * The number of structural features of the '<em>Actuator Function</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ACTUATOR_FUNCTION_FEATURE_COUNT = FUNCTION_FEATURE_COUNT + 1;
-
-  /**
-   * The meta object id for the '{@link xtext.pycom.impl.SensorFunctionImpl <em>Sensor Function</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see xtext.pycom.impl.SensorFunctionImpl
-   * @see xtext.pycom.impl.PycomPackageImpl#getSensorFunction()
-   * @generated
-   */
-  int SENSOR_FUNCTION = 19;
+  int MODULE_FUNCTION = 20;
 
   /**
    * The feature id for the '<em><b>Board</b></em>' reference.
@@ -741,25 +778,154 @@ public interface PycomPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SENSOR_FUNCTION__BOARD = FUNCTION__BOARD;
+  int MODULE_FUNCTION__BOARD = FUNCTION__BOARD;
 
   /**
-   * The feature id for the '<em><b>Sensor Type</b></em>' reference.
+   * The feature id for the '<em><b>Function Name</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int SENSOR_FUNCTION__SENSOR_TYPE = FUNCTION_FEATURE_COUNT + 0;
+  int MODULE_FUNCTION__FUNCTION_NAME = FUNCTION__FUNCTION_NAME;
 
   /**
-   * The number of structural features of the '<em>Sensor Function</em>' class.
+   * The feature id for the '<em><b>Module Type</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int SENSOR_FUNCTION_FEATURE_COUNT = FUNCTION_FEATURE_COUNT + 1;
+  int MODULE_FUNCTION__MODULE_TYPE = FUNCTION_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Module Function</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MODULE_FUNCTION_FEATURE_COUNT = FUNCTION_FEATURE_COUNT + 1;
+
+  /**
+   * The meta object id for the '{@link xtext.pycom.impl.FunctionNameImpl <em>Function Name</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see xtext.pycom.impl.FunctionNameImpl
+   * @see xtext.pycom.impl.PycomPackageImpl#getFunctionName()
+   * @generated
+   */
+  int FUNCTION_NAME = 21;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FUNCTION_NAME__NAME = 0;
+
+  /**
+   * The number of structural features of the '<em>Function Name</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FUNCTION_NAME_FEATURE_COUNT = 1;
+
+  /**
+   * The meta object id for the '{@link xtext.pycom.impl.ActuatorTypeImpl <em>Actuator Type</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see xtext.pycom.impl.ActuatorTypeImpl
+   * @see xtext.pycom.impl.PycomPackageImpl#getActuatorType()
+   * @generated
+   */
+  int ACTUATOR_TYPE = 22;
+
+  /**
+   * The feature id for the '<em><b>Type Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ACTUATOR_TYPE__TYPE_NAME = MODULE_TYPE__TYPE_NAME;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ACTUATOR_TYPE__NAME = MODULE_TYPE__NAME;
+
+  /**
+   * The feature id for the '<em><b>Pins</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ACTUATOR_TYPE__PINS = MODULE_TYPE__PINS;
+
+  /**
+   * The number of structural features of the '<em>Actuator Type</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ACTUATOR_TYPE_FEATURE_COUNT = MODULE_TYPE_FEATURE_COUNT + 0;
+
+  /**
+   * The meta object id for the '{@link xtext.pycom.impl.SensorTypeImpl <em>Sensor Type</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see xtext.pycom.impl.SensorTypeImpl
+   * @see xtext.pycom.impl.PycomPackageImpl#getSensorType()
+   * @generated
+   */
+  int SENSOR_TYPE = 23;
+
+  /**
+   * The feature id for the '<em><b>Type Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SENSOR_TYPE__TYPE_NAME = MODULE_TYPE__TYPE_NAME;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SENSOR_TYPE__NAME = MODULE_TYPE__NAME;
+
+  /**
+   * The feature id for the '<em><b>Pins</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SENSOR_TYPE__PINS = MODULE_TYPE__PINS;
+
+  /**
+   * The number of structural features of the '<em>Sensor Type</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SENSOR_TYPE_FEATURE_COUNT = MODULE_TYPE_FEATURE_COUNT + 0;
 
 
   /**
@@ -848,26 +1014,15 @@ public interface PycomPackage extends EPackage
   EClass getConnection();
 
   /**
-   * Returns the meta object for the attribute '{@link xtext.pycom.Connection#getIpAdr <em>Ip Adr</em>}'.
+   * Returns the meta object for the containment reference '{@link xtext.pycom.Connection#getHost <em>Host</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Ip Adr</em>'.
-   * @see xtext.pycom.Connection#getIpAdr()
+   * @return the meta object for the containment reference '<em>Host</em>'.
+   * @see xtext.pycom.Connection#getHost()
    * @see #getConnection()
    * @generated
    */
-  EAttribute getConnection_IpAdr();
-
-  /**
-   * Returns the meta object for the attribute '{@link xtext.pycom.Connection#getWebsite <em>Website</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Website</em>'.
-   * @see xtext.pycom.Connection#getWebsite()
-   * @see #getConnection()
-   * @generated
-   */
-  EAttribute getConnection_Website();
+  EReference getConnection_Host();
 
   /**
    * Returns the meta object for the attribute '{@link xtext.pycom.Connection#getPortnumber <em>Portnumber</em>}'.
@@ -879,6 +1034,38 @@ public interface PycomPackage extends EPackage
    * @generated
    */
   EAttribute getConnection_Portnumber();
+
+  /**
+   * Returns the meta object for class '{@link xtext.pycom.Host <em>Host</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Host</em>'.
+   * @see xtext.pycom.Host
+   * @generated
+   */
+  EClass getHost();
+
+  /**
+   * Returns the meta object for the attribute '{@link xtext.pycom.Host#getIpAdr <em>Ip Adr</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Ip Adr</em>'.
+   * @see xtext.pycom.Host#getIpAdr()
+   * @see #getHost()
+   * @generated
+   */
+  EAttribute getHost_IpAdr();
+
+  /**
+   * Returns the meta object for the attribute '{@link xtext.pycom.Host#getWebsite <em>Website</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Website</em>'.
+   * @see xtext.pycom.Host#getWebsite()
+   * @see #getHost()
+   * @generated
+   */
+  EAttribute getHost_Website();
 
   /**
    * Returns the meta object for class '{@link xtext.pycom.Board <em>Board</em>}'.
@@ -933,6 +1120,39 @@ public interface PycomPackage extends EPackage
   EClass getConditionalAction();
 
   /**
+   * Returns the meta object for the attribute '{@link xtext.pycom.ConditionalAction#getType <em>Type</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Type</em>'.
+   * @see xtext.pycom.ConditionalAction#getType()
+   * @see #getConditionalAction()
+   * @generated
+   */
+  EAttribute getConditionalAction_Type();
+
+  /**
+   * Returns the meta object for the containment reference '{@link xtext.pycom.ConditionalAction#getCondition <em>Condition</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Condition</em>'.
+   * @see xtext.pycom.ConditionalAction#getCondition()
+   * @see #getConditionalAction()
+   * @generated
+   */
+  EReference getConditionalAction_Condition();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link xtext.pycom.ConditionalAction#getExpMembers <em>Exp Members</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Exp Members</em>'.
+   * @see xtext.pycom.ConditionalAction#getExpMembers()
+   * @see #getConditionalAction()
+   * @generated
+   */
+  EReference getConditionalAction_ExpMembers();
+
+  /**
    * Returns the meta object for class '{@link xtext.pycom.ExpMember <em>Exp Member</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -985,90 +1205,68 @@ public interface PycomPackage extends EPackage
   EReference getActuator_ActuatorTypes();
 
   /**
-   * Returns the meta object for class '{@link xtext.pycom.ActuatorType <em>Actuator Type</em>}'.
+   * Returns the meta object for class '{@link xtext.pycom.Communication <em>Communication</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Actuator Type</em>'.
-   * @see xtext.pycom.ActuatorType
+   * @return the meta object for class '<em>Communication</em>'.
+   * @see xtext.pycom.Communication
    * @generated
    */
-  EClass getActuatorType();
+  EClass getCommunication();
 
   /**
-   * Returns the meta object for the attribute '{@link xtext.pycom.ActuatorType#getTypeName <em>Type Name</em>}'.
+   * Returns the meta object for the attribute '{@link xtext.pycom.Communication#getType <em>Type</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Type</em>'.
+   * @see xtext.pycom.Communication#getType()
+   * @see #getCommunication()
+   * @generated
+   */
+  EAttribute getCommunication_Type();
+
+  /**
+   * Returns the meta object for class '{@link xtext.pycom.ModuleType <em>Module Type</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Module Type</em>'.
+   * @see xtext.pycom.ModuleType
+   * @generated
+   */
+  EClass getModuleType();
+
+  /**
+   * Returns the meta object for the attribute '{@link xtext.pycom.ModuleType#getTypeName <em>Type Name</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Type Name</em>'.
-   * @see xtext.pycom.ActuatorType#getTypeName()
-   * @see #getActuatorType()
+   * @see xtext.pycom.ModuleType#getTypeName()
+   * @see #getModuleType()
    * @generated
    */
-  EAttribute getActuatorType_TypeName();
+  EAttribute getModuleType_TypeName();
 
   /**
-   * Returns the meta object for the attribute '{@link xtext.pycom.ActuatorType#getName <em>Name</em>}'.
+   * Returns the meta object for the attribute '{@link xtext.pycom.ModuleType#getName <em>Name</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Name</em>'.
-   * @see xtext.pycom.ActuatorType#getName()
-   * @see #getActuatorType()
+   * @see xtext.pycom.ModuleType#getName()
+   * @see #getModuleType()
    * @generated
    */
-  EAttribute getActuatorType_Name();
+  EAttribute getModuleType_Name();
 
   /**
-   * Returns the meta object for the containment reference list '{@link xtext.pycom.ActuatorType#getPins <em>Pins</em>}'.
+   * Returns the meta object for the containment reference '{@link xtext.pycom.ModuleType#getPins <em>Pins</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Pins</em>'.
-   * @see xtext.pycom.ActuatorType#getPins()
-   * @see #getActuatorType()
+   * @return the meta object for the containment reference '<em>Pins</em>'.
+   * @see xtext.pycom.ModuleType#getPins()
+   * @see #getModuleType()
    * @generated
    */
-  EReference getActuatorType_Pins();
-
-  /**
-   * Returns the meta object for class '{@link xtext.pycom.SensorType <em>Sensor Type</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Sensor Type</em>'.
-   * @see xtext.pycom.SensorType
-   * @generated
-   */
-  EClass getSensorType();
-
-  /**
-   * Returns the meta object for the attribute '{@link xtext.pycom.SensorType#getTypeName <em>Type Name</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Type Name</em>'.
-   * @see xtext.pycom.SensorType#getTypeName()
-   * @see #getSensorType()
-   * @generated
-   */
-  EAttribute getSensorType_TypeName();
-
-  /**
-   * Returns the meta object for the attribute '{@link xtext.pycom.SensorType#getName <em>Name</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Name</em>'.
-   * @see xtext.pycom.SensorType#getName()
-   * @see #getSensorType()
-   * @generated
-   */
-  EAttribute getSensorType_Name();
-
-  /**
-   * Returns the meta object for the containment reference list '{@link xtext.pycom.SensorType#getPins <em>Pins</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Pins</em>'.
-   * @see xtext.pycom.SensorType#getPins()
-   * @see #getSensorType()
-   * @generated
-   */
-  EReference getSensorType_Pins();
+  EReference getModuleType_Pins();
 
   /**
    * Returns the meta object for class '{@link xtext.pycom.Pin <em>Pin</em>}'.
@@ -1081,26 +1279,47 @@ public interface PycomPackage extends EPackage
   EClass getPin();
 
   /**
-   * Returns the meta object for the attribute '{@link xtext.pycom.Pin#getPower <em>Power</em>}'.
+   * Returns the meta object for the containment reference '{@link xtext.pycom.Pin#getPower <em>Power</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Power</em>'.
+   * @return the meta object for the containment reference '<em>Power</em>'.
    * @see xtext.pycom.Pin#getPower()
    * @see #getPin()
    * @generated
    */
-  EAttribute getPin_Power();
+  EReference getPin_Power();
 
   /**
-   * Returns the meta object for the attribute '{@link xtext.pycom.Pin#getInput <em>Input</em>}'.
+   * Returns the meta object for the containment reference '{@link xtext.pycom.Pin#getInput <em>Input</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Input</em>'.
+   * @return the meta object for the containment reference '<em>Input</em>'.
    * @see xtext.pycom.Pin#getInput()
    * @see #getPin()
    * @generated
    */
-  EAttribute getPin_Input();
+  EReference getPin_Input();
+
+  /**
+   * Returns the meta object for class '{@link xtext.pycom.PinName <em>Pin Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Pin Name</em>'.
+   * @see xtext.pycom.PinName
+   * @generated
+   */
+  EClass getPinName();
+
+  /**
+   * Returns the meta object for the attribute '{@link xtext.pycom.PinName#getName <em>Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Name</em>'.
+   * @see xtext.pycom.PinName#getName()
+   * @see #getPinName()
+   * @generated
+   */
+  EAttribute getPinName_Name();
 
   /**
    * Returns the meta object for class '{@link xtext.pycom.Condition <em>Condition</em>}'.
@@ -1113,15 +1332,37 @@ public interface PycomPackage extends EPackage
   EClass getCondition();
 
   /**
-   * Returns the meta object for the containment reference list '{@link xtext.pycom.Condition#getExpMembers <em>Exp Members</em>}'.
+   * Returns the meta object for the containment reference '{@link xtext.pycom.Condition#getLogicEx <em>Logic Ex</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Exp Members</em>'.
-   * @see xtext.pycom.Condition#getExpMembers()
+   * @return the meta object for the containment reference '<em>Logic Ex</em>'.
+   * @see xtext.pycom.Condition#getLogicEx()
    * @see #getCondition()
    * @generated
    */
-  EReference getCondition_ExpMembers();
+  EReference getCondition_LogicEx();
+
+  /**
+   * Returns the meta object for the attribute '{@link xtext.pycom.Condition#getOperator <em>Operator</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Operator</em>'.
+   * @see xtext.pycom.Condition#getOperator()
+   * @see #getCondition()
+   * @generated
+   */
+  EAttribute getCondition_Operator();
+
+  /**
+   * Returns the meta object for the containment reference '{@link xtext.pycom.Condition#getNestedCondition <em>Nested Condition</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Nested Condition</em>'.
+   * @see xtext.pycom.Condition#getNestedCondition()
+   * @see #getCondition()
+   * @generated
+   */
+  EReference getCondition_NestedCondition();
 
   /**
    * Returns the meta object for class '{@link xtext.pycom.LogicExp <em>Logic Exp</em>}'.
@@ -1134,15 +1375,26 @@ public interface PycomPackage extends EPackage
   EClass getLogicExp();
 
   /**
-   * Returns the meta object for the containment reference '{@link xtext.pycom.LogicExp#getCondition <em>Condition</em>}'.
+   * Returns the meta object for the containment reference '{@link xtext.pycom.LogicExp#getBoolVal <em>Bool Val</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Condition</em>'.
-   * @see xtext.pycom.LogicExp#getCondition()
+   * @return the meta object for the containment reference '<em>Bool Val</em>'.
+   * @see xtext.pycom.LogicExp#getBoolVal()
    * @see #getLogicExp()
    * @generated
    */
-  EReference getLogicExp_Condition();
+  EReference getLogicExp_BoolVal();
+
+  /**
+   * Returns the meta object for the containment reference '{@link xtext.pycom.LogicExp#getCompExp <em>Comp Exp</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Comp Exp</em>'.
+   * @see xtext.pycom.LogicExp#getCompExp()
+   * @see #getLogicExp()
+   * @generated
+   */
+  EReference getLogicExp_CompExp();
 
   /**
    * Returns the meta object for class '{@link xtext.pycom.Boolean <em>Boolean</em>}'.
@@ -1198,15 +1450,15 @@ public interface PycomPackage extends EPackage
   EAttribute getComparisonExp_Op();
 
   /**
-   * Returns the meta object for the containment reference '{@link xtext.pycom.ComparisonExp#getRigth <em>Rigth</em>}'.
+   * Returns the meta object for the containment reference '{@link xtext.pycom.ComparisonExp#getRight <em>Right</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Rigth</em>'.
-   * @see xtext.pycom.ComparisonExp#getRigth()
+   * @return the meta object for the containment reference '<em>Right</em>'.
+   * @see xtext.pycom.ComparisonExp#getRight()
    * @see #getComparisonExp()
    * @generated
    */
-  EReference getComparisonExp_Rigth();
+  EReference getComparisonExp_Right();
 
   /**
    * Returns the meta object for class '{@link xtext.pycom.Expression <em>Expression</em>}'.
@@ -1217,6 +1469,28 @@ public interface PycomPackage extends EPackage
    * @generated
    */
   EClass getExpression();
+
+  /**
+   * Returns the meta object for the attribute '{@link xtext.pycom.Expression#getOutputValue <em>Output Value</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Output Value</em>'.
+   * @see xtext.pycom.Expression#getOutputValue()
+   * @see #getExpression()
+   * @generated
+   */
+  EAttribute getExpression_OutputValue();
+
+  /**
+   * Returns the meta object for the containment reference '{@link xtext.pycom.Expression#getOutputfunction <em>Outputfunction</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Outputfunction</em>'.
+   * @see xtext.pycom.Expression#getOutputfunction()
+   * @see #getExpression()
+   * @generated
+   */
+  EReference getExpression_Outputfunction();
 
   /**
    * Returns the meta object for class '{@link xtext.pycom.Function <em>Function</em>}'.
@@ -1240,46 +1514,77 @@ public interface PycomPackage extends EPackage
   EReference getFunction_Board();
 
   /**
-   * Returns the meta object for class '{@link xtext.pycom.ActuatorFunction <em>Actuator Function</em>}'.
+   * Returns the meta object for the containment reference '{@link xtext.pycom.Function#getFunctionName <em>Function Name</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Actuator Function</em>'.
-   * @see xtext.pycom.ActuatorFunction
+   * @return the meta object for the containment reference '<em>Function Name</em>'.
+   * @see xtext.pycom.Function#getFunctionName()
+   * @see #getFunction()
    * @generated
    */
-  EClass getActuatorFunction();
+  EReference getFunction_FunctionName();
 
   /**
-   * Returns the meta object for the reference '{@link xtext.pycom.ActuatorFunction#getActuatorType <em>Actuator Type</em>}'.
+   * Returns the meta object for class '{@link xtext.pycom.ModuleFunction <em>Module Function</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the reference '<em>Actuator Type</em>'.
-   * @see xtext.pycom.ActuatorFunction#getActuatorType()
-   * @see #getActuatorFunction()
+   * @return the meta object for class '<em>Module Function</em>'.
+   * @see xtext.pycom.ModuleFunction
    * @generated
    */
-  EReference getActuatorFunction_ActuatorType();
+  EClass getModuleFunction();
 
   /**
-   * Returns the meta object for class '{@link xtext.pycom.SensorFunction <em>Sensor Function</em>}'.
+   * Returns the meta object for the reference '{@link xtext.pycom.ModuleFunction#getModuleType <em>Module Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Sensor Function</em>'.
-   * @see xtext.pycom.SensorFunction
+   * @return the meta object for the reference '<em>Module Type</em>'.
+   * @see xtext.pycom.ModuleFunction#getModuleType()
+   * @see #getModuleFunction()
    * @generated
    */
-  EClass getSensorFunction();
+  EReference getModuleFunction_ModuleType();
 
   /**
-   * Returns the meta object for the reference '{@link xtext.pycom.SensorFunction#getSensorType <em>Sensor Type</em>}'.
+   * Returns the meta object for class '{@link xtext.pycom.FunctionName <em>Function Name</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the reference '<em>Sensor Type</em>'.
-   * @see xtext.pycom.SensorFunction#getSensorType()
-   * @see #getSensorFunction()
+   * @return the meta object for class '<em>Function Name</em>'.
+   * @see xtext.pycom.FunctionName
    * @generated
    */
-  EReference getSensorFunction_SensorType();
+  EClass getFunctionName();
+
+  /**
+   * Returns the meta object for the attribute '{@link xtext.pycom.FunctionName#getName <em>Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Name</em>'.
+   * @see xtext.pycom.FunctionName#getName()
+   * @see #getFunctionName()
+   * @generated
+   */
+  EAttribute getFunctionName_Name();
+
+  /**
+   * Returns the meta object for class '{@link xtext.pycom.ActuatorType <em>Actuator Type</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Actuator Type</em>'.
+   * @see xtext.pycom.ActuatorType
+   * @generated
+   */
+  EClass getActuatorType();
+
+  /**
+   * Returns the meta object for class '{@link xtext.pycom.SensorType <em>Sensor Type</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Sensor Type</em>'.
+   * @see xtext.pycom.SensorType
+   * @generated
+   */
+  EClass getSensorType();
 
   /**
    * Returns the factory that creates the instances of the model.
@@ -1375,20 +1680,12 @@ public interface PycomPackage extends EPackage
     EClass CONNECTION = eINSTANCE.getConnection();
 
     /**
-     * The meta object literal for the '<em><b>Ip Adr</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Host</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute CONNECTION__IP_ADR = eINSTANCE.getConnection_IpAdr();
-
-    /**
-     * The meta object literal for the '<em><b>Website</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute CONNECTION__WEBSITE = eINSTANCE.getConnection_Website();
+    EReference CONNECTION__HOST = eINSTANCE.getConnection_Host();
 
     /**
      * The meta object literal for the '<em><b>Portnumber</b></em>' attribute feature.
@@ -1397,6 +1694,32 @@ public interface PycomPackage extends EPackage
      * @generated
      */
     EAttribute CONNECTION__PORTNUMBER = eINSTANCE.getConnection_Portnumber();
+
+    /**
+     * The meta object literal for the '{@link xtext.pycom.impl.HostImpl <em>Host</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see xtext.pycom.impl.HostImpl
+     * @see xtext.pycom.impl.PycomPackageImpl#getHost()
+     * @generated
+     */
+    EClass HOST = eINSTANCE.getHost();
+
+    /**
+     * The meta object literal for the '<em><b>Ip Adr</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute HOST__IP_ADR = eINSTANCE.getHost_IpAdr();
+
+    /**
+     * The meta object literal for the '<em><b>Website</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute HOST__WEBSITE = eINSTANCE.getHost_Website();
 
     /**
      * The meta object literal for the '{@link xtext.pycom.impl.BoardImpl <em>Board</em>}' class.
@@ -1445,6 +1768,30 @@ public interface PycomPackage extends EPackage
     EClass CONDITIONAL_ACTION = eINSTANCE.getConditionalAction();
 
     /**
+     * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute CONDITIONAL_ACTION__TYPE = eINSTANCE.getConditionalAction_Type();
+
+    /**
+     * The meta object literal for the '<em><b>Condition</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference CONDITIONAL_ACTION__CONDITION = eINSTANCE.getConditionalAction_Condition();
+
+    /**
+     * The meta object literal for the '<em><b>Exp Members</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference CONDITIONAL_ACTION__EXP_MEMBERS = eINSTANCE.getConditionalAction_ExpMembers();
+
+    /**
      * The meta object literal for the '{@link xtext.pycom.impl.ExpMemberImpl <em>Exp Member</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1491,14 +1838,32 @@ public interface PycomPackage extends EPackage
     EReference ACTUATOR__ACTUATOR_TYPES = eINSTANCE.getActuator_ActuatorTypes();
 
     /**
-     * The meta object literal for the '{@link xtext.pycom.impl.ActuatorTypeImpl <em>Actuator Type</em>}' class.
+     * The meta object literal for the '{@link xtext.pycom.impl.CommunicationImpl <em>Communication</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see xtext.pycom.impl.ActuatorTypeImpl
-     * @see xtext.pycom.impl.PycomPackageImpl#getActuatorType()
+     * @see xtext.pycom.impl.CommunicationImpl
+     * @see xtext.pycom.impl.PycomPackageImpl#getCommunication()
      * @generated
      */
-    EClass ACTUATOR_TYPE = eINSTANCE.getActuatorType();
+    EClass COMMUNICATION = eINSTANCE.getCommunication();
+
+    /**
+     * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute COMMUNICATION__TYPE = eINSTANCE.getCommunication_Type();
+
+    /**
+     * The meta object literal for the '{@link xtext.pycom.impl.ModuleTypeImpl <em>Module Type</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see xtext.pycom.impl.ModuleTypeImpl
+     * @see xtext.pycom.impl.PycomPackageImpl#getModuleType()
+     * @generated
+     */
+    EClass MODULE_TYPE = eINSTANCE.getModuleType();
 
     /**
      * The meta object literal for the '<em><b>Type Name</b></em>' attribute feature.
@@ -1506,7 +1871,7 @@ public interface PycomPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute ACTUATOR_TYPE__TYPE_NAME = eINSTANCE.getActuatorType_TypeName();
+    EAttribute MODULE_TYPE__TYPE_NAME = eINSTANCE.getModuleType_TypeName();
 
     /**
      * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
@@ -1514,49 +1879,15 @@ public interface PycomPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute ACTUATOR_TYPE__NAME = eINSTANCE.getActuatorType_Name();
+    EAttribute MODULE_TYPE__NAME = eINSTANCE.getModuleType_Name();
 
     /**
-     * The meta object literal for the '<em><b>Pins</b></em>' containment reference list feature.
+     * The meta object literal for the '<em><b>Pins</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference ACTUATOR_TYPE__PINS = eINSTANCE.getActuatorType_Pins();
-
-    /**
-     * The meta object literal for the '{@link xtext.pycom.impl.SensorTypeImpl <em>Sensor Type</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see xtext.pycom.impl.SensorTypeImpl
-     * @see xtext.pycom.impl.PycomPackageImpl#getSensorType()
-     * @generated
-     */
-    EClass SENSOR_TYPE = eINSTANCE.getSensorType();
-
-    /**
-     * The meta object literal for the '<em><b>Type Name</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute SENSOR_TYPE__TYPE_NAME = eINSTANCE.getSensorType_TypeName();
-
-    /**
-     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute SENSOR_TYPE__NAME = eINSTANCE.getSensorType_Name();
-
-    /**
-     * The meta object literal for the '<em><b>Pins</b></em>' containment reference list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference SENSOR_TYPE__PINS = eINSTANCE.getSensorType_Pins();
+    EReference MODULE_TYPE__PINS = eINSTANCE.getModuleType_Pins();
 
     /**
      * The meta object literal for the '{@link xtext.pycom.impl.PinImpl <em>Pin</em>}' class.
@@ -1569,20 +1900,38 @@ public interface PycomPackage extends EPackage
     EClass PIN = eINSTANCE.getPin();
 
     /**
-     * The meta object literal for the '<em><b>Power</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Power</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute PIN__POWER = eINSTANCE.getPin_Power();
+    EReference PIN__POWER = eINSTANCE.getPin_Power();
 
     /**
-     * The meta object literal for the '<em><b>Input</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Input</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute PIN__INPUT = eINSTANCE.getPin_Input();
+    EReference PIN__INPUT = eINSTANCE.getPin_Input();
+
+    /**
+     * The meta object literal for the '{@link xtext.pycom.impl.PinNameImpl <em>Pin Name</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see xtext.pycom.impl.PinNameImpl
+     * @see xtext.pycom.impl.PycomPackageImpl#getPinName()
+     * @generated
+     */
+    EClass PIN_NAME = eINSTANCE.getPinName();
+
+    /**
+     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute PIN_NAME__NAME = eINSTANCE.getPinName_Name();
 
     /**
      * The meta object literal for the '{@link xtext.pycom.impl.ConditionImpl <em>Condition</em>}' class.
@@ -1595,12 +1944,28 @@ public interface PycomPackage extends EPackage
     EClass CONDITION = eINSTANCE.getCondition();
 
     /**
-     * The meta object literal for the '<em><b>Exp Members</b></em>' containment reference list feature.
+     * The meta object literal for the '<em><b>Logic Ex</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference CONDITION__EXP_MEMBERS = eINSTANCE.getCondition_ExpMembers();
+    EReference CONDITION__LOGIC_EX = eINSTANCE.getCondition_LogicEx();
+
+    /**
+     * The meta object literal for the '<em><b>Operator</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute CONDITION__OPERATOR = eINSTANCE.getCondition_Operator();
+
+    /**
+     * The meta object literal for the '<em><b>Nested Condition</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference CONDITION__NESTED_CONDITION = eINSTANCE.getCondition_NestedCondition();
 
     /**
      * The meta object literal for the '{@link xtext.pycom.impl.LogicExpImpl <em>Logic Exp</em>}' class.
@@ -1613,12 +1978,20 @@ public interface PycomPackage extends EPackage
     EClass LOGIC_EXP = eINSTANCE.getLogicExp();
 
     /**
-     * The meta object literal for the '<em><b>Condition</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Bool Val</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference LOGIC_EXP__CONDITION = eINSTANCE.getLogicExp_Condition();
+    EReference LOGIC_EXP__BOOL_VAL = eINSTANCE.getLogicExp_BoolVal();
+
+    /**
+     * The meta object literal for the '<em><b>Comp Exp</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference LOGIC_EXP__COMP_EXP = eINSTANCE.getLogicExp_CompExp();
 
     /**
      * The meta object literal for the '{@link xtext.pycom.impl.BooleanImpl <em>Boolean</em>}' class.
@@ -1665,12 +2038,12 @@ public interface PycomPackage extends EPackage
     EAttribute COMPARISON_EXP__OP = eINSTANCE.getComparisonExp_Op();
 
     /**
-     * The meta object literal for the '<em><b>Rigth</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Right</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference COMPARISON_EXP__RIGTH = eINSTANCE.getComparisonExp_Rigth();
+    EReference COMPARISON_EXP__RIGHT = eINSTANCE.getComparisonExp_Right();
 
     /**
      * The meta object literal for the '{@link xtext.pycom.impl.ExpressionImpl <em>Expression</em>}' class.
@@ -1681,6 +2054,22 @@ public interface PycomPackage extends EPackage
      * @generated
      */
     EClass EXPRESSION = eINSTANCE.getExpression();
+
+    /**
+     * The meta object literal for the '<em><b>Output Value</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute EXPRESSION__OUTPUT_VALUE = eINSTANCE.getExpression_OutputValue();
+
+    /**
+     * The meta object literal for the '<em><b>Outputfunction</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference EXPRESSION__OUTPUTFUNCTION = eINSTANCE.getExpression_Outputfunction();
 
     /**
      * The meta object literal for the '{@link xtext.pycom.impl.FunctionImpl <em>Function</em>}' class.
@@ -1701,40 +2090,68 @@ public interface PycomPackage extends EPackage
     EReference FUNCTION__BOARD = eINSTANCE.getFunction_Board();
 
     /**
-     * The meta object literal for the '{@link xtext.pycom.impl.ActuatorFunctionImpl <em>Actuator Function</em>}' class.
+     * The meta object literal for the '<em><b>Function Name</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see xtext.pycom.impl.ActuatorFunctionImpl
-     * @see xtext.pycom.impl.PycomPackageImpl#getActuatorFunction()
      * @generated
      */
-    EClass ACTUATOR_FUNCTION = eINSTANCE.getActuatorFunction();
+    EReference FUNCTION__FUNCTION_NAME = eINSTANCE.getFunction_FunctionName();
 
     /**
-     * The meta object literal for the '<em><b>Actuator Type</b></em>' reference feature.
+     * The meta object literal for the '{@link xtext.pycom.impl.ModuleFunctionImpl <em>Module Function</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
+     * @see xtext.pycom.impl.ModuleFunctionImpl
+     * @see xtext.pycom.impl.PycomPackageImpl#getModuleFunction()
      * @generated
      */
-    EReference ACTUATOR_FUNCTION__ACTUATOR_TYPE = eINSTANCE.getActuatorFunction_ActuatorType();
+    EClass MODULE_FUNCTION = eINSTANCE.getModuleFunction();
 
     /**
-     * The meta object literal for the '{@link xtext.pycom.impl.SensorFunctionImpl <em>Sensor Function</em>}' class.
+     * The meta object literal for the '<em><b>Module Type</b></em>' reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see xtext.pycom.impl.SensorFunctionImpl
-     * @see xtext.pycom.impl.PycomPackageImpl#getSensorFunction()
      * @generated
      */
-    EClass SENSOR_FUNCTION = eINSTANCE.getSensorFunction();
+    EReference MODULE_FUNCTION__MODULE_TYPE = eINSTANCE.getModuleFunction_ModuleType();
 
     /**
-     * The meta object literal for the '<em><b>Sensor Type</b></em>' reference feature.
+     * The meta object literal for the '{@link xtext.pycom.impl.FunctionNameImpl <em>Function Name</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see xtext.pycom.impl.FunctionNameImpl
+     * @see xtext.pycom.impl.PycomPackageImpl#getFunctionName()
+     * @generated
+     */
+    EClass FUNCTION_NAME = eINSTANCE.getFunctionName();
+
+    /**
+     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference SENSOR_FUNCTION__SENSOR_TYPE = eINSTANCE.getSensorFunction_SensorType();
+    EAttribute FUNCTION_NAME__NAME = eINSTANCE.getFunctionName_Name();
+
+    /**
+     * The meta object literal for the '{@link xtext.pycom.impl.ActuatorTypeImpl <em>Actuator Type</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see xtext.pycom.impl.ActuatorTypeImpl
+     * @see xtext.pycom.impl.PycomPackageImpl#getActuatorType()
+     * @generated
+     */
+    EClass ACTUATOR_TYPE = eINSTANCE.getActuatorType();
+
+    /**
+     * The meta object literal for the '{@link xtext.pycom.impl.SensorTypeImpl <em>Sensor Type</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see xtext.pycom.impl.SensorTypeImpl
+     * @see xtext.pycom.impl.PycomPackageImpl#getSensorType()
+     * @generated
+     */
+    EClass SENSOR_TYPE = eINSTANCE.getSensorType();
 
   }
 

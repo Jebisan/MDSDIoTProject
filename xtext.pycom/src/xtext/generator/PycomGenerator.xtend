@@ -248,14 +248,14 @@ class PycomGenerator extends AbstractGenerator {
 		var passedTreshold = False
 		«function.functionName.name»Threshold = «i»
 		«function.functionName.name»Value = «function.functionName.name»()
-		if («function.functionName.name»Value «op» «function.functionName.name»Threshold and !passedTreshold):
-			passedTreshold = !passedTreshold
+		if («function.functionName.name»Value «op» «function.functionName.name»Threshold and not passedTreshold):
+			passedTreshold = not passedTreshold
 			sendurl = "«getServerAddress(server.conn)»«postaddress»".format(«function.functionName.name»Value)
 			res = urequests.post(sendurl)   
 			print("Res code: ", res.status_code)
 			print("Res: ", res.reason)
 		if («function.functionName.name»Value «oppositeOP(op)» «function.functionName.name»Threshold and passedTreshold):
-			passedTreshold = !passedTreshold
+			passedTreshold = not passedTreshold
 			sendurl = "«getServerAddress(server.conn)»«postaddress»".format(«function.functionName.name»Value)
 			res = urequests.post(sendurl)   
 			print("Res code: ", res.status_code)
@@ -300,7 +300,6 @@ class PycomGenerator extends AbstractGenerator {
 		functionmap.put(function.functionName.name, funk)
 		functionmap.put(function.functionName.name, funk2)
 	}
-	//('/boardEt/Engine/myEngine1'
 	
 	def genFunction(Board board, Resource resource, Function function, Server server) {
 		if(function.board.equals(board)) {
@@ -346,11 +345,18 @@ class PycomGenerator extends AbstractGenerator {
 		if(type.pins !== null) {
 			var power = type.pins.power.name
 			var input = type.pins.input.name
-			if(power == null || input == null) {
+			if(power !== null || input !== null) {
 				if(moduleMap.containsKey(type.typeName)) {
-					return '''«type.name» = «moduleMap.get(type.typeName)»(Pin.IN = «input», Pin.OUT = «power»)'''
+					return '''«type.name»p_out = Pin('«power»', mode=Pin.OUT)
+					«type.name»adc = ADC(0)
+					«type.name»pin = «type.name»adc.channel(pin='«input»')
+					«type.name» = «moduleMap.get(type.typeName)»)'''
 				} else {
-					return '''«type.name» = #Unknown Sensor'''
+					return '''
+					«type.name»p_out = Pin('«power»', mode=Pin.OUT)
+					«type.name»adc = ADC(0)
+					«type.name»pin = «type.name»adc.channel(pin='«input»')
+					«type.name» = #Unknown Sensor'''
 				}
 			}	
 		}
@@ -365,7 +371,7 @@ class PycomGenerator extends AbstractGenerator {
 		if(moduleMap.containsKey(sensorType.typeName)) {
 			return '''from «moduleMap.get(sensorType.typeName)» import «moduleMap.get(sensorType.typeName)»'''
 		} else {
-			return '''import «sensorType.typeName»'''
+			return '''import «sensorType.typeName» #CHECK THAT THIS SENSOR  IS GENERATED CORRECTLY'''
 		}		
 	}
 	
@@ -384,11 +390,19 @@ class PycomGenerator extends AbstractGenerator {
 		if(type.pins !== null) {
 			var power = type.pins.power.name
 			var input = type.pins.input.name
-			if(power == null || input == null) {
+			if(power !== null || input !== null) {
 				if(moduleMap.containsKey(type.typeName)) {
-					return '''«type.name» = «moduleMap.get(type.typeName)»(Pin.IN = «input», Pin.OUT = «power»)'''
+					return '''
+					«type.name»p_out = Pin('«power»', mode=Pin.OUT)
+					«type.name»adc = ADC(0)
+					«type.name»pin = «type.name»adc.channel(pin='«input»')
+					«type.name» = «moduleMap.get(type.typeName)»)'''
 				} else {
-					return '''«type.name» = #Unknown Actuator'''
+					return '''
+					«type.name»p_out = Pin('«power»', mode=Pin.OUT)
+					«type.name»adc = ADC(0)
+					«type.name»pin = «type.name»adc.channel(pin='«input»')
+					«type.name» = #Unknown Sensor'''
 				}
 			}	
 		}
@@ -400,7 +414,11 @@ class PycomGenerator extends AbstractGenerator {
 	}
 	
 	def generateActuatorImports(Board b, Resource r, ActuatorType actuatorType) {	
-		'''import «actuatorType.typeName»'''
+		if(moduleMap.containsKey(actuatorType.typeName)) {
+			return '''from «moduleMap.get(actuatorType.typeName)» import «moduleMap.get(actuatorType.typeName)»'''
+		} else {
+			return '''import «actuatorType.typeName»  #CHECK THAT THIS ACTUATOR IS GENERATED CORRECTLY'''
+		}
 	}
 	
 	def generatePycomConnection(Board b, Resource r) {
@@ -546,7 +564,7 @@ class PycomGenerator extends AbstractGenerator {
 				varname = exp.board.name + "_" + exp.functionName.name
 			}
 			if(!globalVariables.containsKey(varname)) {
-				globalVariables.put(varname,"var " + varname + " = undefined" + "\n")
+				globalVariables.put(varname, varname + " = undefined" + "\n")
 				if(exp instanceof ModuleFunction) {
 					if (exp.moduleType instanceof SensorType) {
 						variableNamesForPostAndGetRoutes.put(varname,"SensorFunction")

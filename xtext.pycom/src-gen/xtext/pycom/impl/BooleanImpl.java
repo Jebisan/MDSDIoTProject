@@ -8,6 +8,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import xtext.pycom.PycomPackage;
 
@@ -24,7 +25,7 @@ import xtext.pycom.PycomPackage;
  *
  * @generated
  */
-public class BooleanImpl extends LogicExpImpl implements xtext.pycom.Boolean
+public class BooleanImpl extends MinimalEObjectImpl.Container implements xtext.pycom.Boolean
 {
   /**
    * The default value of the '{@link #getValue() <em>Value</em>}' attribute.

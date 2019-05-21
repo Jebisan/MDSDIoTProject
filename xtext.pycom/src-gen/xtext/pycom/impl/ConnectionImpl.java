@@ -4,13 +4,16 @@
 package xtext.pycom.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import xtext.pycom.Connection;
+import xtext.pycom.Host;
 import xtext.pycom.PycomPackage;
 
 /**
@@ -21,8 +24,7 @@ import xtext.pycom.PycomPackage;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link xtext.pycom.impl.ConnectionImpl#getIpAdr <em>Ip Adr</em>}</li>
- *   <li>{@link xtext.pycom.impl.ConnectionImpl#getWebsite <em>Website</em>}</li>
+ *   <li>{@link xtext.pycom.impl.ConnectionImpl#getHost <em>Host</em>}</li>
  *   <li>{@link xtext.pycom.impl.ConnectionImpl#getPortnumber <em>Portnumber</em>}</li>
  * </ul>
  *
@@ -31,44 +33,14 @@ import xtext.pycom.PycomPackage;
 public class ConnectionImpl extends MinimalEObjectImpl.Container implements Connection
 {
   /**
-   * The default value of the '{@link #getIpAdr() <em>Ip Adr</em>}' attribute.
+   * The cached value of the '{@link #getHost() <em>Host</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getIpAdr()
+   * @see #getHost()
    * @generated
    * @ordered
    */
-  protected static final String IP_ADR_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getIpAdr() <em>Ip Adr</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getIpAdr()
-   * @generated
-   * @ordered
-   */
-  protected String ipAdr = IP_ADR_EDEFAULT;
-
-  /**
-   * The default value of the '{@link #getWebsite() <em>Website</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getWebsite()
-   * @generated
-   * @ordered
-   */
-  protected static final String WEBSITE_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getWebsite() <em>Website</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getWebsite()
-   * @generated
-   * @ordered
-   */
-  protected String website = WEBSITE_EDEFAULT;
+  protected Host host;
 
   /**
    * The default value of the '{@link #getPortnumber() <em>Portnumber</em>}' attribute.
@@ -117,9 +89,9 @@ public class ConnectionImpl extends MinimalEObjectImpl.Container implements Conn
    * @generated
    */
   @Override
-  public String getIpAdr()
+  public Host getHost()
   {
-    return ipAdr;
+    return host;
   }
 
   /**
@@ -127,13 +99,16 @@ public class ConnectionImpl extends MinimalEObjectImpl.Container implements Conn
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
-  public void setIpAdr(String newIpAdr)
+  public NotificationChain basicSetHost(Host newHost, NotificationChain msgs)
   {
-    String oldIpAdr = ipAdr;
-    ipAdr = newIpAdr;
+    Host oldHost = host;
+    host = newHost;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, PycomPackage.CONNECTION__IP_ADR, oldIpAdr, ipAdr));
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PycomPackage.CONNECTION__HOST, oldHost, newHost);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
   }
 
   /**
@@ -142,23 +117,20 @@ public class ConnectionImpl extends MinimalEObjectImpl.Container implements Conn
    * @generated
    */
   @Override
-  public String getWebsite()
+  public void setHost(Host newHost)
   {
-    return website;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public void setWebsite(String newWebsite)
-  {
-    String oldWebsite = website;
-    website = newWebsite;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, PycomPackage.CONNECTION__WEBSITE, oldWebsite, website));
+    if (newHost != host)
+    {
+      NotificationChain msgs = null;
+      if (host != null)
+        msgs = ((InternalEObject)host).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PycomPackage.CONNECTION__HOST, null, msgs);
+      if (newHost != null)
+        msgs = ((InternalEObject)newHost).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PycomPackage.CONNECTION__HOST, null, msgs);
+      msgs = basicSetHost(newHost, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, PycomPackage.CONNECTION__HOST, newHost, newHost));
   }
 
   /**
@@ -192,14 +164,28 @@ public class ConnectionImpl extends MinimalEObjectImpl.Container implements Conn
    * @generated
    */
   @Override
+  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  {
+    switch (featureID)
+    {
+      case PycomPackage.CONNECTION__HOST:
+        return basicSetHost(null, msgs);
+    }
+    return super.eInverseRemove(otherEnd, featureID, msgs);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
     switch (featureID)
     {
-      case PycomPackage.CONNECTION__IP_ADR:
-        return getIpAdr();
-      case PycomPackage.CONNECTION__WEBSITE:
-        return getWebsite();
+      case PycomPackage.CONNECTION__HOST:
+        return getHost();
       case PycomPackage.CONNECTION__PORTNUMBER:
         return getPortnumber();
     }
@@ -216,11 +202,8 @@ public class ConnectionImpl extends MinimalEObjectImpl.Container implements Conn
   {
     switch (featureID)
     {
-      case PycomPackage.CONNECTION__IP_ADR:
-        setIpAdr((String)newValue);
-        return;
-      case PycomPackage.CONNECTION__WEBSITE:
-        setWebsite((String)newValue);
+      case PycomPackage.CONNECTION__HOST:
+        setHost((Host)newValue);
         return;
       case PycomPackage.CONNECTION__PORTNUMBER:
         setPortnumber((String)newValue);
@@ -239,11 +222,8 @@ public class ConnectionImpl extends MinimalEObjectImpl.Container implements Conn
   {
     switch (featureID)
     {
-      case PycomPackage.CONNECTION__IP_ADR:
-        setIpAdr(IP_ADR_EDEFAULT);
-        return;
-      case PycomPackage.CONNECTION__WEBSITE:
-        setWebsite(WEBSITE_EDEFAULT);
+      case PycomPackage.CONNECTION__HOST:
+        setHost((Host)null);
         return;
       case PycomPackage.CONNECTION__PORTNUMBER:
         setPortnumber(PORTNUMBER_EDEFAULT);
@@ -262,10 +242,8 @@ public class ConnectionImpl extends MinimalEObjectImpl.Container implements Conn
   {
     switch (featureID)
     {
-      case PycomPackage.CONNECTION__IP_ADR:
-        return IP_ADR_EDEFAULT == null ? ipAdr != null : !IP_ADR_EDEFAULT.equals(ipAdr);
-      case PycomPackage.CONNECTION__WEBSITE:
-        return WEBSITE_EDEFAULT == null ? website != null : !WEBSITE_EDEFAULT.equals(website);
+      case PycomPackage.CONNECTION__HOST:
+        return host != null;
       case PycomPackage.CONNECTION__PORTNUMBER:
         return PORTNUMBER_EDEFAULT == null ? portnumber != null : !PORTNUMBER_EDEFAULT.equals(portnumber);
     }
@@ -283,11 +261,7 @@ public class ConnectionImpl extends MinimalEObjectImpl.Container implements Conn
     if (eIsProxy()) return super.toString();
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (ipAdr: ");
-    result.append(ipAdr);
-    result.append(", website: ");
-    result.append(website);
-    result.append(", portnumber: ");
+    result.append(" (portnumber: ");
     result.append(portnumber);
     result.append(')');
     return result.toString();

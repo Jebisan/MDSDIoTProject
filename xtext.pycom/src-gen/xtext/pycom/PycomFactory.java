@@ -51,6 +51,15 @@ public interface PycomFactory extends EFactory
   Connection createConnection();
 
   /**
+   * Returns a new object of class '<em>Host</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Host</em>'.
+   * @generated
+   */
+  Host createHost();
+
+  /**
    * Returns a new object of class '<em>Board</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -105,22 +114,22 @@ public interface PycomFactory extends EFactory
   Actuator createActuator();
 
   /**
-   * Returns a new object of class '<em>Actuator Type</em>'.
+   * Returns a new object of class '<em>Communication</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Actuator Type</em>'.
+   * @return a new object of class '<em>Communication</em>'.
    * @generated
    */
-  ActuatorType createActuatorType();
+  Communication createCommunication();
 
   /**
-   * Returns a new object of class '<em>Sensor Type</em>'.
+   * Returns a new object of class '<em>Module Type</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Sensor Type</em>'.
+   * @return a new object of class '<em>Module Type</em>'.
    * @generated
    */
-  SensorType createSensorType();
+  ModuleType createModuleType();
 
   /**
    * Returns a new object of class '<em>Pin</em>'.
@@ -130,6 +139,15 @@ public interface PycomFactory extends EFactory
    * @generated
    */
   Pin createPin();
+
+  /**
+   * Returns a new object of class '<em>Pin Name</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Pin Name</em>'.
+   * @generated
+   */
+  PinName createPinName();
 
   /**
    * Returns a new object of class '<em>Condition</em>'.
@@ -186,22 +204,40 @@ public interface PycomFactory extends EFactory
   Function createFunction();
 
   /**
-   * Returns a new object of class '<em>Actuator Function</em>'.
+   * Returns a new object of class '<em>Module Function</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Actuator Function</em>'.
+   * @return a new object of class '<em>Module Function</em>'.
    * @generated
    */
-  ActuatorFunction createActuatorFunction();
+  ModuleFunction createModuleFunction();
 
   /**
-   * Returns a new object of class '<em>Sensor Function</em>'.
+   * Returns a new object of class '<em>Function Name</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Sensor Function</em>'.
+   * @return a new object of class '<em>Function Name</em>'.
    * @generated
    */
-  SensorFunction createSensorFunction();
+  FunctionName createFunctionName();
+
+  /**
+   * Returns a new object of class '<em>Actuator Type</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Actuator Type</em>'.
+   * @generated
+   */
+  ActuatorType createActuatorType();
+
+  /**
+   * Returns a new object of class '<em>Sensor Type</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Sensor Type</em>'.
+   * @generated
+   */
+  SensorType createSensorType();
 
   /**
    * Returns the package supported by this factory.

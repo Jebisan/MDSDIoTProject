@@ -3,6 +3,7 @@
  */
 package xtext.pycom;
 
+import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -20,7 +21,7 @@ package xtext.pycom;
  * @model
  * @generated
  */
-public interface Boolean extends LogicExp
+public interface Boolean extends EObject
 {
   /**
    * Returns the value of the '<em><b>Value</b></em>' attribute.
